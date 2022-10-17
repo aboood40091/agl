@@ -2,6 +2,8 @@
 
 #include <common/aglTextureEnum.h>
 
+#include <cafe/gx2.h>
+
 namespace agl {
 
 class TextureData
