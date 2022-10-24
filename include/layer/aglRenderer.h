@@ -32,18 +32,20 @@ public:
 
     void removeDrawMethod(const DrawMethod* p_draw_method);
 
+    Layer* getLayer(s32 index) const { return mLayer[index]; }
+
 private:
     u32 _10;
     u32 mMultiSampleType; // agl::MultiSampleType
     u32 mRenderDisplay[cDisplayType_Max][0x6C4 / sizeof(u32)]; // agl::lyr::RenderDisplay[cDisplayType_Max]
-    RenderBuffer* mpRenderBuffer[cDisplayType_Max];
-    sead::Buffer<Layer*> mpLayer;
+    RenderBuffer* mRenderBuffer[cDisplayType_Max];
+    sead::Buffer<Layer*> mLayer;
     mutable sead::BitFlag16 mFlag;
     f32 _db4;
     u8 _db8[16];
     sead::CriticalSection mCriticalSection;
     u32 mJobQueue[2][0x64 / sizeof(u32)]; // sead::FixedSizeJQ[2]
-    sead::PtrArrayImpl mpRenderDisplayJob[cDisplayType_Max]; // sead::PtrArray<agl::lyr::RenderDisplay::Job>[cDisplayType_Max]
+    sead::PtrArrayImpl mRenderDisplayJob[cDisplayType_Max]; // sead::PtrArray<agl::lyr::RenderDisplay::Job>[cDisplayType_Max]
     u32 _ee4;
     u32 _ee8;
     s32 _eeC;
