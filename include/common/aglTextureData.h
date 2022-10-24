@@ -10,7 +10,7 @@ class TextureData
 {
 public:
     TextureData();
-    virtual ~TextureData();
+    virtual ~TextureData() { }
 
     /* agl::TextureType */ GX2SurfaceDim getTextureType() const { return mSurface.dim; }
 

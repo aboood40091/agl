@@ -1,5 +1,7 @@
 #pragma once
 
+#include <common/aglTextureData.h>
+
 namespace agl {
 
 class RenderTargetBase

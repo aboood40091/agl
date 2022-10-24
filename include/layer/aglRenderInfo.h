@@ -1,6 +1,6 @@
 #pragma once
 
-#include <basis/seadTypes.h>
+#include <layer/aglLayerEnum.h>
 
 namespace sead {
 
@@ -17,7 +17,6 @@ class DisplayList;
 
 namespace lyr {
 
-enum DisplayType;
 class Layer;
 
 class RenderInfo

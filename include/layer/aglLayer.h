@@ -7,6 +7,7 @@
 #include <gfx/seadViewport.h>
 #include <heap/seadDisposer.h>
 #include <heap/seadHeap.h>
+#include <layer/aglLayerEnum.h>
 #include <prim/seadBitFlag.h>
 #include <prim/seadSafeString.h>
 
@@ -16,11 +17,6 @@ class DrawMethod;
 class Renderer;
 class RenderInfo;
 class RenderStep;
-
-// TODO
-enum DisplayType
-{
-};
 
 class Layer : public sead::IDisposer
 {
@@ -41,6 +37,7 @@ public:
 
     DrawMethod* pushBackDrawMethod(u32 render_step, DrawMethod* p_draw_method);
     DrawMethod* pushBackDrawMethod(DrawMethod* p_draw_method);
+    s32 removeDrawMethod(const DrawMethod* p_draw_method);
     // ...
 
 protected:
