@@ -5,6 +5,30 @@
 
 namespace agl { namespace utl {
 
+template <>
+inline Parameter<sead::Vector2f>::Parameter(const sead::SafeString& name_1, const sead::SafeString& name_2, IParameterObj* p_obj, const sead::Vector2f& value)
+    : ParameterBase()
+{
+    initializeListNode(name_1, name_2, "", p_obj);
+    mValue.set(value);
+}
+
+template <>
+inline Parameter<sead::Vector3f>::Parameter(const sead::SafeString& name_1, const sead::SafeString& name_2, IParameterObj* p_obj, const sead::Vector3f& value)
+    : ParameterBase()
+{
+    initializeListNode(name_1, name_2, "", p_obj);
+    mValue.set(value);
+}
+
+template <>
+inline Parameter<sead::Vector4f>::Parameter(const sead::SafeString& name_1, const sead::SafeString& name_2, IParameterObj* p_obj, const sead::Vector4f& value)
+    : ParameterBase()
+{
+    initializeListNode(name_1, name_2, "", p_obj);
+    mValue.set(value);
+}
+
 static_assert(sizeof(Parameter<bool>) == 0x14);
 static_assert(sizeof(Parameter<s32>) == 0x14);
 static_assert(sizeof(Parameter<f32>) == 0x14);

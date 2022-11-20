@@ -4,7 +4,9 @@
 #include <common/aglRenderTarget.h>
 #include <common/aglShaderEnum.h>
 #include <common/aglTextureSampler.h>
+#include <container/seadBuffer.h>
 #include <gfx/seadGraphicsContextMRT.h>
+#include <util/aglDebugTexturePage.h>
 #include <util/aglParameter.h>
 #include <util/aglParameterIO.h>
 #include <util/aglParameterObj.h>
@@ -33,8 +35,11 @@ class DepthOfField : public utl::IParameterIO
     };
     static_assert(sizeof(Context) == 0x834, "agl::pfx::DepthOfField::Context size mismatch");
 
-    struct TempVignetting : public utl::IParameterObj // Not sure if superclass or member
+    struct TempVignetting
     {
+        TempVignetting(DepthOfField*, const sead::SafeString&);
+
+        utl::IParameterObj mParameterObj;
         utl::Parameter<s32> mType;
         utl::Parameter<sead::Vector2f> mRange;
         utl::Parameter<sead::Vector2f> mScale;
@@ -44,6 +49,9 @@ class DepthOfField : public utl::IParameterIO
 
     struct VignettingShape
     {
+        VignettingShape() {}
+        ~VignettingShape(); // TODO
+
         sead::Buffer<sead::Vector4f> mVertexBuffer;
         sead::Buffer<u16> mIndexBuffer;
         u32 mVertex[0x1D4 / sizeof(u32)]; // agl::VertexBuffer
@@ -57,6 +65,7 @@ public:
     ~DepthOfField();
 
     void initialize (s32 ctx_num = 1, sead::Heap* heap = NULL);
+    void freeBuffer(s32 idx_ctx) const;
 
     void setEnable(bool enable)
     {
@@ -105,7 +114,7 @@ private:
     TempVignetting mTempVignetting0;
     TempVignetting mTempVignetting1;
     utl::Parameter<sead::Color4f> mFarMulColor;
-    u32 mDebugTexturePage[0x1DC / sizeof(u32)]; // agl::utl::DebugTexturePage
+    utl::DebugTexturePage mDebugTexturePage;
     ShaderProgram* mpCurrentProgramNearMask[2]; // sead::SafeArray
     ShaderProgram* mpCurrentProgramMipMap[2];
     const ShaderProgram* mpCurrentProgramDepthMask[2];

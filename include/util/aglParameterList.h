@@ -14,6 +14,8 @@ class IParameterList
 public:
     IParameterList();
 
+    void addObj(IParameterObj*, const sead::SafeString&);
+
 protected:
     virtual bool preWrite_() const { return true; }
     virtual void postWrite_() const { }
