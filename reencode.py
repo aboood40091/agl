@@ -6,4 +6,5 @@ def reencode(path):
         outf.write(text)
 
 
+reencode('src/detail/aglFileIOMgr.cpp')
 reencode('src/postfx/aglDepthOfField.cpp')

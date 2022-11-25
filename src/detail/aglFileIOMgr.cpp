@@ -1,6 +1,5 @@
 #include <detail/aglFileIOMgr.h>
 #include <detail/aglPrivateResource.h>
-
 #include <prim/seadMemUtil.h>
 
 namespace agl { namespace detail {
@@ -16,7 +15,7 @@ bool FileIOMgr::showDialog(sead::hostio::FileInfo* p_info, const sead::SafeStrin
                                     : filter;
 
     sead::FormatFixedSafeString<1024> arg(
-        "FileName = %s, Mode = %s, Id = %s, Filter = %sãƒ•ã‚¡ã‚¤ãƒ«(*.%s)|*.%s|ã™ã¹ã¦ã®ãƒ•ã‚¡ã‚¤ãƒ«(*.*)|*.*",
+        "FileName = %s, Mode = %s, Id = %s, Filter = %sƒtƒ@ƒCƒ‹(*.%s)|*.%s|‚·‚×‚Ä‚Ìƒtƒ@ƒCƒ‹(*.*)|*.*",
         filename.cstr(),
         mode.cstr(),
         id_.cstr(),
@@ -81,10 +80,10 @@ bool FileIOMgr::save(const void* p_buf, u32 size, const DialogArg& arg)
                 // Stripped in release build:
                 // sead::hostio::ShowMessageBox(
                 //     sead::FormatFixedSafeString<1024>(
-                //         "%sã®ä¿å­˜ã«å¤±æ•—ã—ã¾ã—ãŸã€‚\nä¿å­˜å…ˆã®ã‚¢ã‚¯ã‚»ã‚¹æ¨©ã‚’ç¢ºèªã—ã¦ä¸‹ã•ã„ã€‚",
+                //         "%s‚Ì•Û‘¶‚É¸”s‚µ‚Ü‚µ‚½B\n•Û‘¶æ‚ÌƒAƒNƒZƒXŒ ‚ğŠm”F‚µ‚Ä‰º‚³‚¢B",
                 //         file_info.path.cstr()
                 //     ),
-                //     "Caption=ãƒ•ã‚¡ã‚¤ãƒ«ä¿å­˜å¤±æ•—, Icon=Error",
+                //     "Caption=ƒtƒ@ƒCƒ‹•Û‘¶¸”s, Icon=Error",
                 //     ""
                 // );
             }

@@ -40,10 +40,10 @@ private:
     f32 mLODBias;
     u32 mMaxAniso;
     bool mReplaceCompSel;
-    u32 mCompR; // agl::TextureCompSel
-    u32 mCompG; // ^^
-    u32 mCompB; // ^^
-    u32 mCompA; // ^^
+    TextureCompSel mCompR;
+    TextureCompSel mCompG;
+    TextureCompSel mCompB;
+    TextureCompSel mCompA;
     bool mIsTextureSet;
     sead::Graphics::DepthFunc mDepthComp;
     mutable GX2Sampler mGX2Sampler;

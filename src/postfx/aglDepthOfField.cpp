@@ -70,4 +70,54 @@ DepthOfField::~DepthOfField()
     mContext.freeBuffer();
 }
 
+ShaderMode DepthOfField::draw(s32 idx_ctx, const RenderBuffer& render_buffer, f32 near, f32 far, ShaderMode mode) const
+{
+    // SEAD_ASSERT(render_buffer.getRenderTargetDepth() != nullptr);
+    return draw(idx_ctx, render_buffer, render_buffer.getRenderTargetDepth()->getTextureData(), false, near, far, mode);
+}
+
+ShaderMode DepthOfField::draw(s32 idx_ctx, const RenderBuffer& render_buffer, const TextureData& depth, bool view_depth, f32 near, f32 far, ShaderMode mode) const
+{
+    if (isEnable())
+    {
+        // SEAD_ASSERT(render_buffer.getRenderTargetColor() != nullptr);
+        if (mContext[idx_ctx].mIsInitialized)
+        {
+            DrawArg arg(mContext[idx_ctx], render_buffer, depth, view_depth, near, far);
+            if (enableBlurMipMapPass_())
+            {
+                allocBuffer(idx_ctx, render_buffer);
+                {
+                    // Pass 0
+                    {
+                        arg.mPass = 0;
+                        mode = drawColorMipMap_(arg, mode);
+                    }
+
+                    if (enableDepthBlur_()) // Pass 1
+                    {
+                        arg.mPass = 1;
+                        mode = drawDepthMipMap_(arg, mode);
+                    }
+
+                    // Pass 2
+                    {
+                        arg.mPass = 2;
+                        mode = drawCompose_(arg, mode);
+                    }
+                }
+                freeBuffer(idx_ctx);
+            }
+
+            if (enableSeparateVignettingPass_()) // Pass 3
+            {
+                arg.mPass = 3;
+                mode = drawVignetting_(arg, mode);
+            }
+        }
+    }
+
+    return mode;
+}
+
 } }

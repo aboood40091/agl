@@ -1,4 +1,4 @@
-#include <util/aglPrimitiveTexture.h>
+#include <utility/aglPrimitiveTexture.h>
 
 namespace agl { namespace utl {
 

@@ -1,7 +1,7 @@
 #include <detail/aglGX2.h>
 
 #ifdef cafe
-#include <cafe.h>
+#include <cafe/gx2.h>
 #endif // cafe
 
 namespace agl { namespace driver {

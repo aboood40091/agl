@@ -8,10 +8,10 @@ TextureData::TextureData()
     , mHeight(1)
     , mDepth(1)
     , mImageByteSize(1)
-    , mCompR(4)
-    , mCompG(4)
-    , mCompB(4)
-    , mCompA(4)
+    , mCompR(cTextureCompSel_0)
+    , mCompG(cTextureCompSel_0)
+    , mCompB(cTextureCompSel_0)
+    , mCompA(cTextureCompSel_0)
 {
     sead::MemUtil::fillZero(&mSurface, sizeof(GX2Surface));
 }

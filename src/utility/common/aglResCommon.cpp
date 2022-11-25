@@ -1,5 +1,5 @@
+#include <common/aglResCommon.h>
 #include <prim/seadEndian.h>
-#include <util/common/aglResCommon.h>
 
 namespace agl {
 

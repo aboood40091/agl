@@ -25,12 +25,12 @@ public:
     virtual void clear(u32 clr_flag, const sead::Color4f& color, f32 depth, u32 stencil) const;
     virtual void bindImpl_() const;
 
-    RenderTarget<RenderTargetColor>* getColorTarget(u32 target = 0) const
+    RenderTarget<RenderTargetColor>* getRenderTargetColor(u32 target = 0) const
     {
         return mColorTarget[target];
     }
 
-    RenderTarget<RenderTargetDepth>* getDepthTarget() const
+    RenderTarget<RenderTargetDepth>* getRenderTargetDepth() const
     {
         return mDepthTarget;
     }

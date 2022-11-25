@@ -1,8 +1,8 @@
 #pragma once
 
+#include <common/aglResCommon.h>
 #include <common/aglShaderEnum.h>
 #include <prim/seadSafeString.h>
-#include <util/common/aglResCommon.h>
 
 namespace agl {
 

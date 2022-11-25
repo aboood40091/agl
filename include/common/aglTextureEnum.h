@@ -76,4 +76,32 @@ enum TextureFormat
 static_assert(sizeof(TextureFormat) == 4 &&
               cTextureFormat_Num == 0x3C, "agl::TextureFormat size mismatch");
 
+enum TextureType
+{
+    cTextureType_1D,
+    cTextureType_2D,
+    cTextureType_3D,
+    cTextureType_CubeMap,
+    cTextureType_1D_Array,
+    cTextureType_2D_Array,
+    cTextureType_2D_MSAA,
+    cTextureType_2D_MSAA_Array,
+    cTextureType_Num
+};
+static_assert(sizeof(TextureType) == 4 &&
+              cTextureType_Num == 8, "agl::TextureType size mismatch");
+
+enum TextureCompSel
+{
+    cTextureCompSel_R,
+    cTextureCompSel_G,
+    cTextureCompSel_B,
+    cTextureCompSel_A,
+    cTextureCompSel_0,
+    cTextureCompSel_1,
+    cTextureCompSel_Num
+};
+static_assert(sizeof(TextureCompSel) == 4 &&
+              cTextureCompSel_Num == 6, "agl::TextureCompSel size mismatch");
+
 }

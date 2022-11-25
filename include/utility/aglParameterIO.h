@@ -1,7 +1,7 @@
 #pragma once
 
-#include <util/aglParameterList.h>
-#include <util/aglResParameter.h>
+#include <utility/aglParameterList.h>
+#include <utility/aglResParameter.h>
 
 namespace agl { namespace utl {
 

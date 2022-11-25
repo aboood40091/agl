@@ -1,11 +1,11 @@
+#include <common/aglResShaderArchive.h>
+#include <common/aglResShaderVariation.h>
+#include <common/aglResShaderSymbol.h>
+#include <common/aglShader.h>
 #include <prim/seadEndian.h>
-#include <util/common/aglResShaderArchive.h>
-#include <util/common/aglResShaderVariation.h>
-#include <util/common/aglResShaderSymbol.h>
-#include <util/common/aglShader.h>
 
 #ifdef cafe
-#include <cafe.h>
+#include <cafe/gx2.h>
 #endif // cafe
 
 static inline void swap32(void* ptr, size_t size)

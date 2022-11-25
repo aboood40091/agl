@@ -12,12 +12,12 @@ public:
     TextureData();
     virtual ~TextureData() { }
 
-    /* agl::TextureType */ GX2SurfaceDim getTextureType() const { return mSurface.dim; }
+    TextureType getTextureType() const { return TextureType(mSurface.dim); }
 
-    /* agl::TextureCompSel */ u32 getComponentR() const { return mCompR; }
-    /* agl::TextureCompSel */ u32 getComponentG() const { return mCompG; }
-    /* agl::TextureCompSel */ u32 getComponentB() const { return mCompB; }
-    /* agl::TextureCompSel */ u32 getComponentA() const { return mCompA; }
+    TextureCompSel getComponentR() const { return mCompR; }
+    TextureCompSel getComponentG() const { return mCompG; }
+    TextureCompSel getComponentB() const { return mCompB; }
+    TextureCompSel getComponentA() const { return mCompA; }
 
 private:
     TextureFormat mFormat;
@@ -26,10 +26,10 @@ private:
     u32 mHeight;
     u32 mDepth;
     u32 mImageByteSize;
-    u32 mCompR; // agl::TextureCompSel
-    u32 mCompG; // ^^
-    u32 mCompB; // ^^
-    u32 mCompA; // ^^
+    TextureCompSel mCompR;
+    TextureCompSel mCompG;
+    TextureCompSel mCompB;
+    TextureCompSel mCompA;
 };
 static_assert(sizeof(TextureData) == 0x9C, "agl::TextureData size mismatch");
 

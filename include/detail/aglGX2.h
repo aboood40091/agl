@@ -1,9 +1,9 @@
 #pragma once
 
 #include <common/aglShaderEnum.h>
+#include <common/aglShaderOptimizeInfo.h>
 #include <heap/seadDisposer.h>
 #include <thread/seadCriticalSection.h>
-#include <util/common/aglShaderOptimizeInfo.h>
 
 namespace agl { namespace driver {
 

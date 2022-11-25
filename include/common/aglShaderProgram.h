@@ -1,13 +1,13 @@
 #pragma once
 
 #include <common/aglDisplayList.h>
+#include <common/aglResShaderSymbol.h>
+#include <common/aglResShaderVariation.h>
+#include <common/aglShader.h>
 #include <common/aglShaderLocation.h>
 #include <container/seadBuffer.h>
 #include <prim/seadBitFlag.h>
 #include <prim/seadNamable.h>
-#include <util/common/aglResShaderSymbol.h>
-#include <util/common/aglResShaderVariation.h>
-#include <util/common/aglShader.h>
 
 namespace agl {
 

@@ -2,7 +2,7 @@
 
 //#include <container/seadOffsetList.h>
 #include <prim/seadSafeString.h>
-#include <util/aglResParameter.h>
+#include <utility/aglResParameter.h>
 
 namespace agl { namespace utl {
 

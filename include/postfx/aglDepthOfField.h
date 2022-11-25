@@ -6,10 +6,10 @@
 #include <common/aglTextureSampler.h>
 #include <container/seadBuffer.h>
 #include <gfx/seadGraphicsContextMRT.h>
-#include <util/aglDebugTexturePage.h>
-#include <util/aglParameter.h>
-#include <util/aglParameterIO.h>
-#include <util/aglParameterObj.h>
+#include <utility/aglDebugTexturePage.h>
+#include <utility/aglParameter.h>
+#include <utility/aglParameterIO.h>
+#include <utility/aglParameterObj.h>
 
 namespace agl {
 
@@ -35,11 +35,25 @@ class DepthOfField : public utl::IParameterIO
     };
     static_assert(sizeof(Context) == 0x834, "agl::pfx::DepthOfField::Context size mismatch");
 
-    struct TempVignetting
+    struct DrawArg
+    {
+        DrawArg(Context& ctx, const RenderBuffer& render_buffer, const TextureData& depth, bool view_depth, f32 near, f32 far);
+
+        s32 mPass;
+        Context& mCtx;
+        const RenderBuffer& mRenderBuffer;
+        f32 mNear;
+        f32 mFar;
+        u32 mWidth;
+        u32 mHeight;
+        bool mViewDepth;
+    };
+    static_assert(sizeof(DrawArg) == 0x20, "agl::pfx::DepthOfField::DrawArg size mismatch");
+
+    struct TempVignetting : utl::IParameterObj
     {
         TempVignetting(DepthOfField*, const sead::SafeString&);
 
-        utl::IParameterObj mParameterObj;
         utl::Parameter<s32> mType;
         utl::Parameter<sead::Vector2f> mRange;
         utl::Parameter<sead::Vector2f> mScale;
@@ -47,12 +61,17 @@ class DepthOfField : public utl::IParameterIO
     };
     static_assert(sizeof(TempVignetting) == 0xCC, "agl::pfx::DepthOfField::TempVignetting size mismatch");
 
+    struct Vertex
+    {
+        sead::Vector4f data;
+    };
+
     struct VignettingShape
     {
         VignettingShape() {}
         ~VignettingShape(); // TODO
 
-        sead::Buffer<sead::Vector4f> mVertexBuffer;
+        sead::Buffer<Vertex> mVertexBuffer;
         sead::Buffer<u16> mIndexBuffer;
         u32 mVertex[0x1D4 / sizeof(u32)]; // agl::VertexBuffer
         u32 mAttrib[0xF4 / sizeof(u32)]; // agl::VertexAttribute
@@ -65,22 +84,43 @@ public:
     ~DepthOfField();
 
     void initialize (s32 ctx_num = 1, sead::Heap* heap = NULL);
-    void freeBuffer(s32 idx_ctx) const;
+
+    bool isEnable() const
+    {
+        return mEnable.getValue();
+    }
 
     void setEnable(bool enable)
     {
         mEnable.setValue(enable);
     }
 
-    void setIndirectTextureData(const TextureData* p_texture_data);
-    void setIndirectTextureTrans(const sead::Vector2f& trans);
-    void setIndirectEnable(bool enable);
+    ShaderMode draw(s32 idx_ctx, const RenderBuffer& render_buffer, f32 near, f32 far, ShaderMode mode = cShaderMode_Invalid) const;
+    ShaderMode draw(s32 idx_ctx, const RenderBuffer& render_buffer, const TextureData& depth, bool view_depth, f32 near, f32 far, ShaderMode mode = cShaderMode_Invalid) const;
 
-    ShaderMode draw(s32, const RenderBuffer&, f32, f32, ShaderMode = cShaderMode_Invalid) const;
-    ShaderMode draw(s32, const RenderBuffer&, const TextureData&, bool, f32, f32, ShaderMode = cShaderMode_Invalid) const;
+    void allocBuffer(s32 idx_ctx, const RenderBuffer& render_buffer) const;
+    void allocBuffer(s32 idx_ctx, TextureFormat format, s32 width, s32 height) const;
+    void freeBuffer(s32 idx_ctx) const;
 
 private:
-    sead::Buffer<Context> mContext;
+    bool enableDepthOfField_() const;
+    bool enableBlurMipMapPass_() const;
+    bool enableDepthBlur_() const;
+    bool enableSeparateVignettingPass_() const;
+
+    ShaderMode drawColorMipMap_(const DrawArg& arg, ShaderMode mode) const;
+    ShaderMode drawDepthMipMap_(const DrawArg& arg, ShaderMode mode) const;
+    ShaderMode drawCompose_(const DrawArg& arg, ShaderMode mode) const;
+    ShaderMode drawVignetting_(const DrawArg& arg, ShaderMode mode) const;
+
+public:
+    void setIndirectTextureData(const TextureData* p_texture_data);
+    void setIndirectEnable(bool enable);
+
+    void setIndirectTextureTrans(const sead::Vector2f& trans);
+
+private:
+    mutable sead::Buffer<Context> mContext;
     u32 _1e8;
     f32 _1ec;
     u8 _1f0;
