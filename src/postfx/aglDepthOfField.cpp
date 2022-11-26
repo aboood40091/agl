@@ -120,4 +120,14 @@ ShaderMode DepthOfField::draw(s32 idx_ctx, const RenderBuffer& render_buffer, co
     return mode;
 }
 
+DepthOfField::TempVignetting::TempVignetting(DepthOfField* p_dof, const sead::SafeString& param_name)
+    : utl::IParameterObj()
+    , mType (0,                           "type",  "形状",    this)
+    , mRange(sead::Vector2f(0.25f, 1.0f), "range", "変化幅",  this)
+    , mScale(sead::Vector2f(1.0f, 1.0f),  "scale", "スケール",  this)
+    , mTrans(sead::Vector2f(0.0f, 0.0f),  "trans", "オフセット", this)
+{
+    p_dof->addObj(this, param_name);
+}
+
 } }

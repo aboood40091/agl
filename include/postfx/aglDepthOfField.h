@@ -55,7 +55,7 @@ class DepthOfField : public utl::IParameterIO
 
     struct TempVignetting : utl::IParameterObj
     {
-        TempVignetting(DepthOfField*, const sead::SafeString&);
+        TempVignetting(DepthOfField* p_dof, const sead::SafeString& param_name);
 
         utl::Parameter<s32> mType;
         utl::Parameter<sead::Vector2f> mRange;
