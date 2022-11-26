@@ -7,7 +7,6 @@ namespace agl {
 // No idea which headers these are actually supposed to go in
 
 // enum TextureFilterType;
-// enum TextureCompSel;
 
 enum TextureFormat
 {

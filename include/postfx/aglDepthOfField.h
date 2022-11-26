@@ -1,9 +1,12 @@
 #pragma once
 
+#include <common/aglIndexStream.h>
 #include <common/aglRenderBuffer.h>
 #include <common/aglRenderTarget.h>
 #include <common/aglShaderEnum.h>
 #include <common/aglTextureSampler.h>
+#include <common/aglVertexAttribute.h>
+#include <common/aglVertexBuffer.h>
 #include <container/seadBuffer.h>
 #include <gfx/seadGraphicsContextMRT.h>
 #include <utility/aglDebugTexturePage.h>
@@ -68,14 +71,11 @@ class DepthOfField : public utl::IParameterIO
 
     struct VignettingShape
     {
-        VignettingShape() {}
-        ~VignettingShape(); // TODO
-
         sead::Buffer<Vertex> mVertexBuffer;
         sead::Buffer<u16> mIndexBuffer;
-        u32 mVertex[0x1D4 / sizeof(u32)]; // agl::VertexBuffer
-        u32 mAttrib[0xF4 / sizeof(u32)]; // agl::VertexAttribute
-        u32 mIndex[0x18 / sizeof(u32)]; // agl::IndexStream
+        VertexBuffer mVertex;
+        VertexAttribute mAttrib; // 0xF4
+        IndexStream mIndex; // 0x18
     };
     static_assert(sizeof(VignettingShape) == 0x2F0, "agl::pfx::DepthOfField::VignettingShape size mismatch");
 
