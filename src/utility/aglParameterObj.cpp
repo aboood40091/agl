@@ -14,6 +14,8 @@ IParameterObj::IParameterObj()
 
 void IParameterObj::pushBackListNode(ParameterBase* p_node)
 {
+    // SEAD_ASSERT(p_node != nullptr);
+
     u32 child_hash[1024];
     u32 child_num = 0;
 

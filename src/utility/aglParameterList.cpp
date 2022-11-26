@@ -19,4 +19,13 @@ void IParameterList::setParameterListName_(const sead::SafeString& name)
     mNameHash = ParameterBase::calcHash(name);
 }
 
+void IParameterList::addObj(IParameterObj* child, const sead::SafeString& name)
+{
+    // SEAD_ASSERT(child != nullptr);
+    child->mName = name;
+    child->mNameHash = ParameterBase::calcHash(child->mName);
+
+    mChildObj.pushBack(child);
+}
+
 } }
