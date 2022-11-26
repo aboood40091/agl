@@ -6,26 +6,26 @@
 namespace agl { namespace utl {
 
 template <>
-inline Parameter<sead::Vector2f>::Parameter(const sead::SafeString& name_1, const sead::SafeString& name_2, IParameterObj* p_obj, const sead::Vector2f& value)
+inline Parameter<sead::Vector2f>::Parameter(const sead::Vector2f& value, const sead::SafeString& name, const sead::SafeString& label, IParameterObj* p_obj)
     : ParameterBase()
 {
-    initializeListNode(name_1, name_2, "", p_obj);
+    initializeListNode(name, label, "", p_obj);
     mValue.set(value);
 }
 
 template <>
-inline Parameter<sead::Vector3f>::Parameter(const sead::SafeString& name_1, const sead::SafeString& name_2, IParameterObj* p_obj, const sead::Vector3f& value)
+inline Parameter<sead::Vector3f>::Parameter(const sead::Vector3f& value, const sead::SafeString& name, const sead::SafeString& label, IParameterObj* p_obj)
     : ParameterBase()
 {
-    initializeListNode(name_1, name_2, "", p_obj);
+    initializeListNode(name, label, "", p_obj);
     mValue.set(value);
 }
 
 template <>
-inline Parameter<sead::Vector4f>::Parameter(const sead::SafeString& name_1, const sead::SafeString& name_2, IParameterObj* p_obj, const sead::Vector4f& value)
+inline Parameter<sead::Vector4f>::Parameter(const sead::Vector4f& value, const sead::SafeString& name, const sead::SafeString& label, IParameterObj* p_obj)
     : ParameterBase()
 {
-    initializeListNode(name_1, name_2, "", p_obj);
+    initializeListNode(name, label, "", p_obj);
     mValue.set(value);
 }
 
@@ -56,7 +56,7 @@ template <>
 inline ParameterBase::ParameterType
 Parameter<f32>::getParameterType() const
 {
-    return cType_float;
+    return cType_f32;
 }
 
 template <>
@@ -91,7 +91,7 @@ template <>
 inline ParameterBase::ParameterType
 Parameter< sead::FixedSafeString<32> >::getParameterType() const
 {
-    return cType_str;
+    return cType_string32;
 }
 
 } }

@@ -18,14 +18,14 @@ class ParameterBase
 public:
     enum ParameterType
     {
-        cType_bool  = 0, // bool
-        cType_float = 1, // f32
-        cType_int   = 2, // s32
-        cType_vec2  = 3, // sead::Vector2f
-        cType_vec3  = 4, // sead::Vector3f
-        cType_vec4  = 5, // sead::Vector4f
-        cType_color = 6, // sead::Color4f
-        cType_str   = 7  // sead::FixedSafeString<32>
+        cType_bool      = 0, // bool
+        cType_f32       = 1, // f32
+        cType_int       = 2, // s32
+        cType_vec2      = 3, // sead::Vector2f
+        cType_vec3      = 4, // sead::Vector3f
+        cType_vec4      = 5, // sead::Vector4f
+        cType_color     = 6, // sead::Color4f
+        cType_string32  = 7  // sead::FixedSafeString<32>
     };
 
 public:
@@ -46,7 +46,7 @@ public:
 
     virtual void postApplyResource_(const void*, size_t) { }
 
-    void initializeListNode(const sead::SafeString&, const sead::SafeString&, const sead::SafeString&, IParameterObj*);
+    void initializeListNode(const sead::SafeString& name, const sead::SafeString& label, const sead::SafeString& meta, IParameterObj* p_obj);
 
     static u32 calcHash(const sead::SafeString& s);
 
@@ -62,10 +62,10 @@ template <typename T>
 class Parameter : public ParameterBase
 {
 public:
-    Parameter(const sead::SafeString& name_1, const sead::SafeString& name_2, IParameterObj* p_obj, const T& value)
+    Parameter(const T& value, const sead::SafeString& name, const sead::SafeString& label, IParameterObj* p_obj)
         : ParameterBase()
     {
-        initializeListNode(name_1, name_2, "", p_obj);
+        initializeListNode(name, label, "", p_obj);
         mValue = value;
     }
 
