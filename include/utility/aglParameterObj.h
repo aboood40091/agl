@@ -14,6 +14,8 @@ class IParameterObj
 public:
     IParameterObj();
 
+    void pushBackListNode(ParameterBase* p_node);
+
 protected:
     virtual bool preWrite_() const { return true; }
     virtual void postWrite_() const { }
