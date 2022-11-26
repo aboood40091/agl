@@ -1,5 +1,6 @@
 #pragma once
 
+#include <container/seadListImpl.h>
 #include <prim/seadSafeString.h>
 
 namespace sead {
@@ -47,10 +48,13 @@ public:
 
     void initializeListNode(const sead::SafeString&, const sead::SafeString&, const sead::SafeString&, IParameterObj*);
 
+    static u32 calcHash(const sead::SafeString& s);
+
 protected:
     u32 mHash;
-    u32 _4;
-    u32 _8;
+    sead::ListNode mListNode;
+
+    friend class IParameterObj;
 };
 static_assert(sizeof(ParameterBase) == 0x10, "agl::utl::ParameterBase size mismatch");
 
