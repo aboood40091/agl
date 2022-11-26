@@ -1,10 +1,13 @@
 #pragma once
 
-//#include <container/seadOffsetList.h>
+#include <container/seadOffsetList.h>
 #include <prim/seadSafeString.h>
 #include <utility/aglResParameter.h>
 
 namespace agl { namespace utl {
+
+class IParameterList;
+class ParameterBase;
 
 class IParameterObj
 {
@@ -19,12 +22,13 @@ protected:
     virtual bool isApply_(ResParameterObj obj) const { return obj.getParameterObjNameHash() == mNameHash; }
 
 protected:
-    u32 _0[4];  // sead::OffsetList<idk>
-    sead::FixedSafeString<64> _10;
+    sead::OffsetList<ParameterBase> mChildParameter;
+    sead::FixedSafeString<64> mName;
     u32 mNameHash;
-    u32 _60;
-    u32 _64;
-    u32 _68;
+    u32 mChildHash;
+    sead::ListNode mListNode;
+
+    friend class IParameterList;
 };
 static_assert(sizeof(IParameterObj) == 0x70, "agl::utl::IParameterObj size mismatch");
 
