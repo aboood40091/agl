@@ -9,10 +9,8 @@ class IParameterIO : public IParameterList
 {
 public:
     IParameterIO();
-    IParameterIO(const sead::SafeString&, u32 = 0);
-
-protected:
-    virtual void callbackNotInterpolatable_(IParameterObj*, ParameterBase*, ResParameterObj, ResParameterObj, ResParameter, ResParameter, f32) { }
+    IParameterIO(const sead::SafeString& name, u32 = 0);
+    virtual ~IParameterIO() { }
 
 public:
     virtual bool save(const sead::SafeString&, u32) const;

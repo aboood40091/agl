@@ -81,7 +81,7 @@ class DepthOfField : public utl::IParameterIO
 
 public:
     DepthOfField();
-    ~DepthOfField();
+    virtual ~DepthOfField();
 
     void initialize (s32 ctx_num = 1, sead::Heap* heap = NULL);
 
