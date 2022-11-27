@@ -1,5 +1,6 @@
 #include <detail/aglRootNode.h>
 #include <postfx/aglDepthOfField.h>
+#include <utility/aglDynamicTextureAllocator.h>
 
 namespace agl { namespace pfx {
 
@@ -70,23 +71,23 @@ DepthOfField::~DepthOfField()
     mContext.freeBuffer();
 }
 
-ShaderMode DepthOfField::draw(s32 idx_ctx, const RenderBuffer& render_buffer, f32 near, f32 far, ShaderMode mode) const
+ShaderMode DepthOfField::draw(s32 ctx_index, const RenderBuffer& render_buffer, f32 near, f32 far, ShaderMode mode) const
 {
     // SEAD_ASSERT(render_buffer.getRenderTargetDepth() != nullptr);
-    return draw(idx_ctx, render_buffer, render_buffer.getRenderTargetDepth()->getTextureData(), false, near, far, mode);
+    return draw(ctx_index, render_buffer, render_buffer.getRenderTargetDepth()->getTextureData(), false, near, far, mode);
 }
 
-ShaderMode DepthOfField::draw(s32 idx_ctx, const RenderBuffer& render_buffer, const TextureData& depth, bool view_depth, f32 near, f32 far, ShaderMode mode) const
+ShaderMode DepthOfField::draw(s32 ctx_index, const RenderBuffer& render_buffer, const TextureData& depth, bool view_depth, f32 near, f32 far, ShaderMode mode) const
 {
     if (isEnable())
     {
         // SEAD_ASSERT(render_buffer.getRenderTargetColor() != nullptr);
-        if (mContext[idx_ctx].mIsInitialized)
+        if (mContext[ctx_index].mIsInitialized)
         {
-            DrawArg arg(mContext[idx_ctx], render_buffer, depth, view_depth, near, far);
+            DrawArg arg(mContext[ctx_index], render_buffer, depth, view_depth, near, far);
             if (enableBlurMipMapPass_())
             {
-                allocBuffer(idx_ctx, render_buffer);
+                allocBuffer(ctx_index, render_buffer);
                 {
                     // Pass 0
                     {
@@ -106,7 +107,7 @@ ShaderMode DepthOfField::draw(s32 idx_ctx, const RenderBuffer& render_buffer, co
                         mode = drawCompose_(arg, mode);
                     }
                 }
-                freeBuffer(idx_ctx);
+                freeBuffer(ctx_index);
             }
 
             if (enableSeparateVignettingPass_()) // Pass 3
@@ -118,6 +119,21 @@ ShaderMode DepthOfField::draw(s32 idx_ctx, const RenderBuffer& render_buffer, co
     }
 
     return mode;
+}
+
+void DepthOfField::freeBuffer(s32 ctx_index) const
+{
+    Context& ctx = mContext[ctx_index];
+    if (ctx.mpColorTextureData)
+    {
+        utl::DynamicTextureAllocator::instance()->free(ctx.mpColorTextureData);
+        ctx.mpColorTextureData = NULL;
+    }
+    if (ctx.mpDepthTextureData)
+    {
+        utl::DynamicTextureAllocator::instance()->free(ctx.mpDepthTextureData);
+        ctx.mpDepthTextureData = NULL;
+    }
 }
 
 DepthOfField::TempVignetting::TempVignetting(DepthOfField* p_dof, const sead::SafeString& param_name)

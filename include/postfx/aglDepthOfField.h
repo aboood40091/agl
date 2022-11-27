@@ -96,12 +96,12 @@ public:
         mEnable.setValue(enable);
     }
 
-    ShaderMode draw(s32 idx_ctx, const RenderBuffer& render_buffer, f32 near, f32 far, ShaderMode mode = cShaderMode_Invalid) const;
-    ShaderMode draw(s32 idx_ctx, const RenderBuffer& render_buffer, const TextureData& depth, bool view_depth, f32 near, f32 far, ShaderMode mode = cShaderMode_Invalid) const;
+    ShaderMode draw(s32 ctx_index, const RenderBuffer& render_buffer, f32 near, f32 far, ShaderMode mode = cShaderMode_Invalid) const;
+    ShaderMode draw(s32 ctx_index, const RenderBuffer& render_buffer, const TextureData& depth, bool view_depth, f32 near, f32 far, ShaderMode mode = cShaderMode_Invalid) const;
 
-    void allocBuffer(s32 idx_ctx, const RenderBuffer& render_buffer) const;
-    void allocBuffer(s32 idx_ctx, TextureFormat format, s32 width, s32 height) const;
-    void freeBuffer(s32 idx_ctx) const;
+    void allocBuffer(s32 ctx_index, const RenderBuffer& render_buffer) const;
+    void allocBuffer(s32 ctx_index, TextureFormat format, s32 width, s32 height) const;
+    void freeBuffer(s32 ctx_index) const;
 
 private:
     bool enableDepthOfField_() const;
