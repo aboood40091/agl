@@ -28,23 +28,25 @@ private:
 
 private:
     TextureData mTextureData;
-    u32 mFilterMag; // agl::TextureFilterType
-    u32 mFilterMin; // ^^
-    u32 mMipFilter;
-    u32 mWrapX;
-    u32 mWrapY;
-    u32 mWrapZ;
+    TextureFilterType mFilterMag;
+    TextureFilterType mFilterMin;
+    TextureMipFilterType mMipFilter;
+    TextureWrapType mWrapX;
+    TextureWrapType mWrapY;
+    TextureWrapType mWrapZ;
     sead::Color4f mBorderColor;
     f32 mLODMin;
     f32 mLODMax;
     f32 mLODBias;
-    u32 mMaxAniso;
+    TextureAnisoRatio mMaxAniso;
     bool mReplaceCompSel;
     TextureCompSel mCompR;
     TextureCompSel mCompG;
     TextureCompSel mCompB;
     TextureCompSel mCompA;
     bool mIsTextureSet;
+    u8 _e9;
+    u8 _ea;
     sead::Graphics::DepthFunc mDepthComp;
     mutable GX2Sampler mGX2Sampler;
     mutable GX2Texture mGX2Texture;
