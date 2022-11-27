@@ -38,6 +38,18 @@ static_assert(sizeof(Parameter<sead::Vector4f>) == 0x20);
 static_assert(sizeof(Parameter<sead::Color4f>) == 0x20);
 static_assert(sizeof(Parameter< sead::FixedSafeString<32> >) == 0x3C);
 
+template <typename T>
+void ParameterBase::copyLerp_(const ParameterBase& parameter_a, const ParameterBase& parameter_b, f32 t)
+{
+    static_cast<T*>(ptr())->setLerp(*static_cast<const T*>(parameter_a.ptr()), *static_cast<const T*>(parameter_b.ptr()), t);
+}
+
+template <>
+void ParameterBase::copyLerp_<f32>(const ParameterBase& parameter_a, const ParameterBase& parameter_b, f32 t)
+{
+    *static_cast<f32*>(ptr()) = sead::Mathf::lerp(*static_cast<const f32*>(parameter_a.ptr()), *static_cast<const f32*>(parameter_b.ptr()), t);
+}
+
 template <>
 inline ParameterBase::ParameterType
 Parameter<bool>::getParameterType() const

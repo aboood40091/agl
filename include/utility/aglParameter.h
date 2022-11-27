@@ -32,10 +32,15 @@ public:
     ParameterBase();
     virtual ~ParameterBase() { }
 
-    virtual bool copy(const ParameterBase&);
-    virtual void copyUnsafe(const ParameterBase&);
-    virtual bool copyLerp(const ParameterBase&, const ParameterBase&, f32);
+    virtual bool copy(const ParameterBase& parameter);
+    virtual void copyUnsafe(const ParameterBase& parameter);
+    virtual bool copyLerp(const ParameterBase& parameter_a, const ParameterBase& parameter_b, f32 t);
 
+private:
+    template <typename T>
+    void copyLerp_(const ParameterBase& parameter_a, const ParameterBase& parameter_b, f32 t);
+
+public:
     virtual ParameterType getParameterType() const = 0;
     virtual const void* ptr() const = 0;
     virtual void* ptr() = 0;
