@@ -2,6 +2,40 @@
 
 namespace agl {
 
+TextureSampler::TextureSampler()
+    : mTextureData()
+    , mFilterMag(cTextureFilterType_Linear)
+    , mFilterMin(cTextureFilterType_Linear)
+    , mMipFilter(cTextureMipFilterType_Linear)
+    , mWrapX(cTextureWrapType_Clamp)
+    , mWrapY(cTextureWrapType_Clamp)
+    , mWrapZ(cTextureWrapType_Clamp)
+    , mBorderColor(0.0f, 0.0f, 0.0f, 1.0f)
+    , mLODMin(0.0f)
+    , mLODMax(14.0f)
+    , mLODBias(0.0f)
+    , mMaxAniso(cTextureAnisoRatio_1_to_1)
+    , mReplaceCompSel(false)
+    , mCompR(cTextureCompSel_R)
+    , mCompG(cTextureCompSel_G)
+    , mCompB(cTextureCompSel_B)
+    , mCompA(cTextureCompSel_A)
+    , mIsTextureSet(false)
+    , _e9(0)
+    , _ea(0)
+    , mDepthComp(sead::Graphics::cDepthFunc_Never)
+{
+    GX2InitSampler(&mGX2Sampler,
+                   GX2_TEX_CLAMP_CLAMP,
+                   GX2_TEX_XY_FILTER_BILINEAR);
+
+    mFlag.makeAllOne();
+}
+
+TextureSampler::~TextureSampler()
+{
+}
+
 void TextureSampler::initRegs_() const
 {
     if (mFlag.isOn(1 << 0))
@@ -79,6 +113,7 @@ void TextureSampler::initDepthComp_() const
 {
     GX2InitSamplerDepthCompare(&mGX2Sampler, (GX2CompareFunction)mDepthComp);
 }
+
 void TextureSampler::initBorderColor_() const
 {
     if (mBorderColor == sead::Color4f::cBlack)
