@@ -1,5 +1,6 @@
 #pragma once
 
+#include <container/seadBuffer.h>
 #include <gfx/seadFrameBuffer.h>
 #include <heap/seadDisposer.h>
 #include <math/seadVector.h>
@@ -38,6 +39,8 @@ public:
 private:
     RenderTarget<RenderTargetColor>* mColorTarget[8]; // sead::UnsafeArray
     RenderTarget<RenderTargetDepth>* mDepthTarget;
+
+    static sead::Buffer<RenderBuffer*> sBoundRenderBuffer;
 };
 static_assert(sizeof(RenderBuffer) == 0x50, "agl::RenderBuffer size mistmatch");
 
