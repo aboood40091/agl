@@ -21,6 +21,8 @@ public:
     sead::HeapSafeString* getShaderText() const { return mShaderText; }
     sead::Buffer<char>& getShaderWorkBuffer() { return mShaderWorkBuffer; }
     sead::Heap* getDebugHeap() const { return mDebugHeap; }
+    sead::CriticalSection& getCriticalSection() { return mCriticalSection; }
+    const sead::CriticalSection& getCriticalSection() const { return mCriticalSection; }
 
 private:
     sead::Heap* mWorkHeap; // ExpHeap*

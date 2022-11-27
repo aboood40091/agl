@@ -9,6 +9,7 @@
 #include <common/aglVertexBuffer.h>
 #include <container/seadBuffer.h>
 #include <gfx/seadGraphicsContextMRT.h>
+#include <hostio/seadHostIODummy.h>
 #include <utility/aglDebugTexturePage.h>
 #include <utility/aglParameter.h>
 #include <utility/aglParameterIO.h>
@@ -21,7 +22,7 @@ class TextureData;
 
 namespace pfx {
 
-class DepthOfField : public utl::IParameterIO
+class DepthOfField : public utl::IParameterIO, public sead::hostio::Node
 {
     struct Context
     {
