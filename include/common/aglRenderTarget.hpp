@@ -54,19 +54,35 @@ RenderTargetColor::copyToDisplayBuffer(GX2ScanTarget scan_target) const
 }
 
 inline void
-RenderTargetColor::expandAuxBuffer() const
+RenderTargetColor::initRegs() const
 {
-    if (!mpAuxBuffer)
-        return;
-
     if (mUpdateRegs)
     {
         initRegs_();
         mUpdateRegs = false;
     }
+}
+
+inline void
+RenderTargetColor::expandAuxBuffer() const
+{
+    if (!mpAuxBuffer)
+        return;
+
+    initRegs();
 
     GX2ExpandAAColorBuffer(&mInnerBuffer);
     driver::GX2Resource::instance()->restoreContextState();
+}
+
+inline void
+RenderTargetDepth::initRegs() const
+{
+    if (mUpdateRegs)
+    {
+        initRegs_();
+        mUpdateRegs = false;
+    }
 }
 
 inline void
@@ -75,11 +91,7 @@ RenderTargetDepth::expandHiZBuffer() const
     if (!mpHiZBuffer)
         return;
 
-    if (mUpdateRegs)
-    {
-        initRegs_();
-        mUpdateRegs = false;
-    }
+    initRegs();
 
     GX2ExpandDepthBuffer(&mInnerBuffer);
     driver::GX2Resource::instance()->restoreContextState();

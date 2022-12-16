@@ -46,7 +46,7 @@ private:
     RenderTarget<RenderTargetColor>* mColorTarget[8]; // sead::SafeArray
     RenderTarget<RenderTargetDepth>* mDepthTarget;
 
-    static sead::Buffer<RenderBuffer*> sBoundRenderBuffer;
+    static sead::Buffer<const RenderBuffer*> sBoundRenderBuffer;
 };
 static_assert(sizeof(RenderBuffer) == 0x50, "agl::RenderBuffer size mistmatch");
 

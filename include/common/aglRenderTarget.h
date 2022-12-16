@@ -40,6 +40,7 @@ public:
 
     void copyToDisplayBuffer(const sead::DisplayBufferCafe* display_buffer) const;
     void copyToDisplayBuffer(GX2ScanTarget scan_target) const;
+    void initRegs() const;
     void expandAuxBuffer() const;
 
     void invalidateGPUCache() const;
@@ -64,6 +65,7 @@ public:
 
     GX2DepthBuffer& getInnerBuffer() const { return mInnerBuffer; }
 
+    void initRegs() const;
     void expandHiZBuffer() const;
 
     void invalidateGPUCache() const;

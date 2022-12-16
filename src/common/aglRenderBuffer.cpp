@@ -1,9 +1,10 @@
 #include <common/aglRenderBuffer.h>
 #include <common/aglRenderTarget.h>
+#include <mc/seadCoreInfo.h>
 
 namespace agl {
 
-sead::Buffer<RenderBuffer*> RenderBuffer::sBoundRenderBuffer;
+sead::Buffer<const RenderBuffer*> RenderBuffer::sBoundRenderBuffer;
 
 RenderBuffer::~RenderBuffer()
 {
@@ -101,6 +102,31 @@ void RenderBuffer::clear(u32 target_index, u32 clr_flag, const sead::Color4f& co
     }
 
     driver::GX2Resource::instance()->restoreContextState();
+}
+
+void RenderBuffer::bindImpl_() const
+{
+    sBoundRenderBuffer[sead::CoreInfo::getCurrentCoreId()] = this;
+
+    // TODO: sead::SafeArray
+    {
+        typedef sead::Buffer< RenderTarget<RenderTargetColor>* const >::iterator _Iterator;
+        for (_Iterator it = _Iterator(mColorTarget), it_end = _Iterator(mColorTarget, 8); it != it_end; ++it)
+        {
+            const RenderTarget<RenderTargetColor>* const p_color_target = *it;
+            if (p_color_target)
+            {
+                p_color_target->initRegs();
+                GX2SetColorBuffer(&p_color_target->getInnerBuffer(), GX2RenderTarget(it.getIndex()));
+            }
+        }
+    }
+
+    if (mDepthTarget)
+    {
+        mDepthTarget->initRegs();
+        GX2SetDepthBuffer(&mDepthTarget->getInnerBuffer());
+    }
 }
 
 }
