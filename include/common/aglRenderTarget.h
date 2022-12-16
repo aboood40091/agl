@@ -36,6 +36,8 @@ public:
     RenderTargetColor();
     RenderTargetColor(const TextureData& texture_data, u32 mip_level, u32 slice);
 
+    GX2ColorBuffer& getInnerBuffer() const { return mInnerBuffer; }
+
     void copyToDisplayBuffer(const sead::DisplayBufferCafe* display_buffer) const;
     void copyToDisplayBuffer(GX2ScanTarget scan_target) const;
     void expandAuxBuffer() const;
@@ -59,6 +61,8 @@ class RenderTargetDepth : public RenderTargetBase
 public:
     RenderTargetDepth();
     RenderTargetDepth(const TextureData& texture_data, u32 mip_level, u32 slice);
+
+    GX2DepthBuffer& getInnerBuffer() const { return mInnerBuffer; }
 
     void expandHiZBuffer() const;
 

@@ -44,12 +44,12 @@ RenderTargetColor::copyToDisplayBuffer(GX2ScanTarget scan_target) const
         GX2InitColorBufferAuxPtr(&color_buffer, mInnerBuffer.auxPtr);
 
         GX2CopyColorBufferToScanBuffer(&color_buffer, scan_target);
-        agl::driver::GX2Resource::instance()->restoreContextState();
+        driver::GX2Resource::instance()->restoreContextState();
     }
     else
     {
         GX2CopyColorBufferToScanBuffer(&mInnerBuffer, scan_target);
-        agl::driver::GX2Resource::instance()->restoreContextState();
+        driver::GX2Resource::instance()->restoreContextState();
     }
 }
 

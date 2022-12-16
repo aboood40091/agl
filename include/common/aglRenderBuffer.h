@@ -26,9 +26,13 @@ public:
     virtual void clear(u32 clr_flag, const sead::Color4f& color, f32 depth, u32 stencil) const;
     virtual void bindImpl_() const;
 
-    RenderTarget<RenderTargetColor>* getRenderTargetColor(u32 target = 0) const
+    RenderTarget<RenderTargetColor>* getRenderTargetColor(u32 target_index = 0) const
     {
-        return mColorTarget[target];
+        // TODO: sead::SafeArray
+        if (target_index < 8)
+            return mColorTarget[target_index];
+        else
+            return mColorTarget[0];
     }
 
     RenderTarget<RenderTargetDepth>* getRenderTargetDepth() const
@@ -36,8 +40,10 @@ public:
         return mDepthTarget;
     }
 
+    void clear(u32 target_index, u32 clr_flag, const sead::Color4f& color, f32 depth, u32 stencil) const;
+
 private:
-    RenderTarget<RenderTargetColor>* mColorTarget[8]; // sead::UnsafeArray
+    RenderTarget<RenderTargetColor>* mColorTarget[8]; // sead::SafeArray
     RenderTarget<RenderTargetDepth>* mDepthTarget;
 
     static sead::Buffer<RenderBuffer*> sBoundRenderBuffer;
