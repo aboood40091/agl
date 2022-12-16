@@ -16,4 +16,13 @@ TextureData::TextureData()
     sead::MemUtil::fillZero(&mSurface, sizeof(GX2Surface));
 }
 
+void TextureData::invalidateGPUCache() const
+{
+    if (getImagePtr())
+        GX2Invalidate(GX2_INVALIDATE_TEXTURE, getImagePtr(), getImageSize());
+
+    if (getMipPtr())
+        GX2Invalidate(GX2_INVALIDATE_TEXTURE, getMipPtr(), getMipSize());
+}
+
 }

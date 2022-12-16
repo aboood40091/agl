@@ -1,6 +1,7 @@
 #pragma once
 
 #include <common/aglTextureData.h>
+#include <gfx/cafe/seadFrameBufferCafe.h>
 
 namespace agl {
 
@@ -35,7 +36,11 @@ public:
     RenderTargetColor();
     RenderTargetColor(const TextureData& texture_data, u32 mip_level, u32 slice);
 
+    void copyToDisplayBuffer(const sead::DisplayBufferCafe* display_buffer) const;
+    void copyToDisplayBuffer(GX2ScanTarget scan_target) const;
     void expandAuxBuffer() const;
+
+    void invalidateGPUCache() const;
 
 private:
     void initRegs_() const;
@@ -56,6 +61,8 @@ public:
     RenderTargetDepth(const TextureData& texture_data, u32 mip_level, u32 slice);
 
     void expandHiZBuffer() const;
+
+    void invalidateGPUCache() const;
 
 private:
     void initRegs_() const;
@@ -80,6 +87,12 @@ public:
     RenderTarget(const TextureData& texture_data, u32 mip_level, u32 slice)
         : T(texture_data, mip_level, slice)
     {
+    }
+
+    void invalidateGPUCache() const
+    {
+        T::invalidateGPUCache();
+        mTextureData.invalidateGPUCache();
     }
 
     void applyTextureData(const TextureData& texture_data);
