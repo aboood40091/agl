@@ -6,11 +6,24 @@ namespace agl {
 
 sead::Buffer<const RenderBuffer*> RenderBuffer::sBoundRenderBuffer;
 
+RenderBuffer::RenderBuffer()
+{
+    // TODO: sead::SafeArray
+
+    initialize_();
+}
+
 RenderBuffer::~RenderBuffer()
 {
     for (s32 i = 0; i < sBoundRenderBuffer.size(); i++)
         if (sBoundRenderBuffer[i] == this)
             sBoundRenderBuffer[i] = NULL;
+}
+
+void RenderBuffer::initialize_()
+{
+    setRenderTargetColorNullAll();
+    setRenderTargetDepthNull();
 }
 
 void RenderBuffer::copyToDisplayBuffer(const sead::DisplayBuffer* display_buffer) const
@@ -126,6 +139,18 @@ void RenderBuffer::bindImpl_() const
     {
         mDepthTarget->initRegs();
         GX2SetDepthBuffer(&mDepthTarget->getInnerBuffer());
+    }
+}
+
+void RenderBuffer::setRenderTargetColorNullAll()
+{
+    for (s32 i = 0; i < 8; i++)
+    {
+        // TODO: sead::SafeArray
+        if (i < 8)
+            mColorTarget[i] = NULL;
+        else
+            mColorTarget[0] = NULL;
     }
 }
 
