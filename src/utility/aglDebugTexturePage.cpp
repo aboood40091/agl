@@ -18,6 +18,10 @@ DebugTexturePage::DebugTexturePage()
 {
 }
 
+void DebugTexturePage::setUp(u32 ctx_num, const sead::SafeString&, sead::Heap*)
+{
+}
+
 void DebugTexturePage::cleanUp()
 {
 }
