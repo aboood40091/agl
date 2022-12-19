@@ -64,7 +64,7 @@ void ResShaderBinary::modifyBinaryEndian()
     void* data = NULL;
 
 #ifdef cafe
-    switch (ref().mShaderType)
+    switch (getShaderType())
     {
     case cShaderType_Vertex:
         {
@@ -115,7 +115,7 @@ void ResShaderBinary::modifyBinaryEndian()
 void ResShaderBinary::setUp()
 {
 #ifdef cafe
-    switch (ref().mShaderType)
+    switch (getShaderType())
     {
     case cShaderType_Vertex:
         {

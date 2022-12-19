@@ -60,9 +60,9 @@ public:
 
     void initialize(const sead::SafeString& name, sead::Heap* heap);
 
-    void createVariationBuffer(s32 num_variation, sead::Heap* heap);
+    void createVariationBuffer(s32 macro_num, sead::Heap* heap);
 
-    void createVariationMacro(s32 index, const sead::SafeString& name, const sead::SafeString& id, s32 num_value, sead::Heap* heap);
+    void createVariationMacro(s32 index, const sead::SafeString& name, const sead::SafeString& id, s32 value_num, sead::Heap* heap);
     void setVariationMacroValue(s32 macro_index, s32 value_index, const sead::SafeString& value);
 
     void createVariation(sead::Heap* heap);
@@ -129,6 +129,8 @@ public:
 
     const sead::SafeString& searchVariationMacroName(const sead::SafeString& id) const;
 
+    s32 getVariationMacroValueVariationNum(s32 macro_index) const;
+
     bool getCompileEnable() const
     {
         return mFlag.isOn(1);
@@ -177,9 +179,9 @@ private:
         VariationBuffer();
         virtual ~VariationBuffer();
 
-        void initialize(ShaderProgram* program, s32 num_variation, sead::Heap* heap);
+        void initialize(ShaderProgram* program, s32 macro_num, sead::Heap* heap);
 
-        void createMacro(s32 index, const sead::SafeString& name, const sead::SafeString& id, s32 num_value, sead::Heap* heap);
+        void createMacro(s32 index, const sead::SafeString& name, const sead::SafeString& id, s32 value_num, sead::Heap* heap);
         void setMacroValue(s32 macro_index, s32 value_index, const sead::SafeString& value);
 
         s32 searchShaderProgramIndex(s32 macro_num, const char* const* macro_array, const char* const* value_array, s32 index) const;
@@ -192,20 +194,27 @@ private:
         s32 getMacroValueIndexArray(s32 index, s32* value_index_array) const;
         s32 calcVariationIndex(const s32* value_index_array) const;
 
-        class Macro
+        s32 getMacroValueVariationNum(s32 macro_index) const
+        {
+            return mMacroData[macro_index].mValueVariationNum;
+        }
+
+        class MacroData
         {
             sead::SafeString mName;
             sead::SafeString mID;
             sead::Buffer<sead::SafeString> mValue;
-            u16 _18;
+            u16 mValueVariationNum;                 // Number of variations using *succeeding* macros (i.e., ignoring preceding macros), if value of this macro is fixed.
+                                                    // i.e., In a matrix where variations are the rows, macros are the columns, and a cell would be a macro's value
+                                                    // in a certain variation, this field is the number a macro's value occurs before the next value in the macro's column.
 
             friend class VariationBuffer;
         };
-        static_assert(sizeof(Macro) == 0x1C, "agl::ShaderProgram::VariationBuffer::Macro size mismatch");
+        static_assert(sizeof(MacroData) == 0x1C, "agl::ShaderProgram::VariationBuffer::MacroData size mismatch");
 
         ShaderProgram* mpOriginal;
         sead::Buffer<ShaderProgram> mProgram;
-        sead::Buffer<Macro> mMacro;
+        sead::Buffer<MacroData> mMacroData;
 
         friend class ShaderProgram;
         friend class SharedData;
