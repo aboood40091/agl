@@ -84,8 +84,15 @@ public:
     DepthOfField();
     virtual ~DepthOfField();
 
-    void initialize (s32 ctx_num = 1, sead::Heap* heap = NULL);
+    void initialize(s32 ctx_num = 1, sead::Heap* heap = NULL);
 
+private:
+    void assignShaderProgram_();
+
+    void initVertex_(sead::Heap* heap);
+    void initIndex_(sead::Heap* heap);
+
+public:
     bool isEnable() const
     {
         return mEnable.getValue();

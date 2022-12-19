@@ -6,7 +6,7 @@ TextureSampler::TextureSampler()
     : mTextureData()
     , mFilterMag(cTextureFilterType_Linear)
     , mFilterMin(cTextureFilterType_Linear)
-    , mMipFilter(cTextureMipFilterType_Linear)
+    , mFilterMip(cTextureMipFilterType_Linear)
     , mWrapX(cTextureWrapType_Clamp)
     , mWrapY(cTextureWrapType_Clamp)
     , mWrapZ(cTextureWrapType_Clamp)
@@ -101,7 +101,7 @@ void TextureSampler::initFilter_() const
 
     GX2InitSamplerZMFilter(&mGX2Sampler,
                            z_filter,
-                           (GX2TexMipFilterType)mMipFilter);
+                           (GX2TexMipFilterType)mFilterMip);
 }
 
 void TextureSampler::initMipParam_() const

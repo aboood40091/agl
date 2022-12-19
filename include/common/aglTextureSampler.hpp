@@ -101,16 +101,9 @@ TextureSampler::setFilterMin(TextureFilterType filter_min)
 }
 
 inline void
-TextureSampler::setMipFilter(TextureMipFilterType mip_filter)
+TextureSampler::setFilterMip(TextureMipFilterType filter_mip)
 {
-    mMipFilter = mip_filter;
-    mFlag.setBit(2);
-}
-
-inline void
-TextureSampler::setMaxAnisoRatio(TextureAnisoRatio max_aniso)
-{
-    mMaxAniso = max_aniso;
+    mFilterMip = filter_mip;
     mFlag.setBit(2);
 }
 
@@ -118,13 +111,18 @@ inline void
 TextureSampler::setFilter(
     TextureFilterType    filter_mag,
     TextureFilterType    filter_min,
-    TextureMipFilterType mip_filter,
-    TextureAnisoRatio    max_aniso
+    TextureMipFilterType filter_mip
 )
 {
     mFilterMag = filter_mag;
     mFilterMin = filter_min;
-    mMipFilter = mip_filter;
+    mFilterMip = filter_mip;
+    mFlag.setBit(2);
+}
+
+inline void
+TextureSampler::setMaxAnisoRatio(TextureAnisoRatio max_aniso)
+{
     mMaxAniso = max_aniso;
     mFlag.setBit(2);
 }

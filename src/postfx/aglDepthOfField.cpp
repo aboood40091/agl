@@ -71,6 +71,59 @@ DepthOfField::~DepthOfField()
     mContext.freeBuffer();
 }
 
+void DepthOfField::initialize(s32 ctx_num, sead::Heap* heap)
+{
+    mContext.allocBuffer(ctx_num, heap);
+
+    assignShaderProgram_();
+    initVertex_(heap);
+    initIndex_(heap);
+
+    mIndirectTextureSampler.setWrap(
+        cTextureWrapType_Repeat,
+        cTextureWrapType_Repeat,
+        cTextureWrapType_Repeat
+    );
+
+    for (sead::Buffer<Context>::iterator itr_ctx = mContext.begin(), itr_ctx_end = mContext.end(); itr_ctx != itr_ctx_end; ++itr_ctx)
+    {
+        itr_ctx->mIsInitialized = true;
+        itr_ctx->mIndex = itr_ctx.getIndex();
+
+        itr_ctx->mColorTargetTextureSampler.setFilter(
+            cTextureFilterType_Linear,
+            cTextureFilterType_Linear,
+            cTextureMipFilterType_None
+        );
+        itr_ctx->mColorTargetTextureSampler.setUnk1(1);
+
+        itr_ctx->mDepthTargetTextureSampler.setFilter(
+            cTextureFilterType_Linear,
+            cTextureFilterType_Linear,
+            cTextureMipFilterType_None
+        );
+        itr_ctx->mDepthTargetTextureSampler.setUnk1(1);
+
+        itr_ctx->mpColorTextureData = NULL;
+
+        itr_ctx->mColorTextureSampler.setFilter(
+            cTextureFilterType_Linear,
+            cTextureFilterType_Linear,
+            cTextureMipFilterType_Point
+        );
+
+        itr_ctx->mpDepthTextureData = NULL;
+
+        itr_ctx->mDepthTextureSampler.setFilter(
+            cTextureFilterType_Linear,
+            cTextureFilterType_Linear,
+            cTextureMipFilterType_Point
+        );
+    }
+
+    mDebugTexturePage.setUp(ctx_num, "DepthOfField", heap);
+}
+
 ShaderMode DepthOfField::draw(s32 ctx_index, const RenderBuffer& render_buffer, f32 near, f32 far, ShaderMode mode) const
 {
     // SEAD_ASSERT(render_buffer.getRenderTargetDepth() != nullptr);

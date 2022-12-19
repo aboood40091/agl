@@ -37,15 +37,15 @@ public:
 
     void setFilterMag(TextureFilterType filter_mag);
     void setFilterMin(TextureFilterType filter_min);
-    void setMipFilter(TextureMipFilterType mip_filter);
-    void setMaxAnisoRatio(TextureAnisoRatio max_aniso);
+    void setFilterMip(TextureMipFilterType filter_mip);
 
     void setFilter(
         TextureFilterType    filter_mag,
         TextureFilterType    filter_min,
-        TextureMipFilterType mip_filter,
-        TextureAnisoRatio    max_aniso
+        TextureMipFilterType filter_mip
     );
+
+    void setMaxAnisoRatio(TextureAnisoRatio max_aniso);
 
     void setMipParam(f32 lod_min, f32 lod_max, f32 lod_bias);
 
@@ -53,6 +53,12 @@ public:
 
     void setBorderColor(f32 r, f32 g, f32 b, f32 a);
     void setBorderColor(const sead::Color4f& color);
+
+    void setUnk1(u8 v) { _e9 = v; }
+    u8 getUnk1() const { return _e9; }
+
+    void setUnk2(u8 v) { _ea = v; }
+    u8 setUnk2() const { return _ea; }
 
     bool activate(const SamplerLocation& location, s32 = -1) const;
 
@@ -72,7 +78,7 @@ private:
     TextureData mTextureData;
     TextureFilterType mFilterMag;
     TextureFilterType mFilterMin;
-    TextureMipFilterType mMipFilter;
+    TextureMipFilterType mFilterMip;
     TextureWrapType mWrapX;
     TextureWrapType mWrapY;
     TextureWrapType mWrapZ;

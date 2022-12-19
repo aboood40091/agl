@@ -20,6 +20,7 @@ public:
         cleanUp();
     }
 
+    void setUp(u32 ctx_num, const sead::SafeString&, sead::Heap*);
     void cleanUp();
 
 private:
