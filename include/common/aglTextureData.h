@@ -6,6 +6,8 @@
 
 namespace agl {
 
+class TextureSampler;
+
 class TextureData
 {
 public:
@@ -38,6 +40,8 @@ private:
     TextureCompSel mCompG;
     TextureCompSel mCompB;
     TextureCompSel mCompA;
+
+    friend class TextureSampler;
 };
 static_assert(sizeof(TextureData) == 0x9C, "agl::TextureData size mismatch");
 

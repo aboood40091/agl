@@ -38,22 +38,22 @@ TextureSampler::~TextureSampler()
 
 void TextureSampler::initRegs_() const
 {
-    if (mFlag.isOn(1 << 0))
+    if (mFlag.isOnBit(0))
         initTexture_();
 
-    if (mFlag.isOn(1 << 1))
+    if (mFlag.isOnBit(1))
         initWrap_();
 
-    if (mFlag.isOn(1 << 2))
+    if (mFlag.isOnBit(2))
         initFilter_();
 
-    if (mFlag.isOn(1 << 3))
+    if (mFlag.isOnBit(3))
         initMipParam_();
 
-    if (mFlag.isOn(1 << 4))
+    if (mFlag.isOnBit(4))
         initDepthComp_();
 
-    if (mFlag.isOn(1 << 5))
+    if (mFlag.isOnBit(5))
         initBorderColor_();
 
     mFlag.makeAllZero();

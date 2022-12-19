@@ -12,11 +12,53 @@ class TextureSampler
 {
 public:
     TextureSampler();
+    TextureSampler(const TextureData& texture_data);
     virtual ~TextureSampler();
+
+    void applyTextureData(const TextureData& texture_data);
+
+    void setTextureCompSel(
+        TextureCompSel r,
+        TextureCompSel g,
+        TextureCompSel b,
+        TextureCompSel a
+    );
+    void resetTextureCompSel();
+
+    void setWrapX(TextureWrapType wrap_x);
+    void setWrapY(TextureWrapType wrap_y);
+    void setWrapZ(TextureWrapType wrap_z);
+
+    void setWrap(
+        TextureWrapType wrap_x,
+        TextureWrapType wrap_y,
+        TextureWrapType wrap_z
+    );
+
+    void setFilterMag(TextureFilterType filter_mag);
+    void setFilterMin(TextureFilterType filter_min);
+    void setMipFilter(TextureMipFilterType mip_filter);
+    void setMaxAnisoRatio(TextureAnisoRatio max_aniso);
+
+    void setFilter(
+        TextureFilterType    filter_mag,
+        TextureFilterType    filter_min,
+        TextureMipFilterType mip_filter,
+        TextureAnisoRatio    max_aniso
+    );
+
+    void setMipParam(f32 lod_min, f32 lod_max, f32 lod_bias);
+
+    void setDepthComp(sead::Graphics::DepthFunc func);
+
+    void setBorderColor(f32 r, f32 g, f32 b, f32 a);
+    void setBorderColor(const sead::Color4f& color);
 
     bool activate(const SamplerLocation& location, s32 = -1) const;
 
 private:
+    void applyTextureData_(const TextureData& texture_data);
+
     void initRegs_() const;
 
     void initTexture_() const;
@@ -56,3 +98,9 @@ private:
 static_assert(sizeof(TextureSampler) == 0x1A0, "agl::TextureSampler size mismatch");
 
 }
+
+#ifdef __cplusplus
+
+#include <common/aglTextureSampler.hpp>
+
+#endif // __cplusplus
