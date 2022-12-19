@@ -85,6 +85,12 @@ public:
     void setValue(const T& value) { mValue = value; }
     const T& getValue() const { return mValue; }
 
+    T& operator*() { return mValue; }
+    const T& operator*() const { return mValue; }
+
+    T* operator->() { return &mValue; }
+    const T* operator->() const { return &mValue; }
+
 private:
     T mValue;
 };

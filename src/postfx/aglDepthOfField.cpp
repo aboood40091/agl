@@ -1,4 +1,5 @@
 #include <detail/aglRootNode.h>
+#include <detail/aglShaderHolder.h>
 #include <postfx/aglDepthOfField.h>
 #include <utility/aglDynamicTextureAllocator.h>
 
@@ -9,7 +10,7 @@ DepthOfField::DepthOfField()
     , mContext()
     , _1e8(0)
     , _1ec(1.0f)
-    , _1f0(1)
+    , mEnableColorBlur(true)
     , _1f4(1.0f)
     , mGraphicsContext()
     , mParameterObj()
@@ -122,6 +123,122 @@ void DepthOfField::initialize(s32 ctx_num, sead::Heap* heap)
     }
 
     mDebugTexturePage.setUp(ctx_num, "DepthOfField", heap);
+}
+
+#define MACRO_DOF_MIPMAP_COLOR_MIP 0
+#define MACRO_DOF_MIPMAP_DEPTH_MIP 1
+
+#define MACRO_DOF_DEPTH_MASK_DOF_FAR    0
+#define MACRO_DOF_DEPTH_MASK_DOF_NEAR   1
+#define MACRO_DOF_DEPTH_MASK_VIGNETTING 2
+#define MACRO_DOF_DEPTH_MASK_VIEW_DEPTH 3
+
+#define MACRO_DOF_FINAL_DOF_FAR     0
+#define MACRO_DOF_FINAL_DOF_NEAR    1
+#define MACRO_DOF_FINAL_VIGNETTING  2
+#define MACRO_DOF_FINAL_VIEW_DEPTH  3
+
+#define MACRO_DOF_VIGNETTING_VIGNETTING         0
+#define MACRO_DOF_VIGNETTING_VIGNETTING_BLEND   1
+
+static inline ShaderProgram* GetVariation(ShaderProgram& program, s32 macro_index, s32 value_index)
+{
+    /*  Getter of variation where macro at macro_index is set to value at value_index,
+        and all other macros are set to values at index 0 respectively.                 */
+
+    return program.getVariation(program.getVariationMacroValueVariationNum(macro_index) * value_index);
+}
+
+void DepthOfField::assignShaderProgram_()
+{
+    // MipMap
+    {
+        ShaderProgram& program_mipmap = detail::ShaderHolder::instance()->getShader(detail::ShaderHolder::cShader_DOFMipmap);
+
+        mpCurrentProgramMipMap[0] = GetVariation(program_mipmap, MACRO_DOF_MIPMAP_COLOR_MIP, mEnableColorBlur ? 2 : 1);
+        mpCurrentProgramMipMap[1] = GetVariation(program_mipmap, MACRO_DOF_MIPMAP_DEPTH_MIP, 1);
+    }
+    // DepthMask + Final
+    {
+        bool enable_depth_blur = enableDepthBlur_();
+        s32 dof_near_idx =
+            *mNearEnable
+                ? (enable_depth_blur ? 2 : 1)
+                : 0;
+
+        s32 vignetting_idx = 0;
+        if (*mEnableVignettingBlur)
+        {
+            vignetting_idx = 1;
+            if (*mEnableVignettingColor && !enableSeparateVignettingPass_())
+            {
+                if (    mVignettingColor->r != 0.0f ||
+                        mVignettingColor->g != 0.0f ||
+                        mVignettingColor->b != 0.0f     )
+                    vignetting_idx += 1;
+
+                vignetting_idx += 1;
+            }
+        }
+
+        s32 dof_far_idx = 0;
+        if (*mFarEnable)
+        {
+            dof_far_idx = 1;
+            if (*mEnableColorControl)
+            {
+                if (*mSaturateMin != 1.0f)
+                    dof_far_idx = 2;
+
+                if (    mFarMulColor->r != 1.0f ||
+                        mFarMulColor->g != 1.0f ||
+                        mFarMulColor->b != 1.0f     )
+                    dof_far_idx += 2;
+            }
+
+            if (mpIndirectTextureData && *mIndirectEnable)
+                dof_far_idx += 4;
+        }
+
+        const ShaderProgram& program_depth_mask = detail::ShaderHolder::instance()->getShader(detail::ShaderHolder::cShader_DOFDepthMask);
+
+        s32 depth_mask_variation_idx = program_depth_mask.getVariationMacroValueVariationNum(MACRO_DOF_DEPTH_MASK_DOF_FAR)      * (dof_far_idx != 0) +
+                                       program_depth_mask.getVariationMacroValueVariationNum(MACRO_DOF_DEPTH_MASK_DOF_NEAR)     * dof_near_idx +
+                                       program_depth_mask.getVariationMacroValueVariationNum(MACRO_DOF_DEPTH_MASK_VIGNETTING)   * *mEnableVignettingBlur;
+
+        mpCurrentProgramDepthMask[0] = program_depth_mask.getVariation(depth_mask_variation_idx);
+        mpCurrentProgramDepthMask[1] = program_depth_mask.getVariation(depth_mask_variation_idx | 1);
+
+        ShaderProgram& program_final = detail::ShaderHolder::instance()->getShader(detail::ShaderHolder::cShader_DOFFinal);
+
+        s32 final_variation_idx = program_final.getVariationMacroValueVariationNum(MACRO_DOF_FINAL_DOF_FAR)     * dof_far_idx +
+                                  program_final.getVariationMacroValueVariationNum(MACRO_DOF_FINAL_DOF_NEAR)    * dof_near_idx +
+                                  program_final.getVariationMacroValueVariationNum(MACRO_DOF_FINAL_VIGNETTING)  * vignetting_idx;
+
+        mpCurrentProgramFinal[0] = program_final.getVariation(final_variation_idx);
+        mpCurrentProgramFinal[1] = program_final.getVariation(final_variation_idx | 1);
+    }
+    // Vignetting
+    {
+        ShaderProgram& program_vignetting = detail::ShaderHolder::instance()->getShader(detail::ShaderHolder::cShader_DOFVignetting);
+
+        bool vignetting_color_is_black = mVignettingColor->r == 0.0f &&
+                                         mVignettingColor->g == 0.0f &&
+                                         mVignettingColor->b == 0.0f;
+
+        s32 vignetting_blend_idx;
+        switch (VignettingBlendType(*mVignettingBlend))
+        {
+        default:                        vignetting_blend_idx = 0; break;
+        case cVignettingBlend_White:    vignetting_blend_idx = 1; break;
+        case cVignettingBlend_Black:    vignetting_blend_idx = 2; break;
+        }
+
+        s32 vignetting_variation_idx = program_vignetting.getVariationMacroValueVariationNum(MACRO_DOF_VIGNETTING_VIGNETTING)       * s32(!vignetting_color_is_black) +
+                                       program_vignetting.getVariationMacroValueVariationNum(MACRO_DOF_VIGNETTING_VIGNETTING_BLEND) * vignetting_blend_idx;
+
+        mpCurrentProgramVignetting = program_vignetting.getVariation(vignetting_variation_idx);
+    }
 }
 
 ShaderMode DepthOfField::draw(s32 ctx_index, const RenderBuffer& render_buffer, f32 near, f32 far, ShaderMode mode) const

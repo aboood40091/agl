@@ -80,6 +80,13 @@ class DepthOfField : public utl::IParameterIO, public sead::hostio::Node
     };
     static_assert(sizeof(VignettingShape) == 0x2F0, "agl::pfx::DepthOfField::VignettingShape size mismatch");
 
+    enum VignettingBlendType
+    {
+        // 0 & 1: None
+        cVignettingBlend_White = 2,
+        cVignettingBlend_Black
+    };
+
 public:
     DepthOfField();
     virtual ~DepthOfField();
@@ -95,12 +102,12 @@ private:
 public:
     bool isEnable() const
     {
-        return mEnable.getValue();
+        return *mEnable;
     }
 
     void setEnable(bool enable)
     {
-        mEnable.setValue(enable);
+        *mEnable = enable;
     }
 
     ShaderMode draw(s32 ctx_index, const RenderBuffer& render_buffer, f32 near, f32 far, ShaderMode mode = cShaderMode_Invalid) const;
@@ -131,7 +138,7 @@ private:
     mutable sead::Buffer<Context> mContext;
     u32 _1e8;
     f32 _1ec;
-    u8 _1f0;
+    bool mEnableColorBlur;
     f32 _1f4;
     sead::GraphicsContextMRT mGraphicsContext;
     utl::IParameterObj mParameterObj;
