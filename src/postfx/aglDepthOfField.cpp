@@ -172,12 +172,16 @@ void DepthOfField::assignShaderProgram_()
             vignetting_idx = 1;
             if (*mEnableVignettingColor && !enableSeparateVignettingPass_())
             {
-                if (    mVignettingColor->r != 0.0f ||
-                        mVignettingColor->g != 0.0f ||
-                        mVignettingColor->b != 0.0f     )
-                    vignetting_idx += 1;
+                bool color_is_black = mVignettingColor->r == 0.0f &&
+                                      mVignettingColor->g == 0.0f &&
+                                      mVignettingColor->b == 0.0f;
 
-                vignetting_idx += 1;
+                s32 idx = 2;
+                if  (color_is_black)
+                    idx = 1;
+
+                vignetting_idx = idx;
+                vignetting_idx++;
             }
         }
 
