@@ -10,14 +10,19 @@ public:
     VertexStream()
         : mFormat(cVertexStreamFormat_8_uNorm)
         , mOffset(0)
-        , _8(0)
+        , mInitialized(false)
     {
+    }
+
+    void reset()
+    {
+        mInitialized = false;
     }
 
 private:
     VertexStreamFormat mFormat;
     u32 mOffset;
-    u8 _8;
+    bool mInitialized;
     u32 mCompSel;
     u32 mDivisor;
     VertexStreamEndianSwap mEndianSwap;

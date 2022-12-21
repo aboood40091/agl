@@ -8,11 +8,17 @@ namespace agl {
 class VertexBuffer
 {
 public:
+    static const u32 cVertexStreamMax = 16;
+
+public:
     VertexBuffer();
     virtual ~VertexBuffer();
 
 private:
-    sead::SafeArray<VertexStream, 16> mVertexStream;
+    void cleanUp_();
+
+private:
+    sead::SafeArray<VertexStream, cVertexStreamMax> mVertexStream;
     const void* mpBuffer;
     u32 mStride;
     u32 mVertexNum;
