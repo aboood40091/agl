@@ -13,9 +13,16 @@ class VertexAttribute
 {
     struct Attribute_
     {
+        Attribute_()
+            : mpVertexBuffer(NULL)
+            , mStreamIndex(-1)
+            , mBufferIndex(-1)
+        {
+        }
+
         VertexBuffer* mpVertexBuffer;
-        u32 mStreamIndex;
-        u32 mBufferIndex;
+        s32 mStreamIndex;
+        s32 mBufferIndex;
     };
     static_assert(sizeof(Attribute_) == 0xC, "agl::VertexAttribute::Attribute_ size mismatch");
 
@@ -25,6 +32,8 @@ public:
 public:
     VertexAttribute();
     virtual ~VertexAttribute();
+
+    void destroy();
 
 private:
     sead::SafeArray<Attribute_, cVertexAttributeMax> mAttribute;
