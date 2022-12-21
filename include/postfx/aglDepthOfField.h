@@ -122,6 +122,7 @@ private:
     bool enableDepthOfField_() const;
     bool enableBlurMipMapPass_() const;
     bool enableDepthBlur_() const;
+    bool enableDifferntShape_() const;
     bool enableSeparateVignettingPass_() const;
 
     ShaderMode drawColorMipMap_(const DrawArg& arg, ShaderMode mode) const;

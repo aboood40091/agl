@@ -310,6 +310,37 @@ void DepthOfField::freeBuffer(s32 ctx_index) const
     }
 }
 
+bool DepthOfField::enableDepthOfField_() const
+{
+    return *mNearEnable || *mFarEnable;
+}
+
+bool DepthOfField::enableBlurMipMapPass_() const
+{
+    return enableDepthOfField_() || *mEnableVignettingBlur;
+}
+
+bool DepthOfField::enableDepthBlur_() const
+{
+    return *mNearEnable && *mDepthBlur;
+}
+
+bool DepthOfField::enableDifferntShape_() const
+{
+    return *mEnableVignettingColor && *mEnableVignettingBlur && *mEnableVignetting2Shape;
+}
+
+bool DepthOfField::enableSeparateVignettingPass_() const
+{
+    // Implementing this in a single line mismatches :^)
+
+    if (*mEnableVignettingColor)
+        if (enableDifferntShape_() || *mVignettingBlend != 0 || !*mEnableVignettingBlur)
+            return true;
+
+    return false;
+}
+
 DepthOfField::TempVignetting::TempVignetting(DepthOfField* p_dof, const sead::SafeString& param_name)
     : utl::IParameterObj()
     , mType (0,                           "type",  "å`èÛ",    this)
