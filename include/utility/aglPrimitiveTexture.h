@@ -1,6 +1,7 @@
 #pragma once
 
 #include <common/aglTextureSampler.h>
+#include <container/seadSafeArray.h>
 #include <heap/seadDisposer.h>
 
 namespace agl { namespace utl {
@@ -17,7 +18,7 @@ public:
     const TextureSampler& getTextureSampler(s32 index) const { return mTextureSampler[index]; }
 
 private:
-    TextureSampler mTextureSampler[11]; // sead::SafeArray?
+    sead::UnsafeArray<TextureSampler, 11> mTextureSampler;
 };
 static_assert(sizeof(PrimitiveTexture) == 0x11F4, "agl::utl::PrimitiveTexture size mismatch");
 

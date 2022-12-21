@@ -1,5 +1,6 @@
 #pragma once
 
+#include <container/seadSafeArray.h>
 #include <heap/seadDisposer.h>
 #include <prim/seadBitFlag.h>
 #include <thread/seadCriticalSection.h>
@@ -32,7 +33,7 @@ private:
 
 private:
     sead::BitFlag32 _10;
-    Context mContext[4]; // sead::UnsafeArray<Context, 4>
+    sead::UnsafeArray<Context, 4> mContext;
     sead::CriticalSection mCriticalSection;
     u32 _2470;
     u32 _2474;

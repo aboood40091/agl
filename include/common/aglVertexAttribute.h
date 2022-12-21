@@ -1,6 +1,7 @@
 #pragma once
 
 #include <container/seadBuffer.h>
+#include <container/seadSafeArray.h>
 
 #include <cafe/gx2.h>
 
@@ -26,7 +27,7 @@ public:
     virtual ~VertexAttribute();
 
 private:
-    Attribute_ mAttribute[cVertexAttributeMax]; // sead::SafeArray<Attribute_, cVertexAttributeMax>
+    sead::SafeArray<Attribute_, cVertexAttributeMax> mAttribute;
     sead::Buffer<VertexBuffer*> mVertexBuffer;
     bool mSetupFinish;
     bool mCreateFinish;

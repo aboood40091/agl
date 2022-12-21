@@ -5,6 +5,7 @@
 #include <common/aglShaderCompileInfo.h>
 #include <common/aglShaderProgram.h>
 #include <container/seadBuffer.h>
+#include <container/seadSafeArray.h>
 #include <heap/seadDisposer.h>
 #include <prim/seadBitFlag.h>
 #include <prim/seadSafeString.h>
@@ -45,7 +46,7 @@ class ShaderProgramArchive : public sead::IDisposer
     private:
         s32 mIndex;
         ShaderProgramArchive* mpArchive;
-        ShaderCompileInfoEx mCompileInfoEx[cShaderType_Num];
+        sead::UnsafeArray<ShaderCompileInfoEx, cShaderType_Num> mCompileInfoEx;
         sead::Buffer<u32> _110; // No idea buffer of what
         s32 mVariationIndex;
         sead::BitFlag8 mFlag;

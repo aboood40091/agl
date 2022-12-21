@@ -6,6 +6,7 @@
 #include <common/aglShader.h>
 #include <common/aglShaderLocation.h>
 #include <container/seadBuffer.h>
+#include <container/seadSafeArray.h>
 #include <prim/seadBitFlag.h>
 #include <prim/seadNamable.h>
 
@@ -227,7 +228,7 @@ private:
         VariationBuffer* mpVariationBuffer;
         u32 _10;
         ResShaderVariationArray mResShaderVariationDefaultArray; // Variation macro defaults
-        ResShaderSymbolArray mResShaderSymbolArray[cShaderSymbolType_Num]; // sead::SafeArray<ResShaderSymbolArray, cShaderSymbolType_Num>
+        sead::UnsafeArray<ResShaderSymbolArray, cShaderSymbolType_Num> mResShaderSymbolArray;
         u32 _28;
 
         friend class ShaderProgram;

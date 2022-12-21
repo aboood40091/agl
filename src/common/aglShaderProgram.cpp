@@ -53,12 +53,8 @@ void ShaderProgram::initialize(const sead::SafeString& name, sead::Heap* heap)
     mpSharedData->setName(name);
     mpSharedData->_28 = 0;
 
-    // TODO: sead::SafeArray
-    {
-        typedef sead::Buffer<ResShaderSymbolArray>::iterator _Iterator;
-        for (_Iterator it = _Iterator(mpSharedData->mResShaderSymbolArray), it_end = _Iterator(mpSharedData->mResShaderSymbolArray, cShaderSymbolType_Num); it != it_end; ++it)
-            *it = NULL;
-    }
+    for (sead::UnsafeArray<ResShaderSymbolArray, cShaderSymbolType_Num>::iterator it = mpSharedData->mResShaderSymbolArray.begin(), it_end = mpSharedData->mResShaderSymbolArray.end(); it != it_end; ++it)
+        *it = NULL;
 }
 
 void ShaderProgram::createVariationBuffer(s32 macro_num, sead::Heap* heap)

@@ -270,7 +270,7 @@ void ShaderProgramArchive::setResShaderArchive_(ResShaderArchive res_archive, se
 
     mProgramEx.allocBuffer(mProgram.size(), heap);
 
-    bool source_is_used[1024]; // sead::SafeArray<bool, 1024>
+    sead::UnsafeArray<bool, 1024> source_is_used;
 
     const ResShaderSourceArray source_arr = mResText.getResShaderSourceArray();
     const ResShaderProgramArray prog_arr = mResText.getResShaderProgramArray();
@@ -382,35 +382,31 @@ void ShaderProgramArchive::ShaderProgramEx::initialize(ShaderProgramArchive* arc
 
     ShaderProgram& program = archive->mProgram[index];
 
-    // TODO: sead::SafeArray
+    for (sead::UnsafeArray<ShaderCompileInfoEx, cShaderType_Num>::iterator it = mCompileInfoEx.begin(), it_end = mCompileInfoEx.end(); it != it_end; ++it)
     {
-        typedef sead::Buffer<ShaderCompileInfoEx>::iterator _Iterator;
-        for (_Iterator it = _Iterator(mCompileInfoEx), it_end = _Iterator(mCompileInfoEx, cShaderType_Num); it != it_end; ++it)
+        s32 source_index = res.ref().mSourceIndex[it.getIndex()];
+        ShaderType type = ShaderType(it.getIndex());
+
+        if (source_index != -1)
         {
-            s32 source_index = res.ref().mSourceIndex[it.getIndex()];
-            ShaderType type = ShaderType(it.getIndex());
+            it->mSource = &mpArchive->mSource[source_index];
 
-            if (source_index != -1)
+            const ResShaderMacroArray macro_arr = res.getResShaderMacroArray(type);
+            it->mCompileInfo.create(macro_arr.getNum(), program.getVariationMacroNum(), heap);
+
+            it->mCompileInfo.setName(it->mSource->getName());
+
+            for (ResShaderMacroArray::constIterator macro_it = macro_arr.begin(), macro_it_end = macro_arr.end(); macro_it != macro_it_end; ++macro_it)
             {
-                it->mSource = &mpArchive->mSource[source_index];
-
-                const ResShaderMacroArray macro_arr = res.getResShaderMacroArray(type);
-                it->mCompileInfo.create(macro_arr.getNum(), program.getVariationMacroNum(), heap);
-
-                it->mCompileInfo.setName(it->mSource->getName());
-
-                for (ResShaderMacroArray::constIterator macro_it = macro_arr.begin(), macro_it_end = macro_arr.end(); macro_it != macro_it_end; ++macro_it)
-                {
-                    const ResShaderMacro macro(&(*macro_it));
-                    it->mCompileInfo.pushBackMacro(macro.getName(), macro.getValue());
-                }
-
-                program.getShader(type)->setCompileInfo(&it->mCompileInfo);
+                const ResShaderMacro macro(&(*macro_it));
+                it->mCompileInfo.pushBackMacro(macro.getName(), macro.getValue());
             }
-            else
-            {
-                it->mSource = NULL;
-            }
+
+            program.getShader(type)->setCompileInfo(&it->mCompileInfo);
+        }
+        else
+        {
+            it->mSource = NULL;
         }
     }
 
@@ -426,17 +422,13 @@ void ShaderProgramArchive::ShaderProgramEx::initialize(ShaderProgramArchive* arc
 
 void ShaderProgramArchive::ShaderProgramEx::updateRawText()
 {
-    // TODO: sead::SafeArray
+    for (sead::UnsafeArray<ShaderCompileInfoEx, cShaderType_Num>::iterator it = mCompileInfoEx.begin(), it_end = mCompileInfoEx.end(); it != it_end; ++it)
     {
-        typedef sead::Buffer<ShaderCompileInfoEx>::iterator _Iterator;
-        for (_Iterator it = _Iterator(mCompileInfoEx), it_end = _Iterator(mCompileInfoEx, cShaderType_Num); it != it_end; ++it)
+        ShaderSource* source = it->mSource;
+        if (source && source->mFlag.isOn(1))
         {
-            ShaderSource* source = it->mSource;
-            if (source && source->mFlag.isOn(1))
-            {
-                it->mCompileInfo.setSourceText(source->mRawText);
-                mpArchive->getShaderProgram(mIndex).reserveSetUpAllVariation();
-            }
+            it->mCompileInfo.setSourceText(source->mRawText);
+            mpArchive->getShaderProgram(mIndex).reserveSetUpAllVariation();
         }
     }
 }

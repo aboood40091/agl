@@ -1,6 +1,7 @@
 #pragma once
 
 #include <container/seadBuffer.h>
+#include <container/seadSafeArray.h>
 #include <gfx/seadFrameBuffer.h>
 #include <heap/seadDisposer.h>
 #include <math/seadVector.h>
@@ -33,11 +34,7 @@ public:
 
     RenderTarget<RenderTargetColor>* getRenderTargetColor(u32 target_index = 0) const
     {
-        // TODO: sead::SafeArray
-        if (target_index < 8)
-            return mColorTarget[target_index];
-        else
-            return mColorTarget[0];
+        return mColorTarget[target_index];
     }
 
     RenderTarget<RenderTargetDepth>* getRenderTargetDepth() const
@@ -51,7 +48,7 @@ public:
     void clear(u32 target_index, u32 clr_flag, const sead::Color4f& color, f32 depth, u32 stencil) const;
 
 private:
-    RenderTarget<RenderTargetColor>* mColorTarget[8]; // sead::SafeArray
+    sead::SafeArray<RenderTarget<RenderTargetColor>*, 8> mColorTarget;
     RenderTarget<RenderTargetDepth>* mDepthTarget;
 
     static sead::Buffer<const RenderBuffer*> sBoundRenderBuffer;

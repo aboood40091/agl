@@ -172,19 +172,18 @@ private:
     TempVignetting mTempVignetting1;
     utl::Parameter<sead::Color4f> mFarMulColor;
     utl::DebugTexturePage mDebugTexturePage;
-    ShaderProgram* mpCurrentProgramNearMask[2]; // sead::SafeArray
-    ShaderProgram* mpCurrentProgramMipMap[2];
-    const ShaderProgram* mpCurrentProgramDepthMask[2];
-    ShaderProgram* mpCurrentProgramFinal[2];
+    sead::SafeArray<ShaderProgram*, 2> mpCurrentProgramNearMask;
+    sead::SafeArray<ShaderProgram*, 2> mpCurrentProgramMipMap;
+    sead::SafeArray<const ShaderProgram*, 2> mpCurrentProgramDepthMask;
+    sead::SafeArray<ShaderProgram*, 2> mpCurrentProgramFinal;
     ShaderProgram* mpCurrentProgramVignetting;
     TextureData* mpIndirectTextureData;
     TextureSampler mIndirectTextureSampler;
     sead::Vector4f _ae0;
     sead::Vector3f mIndirectMatrixRow0;
     sead::Vector3f mIndirectMatrixRow1;
-    VignettingShape mVignettingShape[2]; // sead::SafeArray
+    sead::SafeArray<VignettingShape, 2> mVignettingShape;
     u8 _10e8;
-    // u32 _1e0[(0x10EC - 0x1E0) / sizeof(u32)];
 };
 static_assert(sizeof(DepthOfField) == 0x10EC, "agl::pfx::DepthOfField size mismatch");
 

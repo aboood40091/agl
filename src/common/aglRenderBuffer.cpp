@@ -8,8 +8,6 @@ sead::Buffer<const RenderBuffer*> RenderBuffer::sBoundRenderBuffer;
 
 RenderBuffer::RenderBuffer()
 {
-    // TODO: sead::SafeArray
-
     initialize_();
 }
 
@@ -121,17 +119,13 @@ void RenderBuffer::bindImpl_() const
 {
     sBoundRenderBuffer[sead::CoreInfo::getCurrentCoreId()] = this;
 
-    // TODO: sead::SafeArray
+    for (sead::SafeArray<RenderTarget<RenderTargetColor>*, 8>::constIterator it = mColorTarget.constBegin(), it_end = mColorTarget.constEnd(); it != it_end; ++it)
     {
-        typedef sead::Buffer< RenderTarget<RenderTargetColor>* const >::iterator _Iterator;
-        for (_Iterator it = _Iterator(mColorTarget), it_end = _Iterator(mColorTarget, 8); it != it_end; ++it)
+        const RenderTarget<RenderTargetColor>* const p_color_target = *it;
+        if (p_color_target)
         {
-            const RenderTarget<RenderTargetColor>* const p_color_target = *it;
-            if (p_color_target)
-            {
-                p_color_target->initRegs();
-                GX2SetColorBuffer(&p_color_target->getInnerBuffer(), GX2RenderTarget(it.getIndex()));
-            }
+            p_color_target->initRegs();
+            GX2SetColorBuffer(&p_color_target->getInnerBuffer(), GX2RenderTarget(it.getIndex()));
         }
     }
 
@@ -145,13 +139,7 @@ void RenderBuffer::bindImpl_() const
 void RenderBuffer::setRenderTargetColorNullAll()
 {
     for (s32 i = 0; i < 8; i++)
-    {
-        // TODO: sead::SafeArray
-        if (i < 8)
-            mColorTarget[i] = NULL;
-        else
-            mColorTarget[0] = NULL;
-    }
+        mColorTarget[i] = NULL;
 }
 
 }

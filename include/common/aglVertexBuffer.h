@@ -1,6 +1,7 @@
 #pragma once
 
 #include <common/aglVertexStream.h>
+#include <container/seadSafeArray.h>
 
 namespace agl {
 
@@ -11,7 +12,7 @@ public:
     virtual ~VertexBuffer();
 
 private:
-    VertexStream mVertexStream[16]; // sead::SafeArray<VertexStream, 16>
+    sead::SafeArray<VertexStream, 16> mVertexStream;
     const void* mpBuffer;
     u32 mStride;
     u32 mVertexNum;

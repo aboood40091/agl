@@ -42,17 +42,11 @@ DepthOfField::DepthOfField()
     , mTempVignetting1(this, "vignetting_shape_1")
     , mFarMulColor              (sead::Color4f(1.0f, 1.0f, 1.0f, 1.0f),              "far_mul_color",             "èÊéZêF",            &mParameterObj)
     , mDebugTexturePage()
-  //, mpCurrentProgramNearMask() // TODO
-  //, mpCurrentProgramMipMap() // TODO
-  //, mpCurrentProgramDepthMask() // TODO
-  //, mpCurrentProgramFinal() // TODO
-  //, mpCurrentProgramVignetting(NULL)
     , mpIndirectTextureData(NULL)
     , mIndirectTextureSampler()
     , _ae0(sead::Vector4f::zero)
     , mIndirectMatrixRow0(1.0f, 0.0f, 0.0f)
     , mIndirectMatrixRow1(0.0f, 1.0f, 0.0f)
-  //, mVignettingShape() // TODO
     , _10e8(1)
 {
     addObj(&mParameterObj, "dof");

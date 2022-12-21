@@ -2,6 +2,7 @@
 
 #include <common/aglShaderProgramArchive.h>
 #include <container/seadPtrArray.h>
+#include <container/seadSafeArray.h>
 #include <heap/seadDisposer.h>
 
 namespace agl { namespace detail {
@@ -137,7 +138,7 @@ public:
 
 private:
     sead::FixedPtrArray<ShaderProgram, cShader_Num> mProgram;
-    ShaderProgramArchive mProgramArchive[cArchive_Num]; // sead::SafeArray or UnsafeArray
+    sead::UnsafeArray<ShaderProgramArchive, cArchive_Num> mProgramArchive;
     bool mCreateDisplayLists;
 };
 static_assert(sizeof(ShaderHolder) == 0x280, "agl::detail::ShaderHolder size mismatch");
