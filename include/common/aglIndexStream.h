@@ -1,18 +1,29 @@
 #pragma once
 
-#include <basis/seadTypes.h>
+#include <common/aglVertexEnum.h>
+
+#include <cafe/gx2.h>
 
 namespace agl {
 
 class IndexStream
 {
 public:
+    typedef GX2PrimitiveType PrimitiveType; // Idk the actual type
+
+public:
     IndexStream();
     virtual ~IndexStream();
 
+    PrimitiveType getPrimitiveType() const { return mPrimitiveType; }
+    void setPrimitiveType(PrimitiveType type) { mPrimitiveType = type; }
+
 private:
-    u32 mFormat; // agl::IndexStreamFormat
-    u32 mPrimitiveType; // Idk the actual type
+    void cleanUp_();
+
+private:
+    IndexStreamFormat mFormat;
+    PrimitiveType mPrimitiveType;
     void* mpBuffer;
     u32 mCount;
     u32 mStride;

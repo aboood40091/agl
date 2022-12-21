@@ -100,4 +100,11 @@ enum VertexStreamIndexType
 static_assert(sizeof(VertexStreamIndexType) == 4 &&
               cVertexStreamIndexType_Num == 2);
 
+enum IndexStreamFormat
+{
+    cIndexStreamFormat_u16 = 4,
+    cIndexStreamFormat_u32 = 9
+};
+static_assert(sizeof(IndexStreamFormat) == 4, "agl::IndexStreamFormat size mismatch");
+
 }
