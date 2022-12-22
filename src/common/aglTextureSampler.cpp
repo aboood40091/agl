@@ -36,6 +36,31 @@ TextureSampler::~TextureSampler()
 {
 }
 
+void TextureSampler::applyTextureData_(const TextureData& texture_data)
+{
+    mTextureData.mFormat = texture_data.mFormat;
+    mTextureData.mSurface = texture_data.mSurface;
+    mTextureData.mWidth = texture_data.mWidth;
+    mTextureData.mHeight = texture_data.mHeight;
+    mTextureData.mDepth = texture_data.mDepth;
+    mTextureData.mImageByteSize = texture_data.mImageByteSize;
+    mTextureData.mCompR = texture_data.mCompR;
+    mTextureData.mCompG = texture_data.mCompG;
+    mTextureData.mCompB = texture_data.mCompB;
+    mTextureData.mCompA = texture_data.mCompA;
+
+    mIsTextureSet = true;
+
+    sead::MemUtil::copy(&mGX2Texture.surface, &mTextureData.mSurface, sizeof(GX2Surface));
+    mGX2Texture.viewFirstMip = 0;
+    mGX2Texture.viewNumMips = mGX2Texture.surface.numMips;
+    mGX2Texture.viewFirstSlice = 0;
+    mGX2Texture.viewNumSlices = mGX2Texture.surface.depth;
+
+    mFlag.set(1 << 0 |
+              1 << 2);
+}
+
 void TextureSampler::initRegs_() const
 {
     if (mFlag.isOnBit(0))
