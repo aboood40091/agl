@@ -110,8 +110,8 @@ public:
     iterator begin() { return iterator(0, (ResParameterData*)(ptr() + 1)); }
     constIterator begin() const { return constIterator(0, (ResParameterData*)(ptr() + 1)); }
 
-    iterator end() { return iterator(getNum(), NULL); }
-    constIterator end() const { return constIterator(getNum(), NULL); }
+    iterator end() { return iterator(getNum(), nullptr); }
+    constIterator end() const { return constIterator(getNum(), nullptr); }
 
 public:
     u32 getParameterObjNameHash() const
@@ -129,7 +129,7 @@ public:
         // SEAD_ASSERT(0 <= index && index < getNum());
 
         constIterator it = begin();
-        constIterator it_end = constIterator(n, NULL);
+        constIterator it_end = constIterator(n, nullptr);
 
         while (it != it_end)
             ++it;
@@ -266,9 +266,9 @@ template <>
 inline ResParameterList::constIterator<ResParameterListData> ResParameterList::begin<ResParameterListData>() const { return constIterator<ResParameterListData>(0, getResParameterListBasePtr_()); }
 
 template <>
-inline ResParameterList::iterator<ResParameterListData> ResParameterList::end<ResParameterListData>() { return iterator<ResParameterListData>(getResParameterListNum(), NULL); }
+inline ResParameterList::iterator<ResParameterListData> ResParameterList::end<ResParameterListData>() { return iterator<ResParameterListData>(getResParameterListNum(), nullptr); }
 template <>
-inline ResParameterList::constIterator<ResParameterListData> ResParameterList::end<ResParameterListData>() const { return constIterator<ResParameterListData>(getResParameterListNum(), NULL); }
+inline ResParameterList::constIterator<ResParameterListData> ResParameterList::end<ResParameterListData>() const { return constIterator<ResParameterListData>(getResParameterListNum(), nullptr); }
 
 template <>
 inline ResParameterList::iterator<ResParameterObjData> ResParameterList::begin<ResParameterObjData>() { return iterator<ResParameterObjData>(0, getResParameterObjBasePtr_()); }
@@ -276,16 +276,16 @@ template <>
 inline ResParameterList::constIterator<ResParameterObjData> ResParameterList::begin<ResParameterObjData>() const { return constIterator<ResParameterObjData>(0, getResParameterObjBasePtr_()); }
 
 template <>
-inline ResParameterList::iterator<ResParameterObjData> ResParameterList::end<ResParameterObjData>() { return iterator<ResParameterObjData>(getResParameterObjNum(), NULL); }
+inline ResParameterList::iterator<ResParameterObjData> ResParameterList::end<ResParameterObjData>() { return iterator<ResParameterObjData>(getResParameterObjNum(), nullptr); }
 template <>
-inline ResParameterList::constIterator<ResParameterObjData> ResParameterList::end<ResParameterObjData>() const { return constIterator<ResParameterObjData>(getResParameterObjNum(), NULL); }
+inline ResParameterList::constIterator<ResParameterObjData> ResParameterList::end<ResParameterObjData>() const { return constIterator<ResParameterObjData>(getResParameterObjNum(), nullptr); }
 
 inline ResParameterList ResParameterList::getResParameterList(s32 n) const
 {
     // SEAD_ASSERT(0 <= index && index < getResParameterListNum());
 
     constIterator<ResParameterListData> it = begin<ResParameterListData>();
-    constIterator<ResParameterListData> it_end = constIterator<ResParameterListData>(n, NULL);
+    constIterator<ResParameterListData> it_end = constIterator<ResParameterListData>(n, nullptr);
 
     while (it != it_end)
         ++it;
@@ -298,7 +298,7 @@ inline ResParameterObj ResParameterList::getResParameterObj(s32 n) const
     // SEAD_ASSERT(0 <= index && index < getResParameterObjNum());
 
     constIterator<ResParameterObjData> it = begin<ResParameterObjData>();
-    constIterator<ResParameterObjData> it_end = constIterator<ResParameterObjData>(n, NULL);
+    constIterator<ResParameterObjData> it_end = constIterator<ResParameterObjData>(n, nullptr);
 
     while (it != it_end)
         ++it;

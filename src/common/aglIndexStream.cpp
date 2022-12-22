@@ -5,7 +5,7 @@ namespace agl {
 IndexStream::IndexStream()
     : mFormat(cIndexStreamFormat_u16)
     , mPrimitiveType(GX2_PRIMITIVE_TRIANGLES)
-    , mpBuffer(NULL)
+    , mpBuffer(nullptr)
     , mCount(0)
     , mStride(0)
 {
@@ -18,7 +18,7 @@ IndexStream::~IndexStream()
 
 void IndexStream::cleanUp_()
 {
-    mpBuffer = NULL;
+    mpBuffer = nullptr;
     mCount = 0;
     mStride = 0;
 }

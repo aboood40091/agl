@@ -11,7 +11,7 @@ void TextureMemoryAllocator::free(MemoryBlock* p_memory)
     if (p_memory->mpBufferFromDebugHeap)
     {
         delete[] p_memory->mpBufferFromDebugHeap;
-        p_memory->mpBufferFromDebugHeap = NULL;
+        p_memory->mpBufferFromDebugHeap = nullptr;
     }
 
     mMemoryBlockUsed.erase(p_memory);

@@ -7,7 +7,7 @@ VertexAttribute::VertexAttribute()
     , mVertexBuffer()
     , mSetupFinish(false)
     , mCreateFinish(false)
-    , mpFetchShaderBuf(NULL)
+    , mpFetchShaderBuf(nullptr)
 {
 }
 
@@ -26,7 +26,7 @@ void VertexAttribute::destroy()
     if (mpFetchShaderBuf)
     {
         delete[] mpFetchShaderBuf;
-        mpFetchShaderBuf = NULL;
+        mpFetchShaderBuf = nullptr;
     }
 
     mCreateFinish = false;

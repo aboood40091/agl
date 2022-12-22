@@ -43,7 +43,7 @@ public:
     }
 
     void setRenderTargetColorNullAll();
-    void setRenderTargetDepthNull() { mDepthTarget = NULL; }
+    void setRenderTargetDepthNull() { mDepthTarget = nullptr; }
 
     void clear(u32 target_index, u32 clr_flag, const sead::Color4f& color, f32 depth, u32 stencil) const;
 

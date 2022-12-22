@@ -42,7 +42,7 @@ DepthOfField::DepthOfField()
     , mTempVignetting1(this, "vignetting_shape_1")
     , mFarMulColor              (sead::Color4f(1.0f, 1.0f, 1.0f, 1.0f),              "far_mul_color",             "æŽZF",            &mParameterObj)
     , mDebugTexturePage()
-    , mpIndirectTextureData(NULL)
+    , mpIndirectTextureData(nullptr)
     , mIndirectTextureSampler()
     , _ae0(sead::Vector4f::zero)
     , mIndirectMatrixRow0(1.0f, 0.0f, 0.0f)
@@ -99,7 +99,7 @@ void DepthOfField::initialize(s32 ctx_num, sead::Heap* heap)
         );
         itr_ctx->mDepthTargetTextureSampler.setUnk1(1);
 
-        itr_ctx->mpColorTextureData = NULL;
+        itr_ctx->mpColorTextureData = nullptr;
 
         itr_ctx->mColorTextureSampler.setFilter(
             cTextureFilterType_Linear,
@@ -107,7 +107,7 @@ void DepthOfField::initialize(s32 ctx_num, sead::Heap* heap)
             cTextureMipFilterType_Point
         );
 
-        itr_ctx->mpDepthTextureData = NULL;
+        itr_ctx->mpDepthTextureData = nullptr;
 
         itr_ctx->mDepthTextureSampler.setFilter(
             cTextureFilterType_Linear,
@@ -295,12 +295,12 @@ void DepthOfField::freeBuffer(s32 ctx_index) const
     if (ctx.mpColorTextureData)
     {
         utl::DynamicTextureAllocator::instance()->free(ctx.mpColorTextureData);
-        ctx.mpColorTextureData = NULL;
+        ctx.mpColorTextureData = nullptr;
     }
     if (ctx.mpDepthTextureData)
     {
         utl::DynamicTextureAllocator::instance()->free(ctx.mpDepthTextureData);
-        ctx.mpDepthTextureData = NULL;
+        ctx.mpDepthTextureData = nullptr;
     }
 }
 

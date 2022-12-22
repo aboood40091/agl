@@ -15,7 +15,7 @@ RenderBuffer::~RenderBuffer()
 {
     for (s32 i = 0; i < sBoundRenderBuffer.size(); i++)
         if (sBoundRenderBuffer[i] == this)
-            sBoundRenderBuffer[i] = NULL;
+            sBoundRenderBuffer[i] = nullptr;
 }
 
 void RenderBuffer::initialize_()
@@ -139,7 +139,7 @@ void RenderBuffer::bindImpl_() const
 void RenderBuffer::setRenderTargetColorNullAll()
 {
     for (s32 i = 0; i < 8; i++)
-        mColorTarget[i] = NULL;
+        mColorTarget[i] = nullptr;
 }
 
 }

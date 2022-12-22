@@ -2,6 +2,6 @@
 
 namespace agl { namespace detail {
 
-ShaderHolder* ShaderHolder::sInstance = NULL;
+ShaderHolder* ShaderHolder::sInstance = nullptr;
 
 } }

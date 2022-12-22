@@ -24,7 +24,7 @@ ShaderProgram::ShaderProgram()
     , mVertexShader()
     , mFragmentShader()
     , mGeometryShader()
-    , mpSharedData(NULL)
+    , mpSharedData(nullptr)
 {
 }
 
@@ -48,13 +48,13 @@ void ShaderProgram::initialize(const sead::SafeString& name, sead::Heap* heap)
 {
     mpSharedData = new (heap) SharedData();
     mpSharedData->mpOriginal = this;
-    mpSharedData->mpVariationBuffer = NULL;
+    mpSharedData->mpVariationBuffer = nullptr;
     mpSharedData->_10 = 0;
     mpSharedData->setName(name);
     mpSharedData->_28 = 0;
 
     for (sead::UnsafeArray<ResShaderSymbolArray, cShaderSymbolType_Num>::iterator it = mpSharedData->mResShaderSymbolArray.begin(), it_end = mpSharedData->mResShaderSymbolArray.end(); it != it_end; ++it)
-        *it = NULL;
+        *it = nullptr;
 }
 
 void ShaderProgram::createVariationBuffer(s32 macro_num, sead::Heap* heap)
@@ -117,7 +117,7 @@ Shader* ShaderProgram::getShader(ShaderType type)
     case cShaderType_Geometry:
         return &mGeometryShader;
     default:
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -132,7 +132,7 @@ const Shader* ShaderProgram::getShader(ShaderType type) const
     case cShaderType_Geometry:
         return &mGeometryShader;
     default:
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -371,7 +371,7 @@ u32 ShaderProgram::forceValidate_() const
             //                     Compiles and loads sharcfb from host pc
             dump();
 
-            if (mDisplayList.getBuffer() != NULL)
+            if (mDisplayList.getBuffer() != nullptr)
             {
                 void* p_dl;
                 size_t size = DisplayList::suspend(&p_dl);
@@ -387,7 +387,7 @@ u32 ShaderProgram::forceValidate_() const
         }
         else
         {
-            if (mDisplayList.getBuffer() != NULL)
+            if (mDisplayList.getBuffer() != nullptr)
             {
                 sead::Graphics::instance()->lockDrawContext();
                 {

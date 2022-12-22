@@ -4,7 +4,7 @@
 
 namespace agl { namespace utl {
 
-DynamicTextureAllocator* DynamicTextureAllocator::sInstance = NULL;
+DynamicTextureAllocator* DynamicTextureAllocator::sInstance = nullptr;
 
 void DynamicTextureAllocator::free(const TextureData* ptr)
 {
@@ -34,7 +34,7 @@ bool DynamicTextureAllocator::free_(Context* p_ctx, const TextureData* ptr)
 
     // SEAD_ASSERT(p_tex->mpMemoryBlock != nullptr);
     p_tex->mpMemoryAllocator->free(p_tex->mpMemoryBlock);
-    p_tex->mpMemoryBlock = NULL;
+    p_tex->mpMemoryBlock = nullptr;
 
     return true;
 }

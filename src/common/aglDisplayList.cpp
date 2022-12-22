@@ -24,7 +24,7 @@ void DisplayList::setBuffer(u8* buffer, size_t size)
 
 void DisplayList::clear()
 {
-    mpBuffer = NULL;
+    mpBuffer = nullptr;
     mSize = 0;
     mValidSize = 0;
 }
@@ -67,7 +67,7 @@ bool DisplayList::beginDisplayListBuffer(u8* buffer, size_t size)
 
 size_t DisplayList::endDisplayListBuffer(sead::Heap* heap)
 {
-    u8* buffer = NULL;
+    u8* buffer = nullptr;
     size_t size = endDisplayList();
     if (size != 0)
     {
@@ -99,7 +99,7 @@ size_t DisplayList::suspend(void** p_dl)
 {
     // SEAD_ASSERT(p_dl != nullptr);
 
-    *p_dl = NULL;
+    *p_dl = nullptr;
     size_t size = 0;
 
 #ifdef cafe
@@ -117,7 +117,7 @@ size_t DisplayList::suspend(void** p_dl)
 void DisplayList::resume(void* dl, size_t size)
 {
 #ifdef cafe
-    if (dl != NULL)
+    if (dl != nullptr)
         GX2BeginDisplayListEx(dl, size, GX2_DISABLE);
 #endif // cafe
 }

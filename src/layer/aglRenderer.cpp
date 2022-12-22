@@ -3,7 +3,7 @@
 
 namespace agl { namespace lyr {
 
-Renderer* Renderer::sInstance = NULL;
+Renderer* Renderer::sInstance = nullptr;
 
 void Renderer::removeDrawMethod(const DrawMethod* p_draw_method)
 {

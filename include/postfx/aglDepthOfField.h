@@ -92,7 +92,7 @@ public:
     DepthOfField();
     virtual ~DepthOfField();
 
-    void initialize(s32 ctx_num = 1, sead::Heap* heap = NULL);
+    void initialize(s32 ctx_num = 1, sead::Heap* heap = nullptr);
 
 private:
     void assignShaderProgram_();

@@ -7,8 +7,8 @@ namespace agl {
 
 ShaderCompileInfo::ShaderCompileInfo()
     : sead::INamable("unititled")
-    , mSourceText(NULL)
-    , mRawText(NULL)
+    , mSourceText(nullptr)
+    , mRawText(nullptr)
     , mMacroName()
     , mMacroValue()
     , mVariationName()

@@ -14,7 +14,7 @@ class VertexAttribute
     struct Attribute_
     {
         Attribute_()
-            : mpVertexBuffer(NULL)
+            : mpVertexBuffer(nullptr)
             , mStreamIndex(-1)
             , mBufferIndex(-1)
         {

@@ -8,10 +8,10 @@ RenderTargetColor::RenderTargetColor()
     , mIsMSAA2D(false)
     , mAuxBufferSize(0)
     , mAuxBufferAlign(0x800)
-    , mpAuxBuffer(NULL)
+    , mpAuxBuffer(nullptr)
 {
     sead::MemUtil::fillZero(&mInnerBuffer, sizeof(GX2ColorBuffer));
-    GX2InitColorBufferAuxPtr(&mInnerBuffer, NULL);
+    GX2InitColorBufferAuxPtr(&mInnerBuffer, nullptr);
 }
 
 void RenderTargetColor::invalidateGPUCache() const
@@ -36,10 +36,10 @@ RenderTargetDepth::RenderTargetDepth()
     : RenderTargetBase()
     , mHiZBufferSize(0)
     , mHiZBufferAlign(0x800)
-    , mpHiZBuffer(NULL)
+    , mpHiZBuffer(nullptr)
 {
     sead::MemUtil::fillZero(&mInnerBuffer, sizeof(GX2DepthBuffer));
-    GX2InitDepthBufferHiZPtr(&mInnerBuffer, NULL);
+    GX2InitDepthBufferHiZPtr(&mInnerBuffer, nullptr);
     GX2InitDepthBufferHiZEnable(&mInnerBuffer, GX2_DISABLE);
 }
 

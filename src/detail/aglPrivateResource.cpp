@@ -2,6 +2,6 @@
 
 namespace agl { namespace detail {
 
-PrivateResource* PrivateResource::sInstance = NULL;
+PrivateResource* PrivateResource::sInstance = nullptr;
 
 } }

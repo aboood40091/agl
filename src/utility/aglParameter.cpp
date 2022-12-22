@@ -6,7 +6,7 @@ namespace agl { namespace utl {
 
 ParameterBase::ParameterBase()
 {
-    initializeListNode("default", "parameter", "", NULL);
+    initializeListNode("default", "parameter", "", nullptr);
 }
 
 bool ParameterBase::copy(const ParameterBase& parameter)

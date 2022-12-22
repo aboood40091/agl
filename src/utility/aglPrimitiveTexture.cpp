@@ -2,7 +2,7 @@
 
 namespace agl { namespace utl {
 
-PrimitiveTexture* PrimitiveTexture::sInstance = NULL;
+PrimitiveTexture* PrimitiveTexture::sInstance = nullptr;
 
 } }
 

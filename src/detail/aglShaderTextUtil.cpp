@@ -212,7 +212,7 @@ void ShaderTextUtil::replace(char* pSrc, const char* pValue, s32 begin, s32 end,
 
 sead::HeapSafeString* ShaderTextUtil::createRawText(const sead::SafeString& text, const char* const* source_name, const char* const* source_text, s32 source_num, bool* source_used, sead::Heap* heap)
 {
-    if (source_used != NULL)
+    if (source_used != nullptr)
         for (s32 i_source = 0; i_source < source_num; i_source++)
             source_used[i_source] = false;
 
@@ -224,7 +224,7 @@ sead::HeapSafeString* ShaderTextUtil::createRawText(const sead::SafeString& text
     while (*p_src != '\0')
     {
         const char* const include_directive_begin = std::strchr(p_src, '#') + 1;
-        if (include_directive_begin - 1 == NULL)
+        if (include_directive_begin - 1 == nullptr)
             break;
 
         const char* directive = include_directive_begin + std::strspn(include_directive_begin, " \t\r\n");
@@ -238,11 +238,11 @@ sead::HeapSafeString* ShaderTextUtil::createRawText(const sead::SafeString& text
             directive[6] == 'e')
         {
             const char* const include_name_begin = std::strchr(directive + 7, '\"') + 1;
-            if (include_name_begin - 1 == NULL)
+            if (include_name_begin - 1 == nullptr)
                 continue;
 
             const char* const include_directive_end = std::strchr(include_name_begin, '\"') + 1;
-            if (include_directive_end - 1 == NULL)
+            if (include_directive_end - 1 == nullptr)
                 continue;
 
             sead::FixedSafeString<1024> name;
@@ -265,7 +265,7 @@ sead::HeapSafeString* ShaderTextUtil::createRawText(const sead::SafeString& text
             }
 
             const char* p_source_text = source_text[i_source];
-            if (source_used != NULL)
+            if (source_used != nullptr)
                 source_used[i_source] = true;
 
             if (!p_source_text)

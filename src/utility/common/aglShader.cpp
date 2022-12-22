@@ -6,8 +6,8 @@
 namespace agl {
 
 Shader::Shader()
-    : mBinary(NULL)
-    , mCompileInfo(NULL)
+    : mBinary(nullptr)
+    , mCompileInfo(nullptr)
 {
 }
 

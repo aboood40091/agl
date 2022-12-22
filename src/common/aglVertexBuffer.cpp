@@ -4,7 +4,7 @@ namespace agl {
 
 VertexBuffer::VertexBuffer()
     : mVertexStream()
-    , mpBuffer(NULL)
+    , mpBuffer(nullptr)
     , mStride(0)
     , mVertexNum(0)
     , mBufferSize(0)
@@ -21,7 +21,7 @@ void VertexBuffer::cleanUp_()
     for (u32 i = 0; i < cVertexStreamMax; i++)
         mVertexStream[i].reset();
 
-    mpBuffer = NULL;
+    mpBuffer = nullptr;
     mBufferSize = 0;
     mStride = 0;
     mVertexNum = 0;
