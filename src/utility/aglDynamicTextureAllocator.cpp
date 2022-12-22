@@ -24,4 +24,19 @@ void DynamicTextureAllocator::free(const TextureData* ptr)
     }
 }
 
+bool DynamicTextureAllocator::free_(Context* p_ctx, const TextureData* ptr)
+{
+    // SEAD_ASSERT(ptr != nullptr);
+    TextureDataEx* p_tex = static_cast<TextureDataEx*>(const_cast<TextureData*>(ptr));
+
+    if (p_tex->mpContext != p_ctx)
+        return false;
+
+    // SEAD_ASSERT(p_tex->mpMemoryBlock != nullptr);
+    p_tex->mpMemoryAllocator->free(p_tex->mpMemoryBlock);
+    p_tex->mpMemoryBlock = NULL;
+
+    return true;
+}
+
 } }
