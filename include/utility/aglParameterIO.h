@@ -15,7 +15,7 @@ public:
 public:
     virtual bool save(const sead::SafeString&, u32) const;
     virtual void applyResParameterArchive(ResParameterArchive arc);
-    virtual void applyResParameterArchiveLerp(ResParameterArchive arc_a, ResParameterArchive arc_b, f32);
+    virtual void applyResParameterArchiveLerp(ResParameterArchive arc_a, ResParameterArchive arc_b, f32 t);
 
 protected:
     virtual void callbackInvalidVersion_(ResParameterArchive arc) { }
