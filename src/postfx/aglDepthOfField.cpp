@@ -335,6 +335,19 @@ bool DepthOfField::enableSeparateVignettingPass_() const
     return false;
 }
 
+DepthOfField::DrawArg::DrawArg(Context& ctx, const RenderBuffer& render_buffer, const TextureData& depth, bool view_depth, f32 near, f32 far)
+    : mCtx(ctx)
+    , mRenderBuffer(render_buffer)
+    , mNear(near)
+    , mFar(far)
+    , mWidth(mRenderBuffer.getRenderTargetColor()->getTextureData().getWidth())
+    , mHeight(mRenderBuffer.getRenderTargetColor()->getTextureData().getHeight())
+    , mViewDepth(view_depth)
+{
+    mCtx.mColorTargetTextureSampler.applyTextureData(mRenderBuffer.getRenderTargetColor()->getTextureData());
+    mCtx.mDepthTargetTextureSampler.applyTextureData(depth);
+}
+
 DepthOfField::TempVignetting::TempVignetting(DepthOfField* p_dof, const sead::SafeString& param_name)
     : utl::IParameterObj()
     , mType (0,                           "type",  "å`èÛ",    this)

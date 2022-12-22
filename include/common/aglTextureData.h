@@ -1,6 +1,7 @@
 #pragma once
 
 #include <common/aglTextureEnum.h>
+#include <math/seadMathCalcCommon.h>
 
 #include <cafe/gx2.h>
 
@@ -15,6 +16,9 @@ public:
     virtual ~TextureData() { }
 
     TextureType getTextureType() const { return TextureType(mSurface.dim); }
+
+    s32 getWidth() const { return sead::Mathi::max(mSurface.width, mWidth); }
+    s32 getHeight() const { return sead::Mathi::max(mSurface.height, mHeight); }
 
     void* getImagePtr() const { return mSurface.imagePtr; }
     u32 getImageSize() const { return mSurface.imageSize; }
@@ -32,8 +36,8 @@ public:
 private:
     TextureFormat mFormat;
     GX2Surface mSurface;
-    u32 mWidth;
-    u32 mHeight;
+    s32 mWidth;
+    s32 mHeight;
     u32 mDepth;
     u32 mImageByteSize;
     TextureCompSel mCompR;

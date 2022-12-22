@@ -20,11 +20,14 @@ TextureSampler::applyTextureData(const TextureData& texture_data)
     }
     else
     {
-        mTextureData.mSurface.imagePtr = texture_data.mSurface.imagePtr;
-        mTextureData.mSurface.mipPtr   = texture_data.mSurface.mipPtr;
+        void* image_ptr = texture_data.mSurface.imagePtr;
+        void* mip_ptr = texture_data.mSurface.mipPtr;
 
-        mGX2Texture.surface.imagePtr = mTextureData.mSurface.imagePtr;
-        mGX2Texture.surface.mipPtr   = mTextureData.mSurface.mipPtr;
+        mTextureData.mSurface.imagePtr = image_ptr;
+        mTextureData.mSurface.mipPtr   = mip_ptr;
+
+        mGX2Texture.surface.imagePtr = image_ptr;
+        mGX2Texture.surface.mipPtr   = mip_ptr;
     }
 }
 
