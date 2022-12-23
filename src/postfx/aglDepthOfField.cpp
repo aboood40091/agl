@@ -289,18 +289,76 @@ ShaderMode DepthOfField::draw(s32 ctx_index, const RenderBuffer& render_buffer, 
     return mode;
 }
 
+void DepthOfField::allocBuffer(s32 ctx_index, const RenderBuffer& render_buffer) const
+{
+    const RenderTarget<RenderTargetColor>* color = render_buffer.getRenderTargetColor();
+    // SEAD_ASSERT(color != nullptr);
+
+    allocBuffer(ctx_index, color->getTextureData().getTextureFormat(), color->getTextureData().getWidth(), color->getTextureData().getHeight());
+}
+
+void DepthOfField::allocBuffer(s32 ctx_index, TextureFormat format, s32 width, s32 height) const
+{
+    Context* p_ctx = &(mContext[ctx_index]);
+    utl::DynamicTextureAllocator* p_allocator = utl::DynamicTextureAllocator::instance();
+
+    s32 color_blur_mipmap_num;
+    s32 color_blur_width;
+    s32 color_blur_height;
+
+    if (*mIndirectEnable && roundDown_(*mLevel) == 0)
+    {
+        color_blur_mipmap_num = roundUp_(*mLevel) + 1;
+
+        color_blur_width  = width;
+        color_blur_height = height;
+    }
+    else
+    {
+        color_blur_mipmap_num = sead::Mathi::max(1, roundUp_(*mLevel));
+
+        color_blur_width  = width  / 2;
+        color_blur_height = height / 2;
+    }
+
+    p_ctx->mpColorTextureData = p_allocator->alloc(
+        "dof_blur_mipmap",
+        format,
+        color_blur_width,
+        color_blur_height,
+        color_blur_mipmap_num
+    );
+    // SEAD_ASSERT(p_ctx->mpColorTextureData != nullptr);
+    p_ctx->mColorTextureSampler.applyTextureData(*p_ctx->mpColorTextureData);
+
+    if (enableDepthBlur_())
+    {
+        p_ctx->mpDepthTextureData = p_allocator->alloc(
+            "dof_depth_mipmap",
+            cTextureFormat_R8_uNorm,
+            width  / 2,
+            height / 2,
+            roundUp_(*mDepthBlurAdd) + 1
+        );
+        // SEAD_ASSERT(p_ctx->mpDepthTextureData != nullptr);
+        p_ctx->mDepthTextureSampler.applyTextureData(*p_ctx->mpDepthTextureData);
+    }
+}
+
 void DepthOfField::freeBuffer(s32 ctx_index) const
 {
-    Context& ctx = mContext[ctx_index];
-    if (ctx.mpColorTextureData)
+    Context* p_ctx = &(mContext[ctx_index]);
+    utl::DynamicTextureAllocator* p_allocator = utl::DynamicTextureAllocator::instance();
+
+    if (p_ctx->mpColorTextureData)
     {
-        utl::DynamicTextureAllocator::instance()->free(ctx.mpColorTextureData);
-        ctx.mpColorTextureData = nullptr;
+        p_allocator->free(p_ctx->mpColorTextureData);
+        p_ctx->mpColorTextureData = nullptr;
     }
-    if (ctx.mpDepthTextureData)
+    if (p_ctx->mpDepthTextureData)
     {
-        utl::DynamicTextureAllocator::instance()->free(ctx.mpDepthTextureData);
-        ctx.mpDepthTextureData = nullptr;
+        p_allocator->free(p_ctx->mpDepthTextureData);
+        p_ctx->mpDepthTextureData = nullptr;
     }
 }
 

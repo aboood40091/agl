@@ -15,6 +15,8 @@ public:
     TextureData();
     virtual ~TextureData() { }
 
+    TextureFormat getTextureFormat() const { return mFormat; }
+
     TextureType getTextureType() const { return TextureType(mSurface.dim); }
 
     s32 getWidth() const { return sead::Mathi::max(mSurface.width, mWidth); }

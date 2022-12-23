@@ -130,6 +130,26 @@ private:
     ShaderMode drawCompose_(const DrawArg& arg, ShaderMode mode) const;
     ShaderMode drawVignetting_(const DrawArg& arg, ShaderMode mode) const;
 
+    static s32 roundUp_(f32 value)
+    {
+        s32 ivalue = s32(value);
+        if (ivalue != value)
+            if (value >= 0.0f)
+                ivalue++;
+
+        return ivalue;
+    }
+
+    static s32 roundDown_(f32 value)
+    {
+        s32 ivalue = s32(value);
+        if (ivalue != value)
+            if (value < 0.0f)
+                ivalue--;
+
+        return ivalue;
+    }
+
 public:
     void setIndirectTextureData(const TextureData* p_texture_data);
     void setIndirectEnable(bool enable);

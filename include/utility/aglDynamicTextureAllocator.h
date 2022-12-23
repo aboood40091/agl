@@ -25,9 +25,22 @@ private:
     friend class TextureDataEx;
 
 public:
+    enum AllocateType
+    {
+        cAllocateType_Num = 3
+    };
+
+public:
     DynamicTextureAllocator();
     virtual ~DynamicTextureAllocator();
 
+    TextureData* alloc(
+        const sead::SafeString& name,
+        TextureFormat format, u32 width, u32 height, u32 mip_level_num,
+        void** pp_buffer = nullptr,
+        AllocateType allocate_type = AllocateType(0),
+        bool invalidate_gpu_cache = true
+    );
     void free(const TextureData* ptr);
 
 private:
