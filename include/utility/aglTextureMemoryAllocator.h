@@ -15,6 +15,9 @@ public:
     public:
         MemoryBlock(); // TODO
 
+        void* getImagePtr() const { return mpImagePtr; }
+        void* getMipPtr() const { return mpMipPtr; }
+
     private:
         u8* mpBuffer;
         u32 mBufferSize;
@@ -30,6 +33,9 @@ public:
     TextureMemoryAllocator();
     virtual ~TextureMemoryAllocator();
 
+    u32 getUsedSize() const { return mUsedSize; }
+
+    MemoryBlock* alloc(const TextureData& tex, void** pp_buffer, bool allocate_from_tail);
     void free(MemoryBlock* p_memory);
 
 private:

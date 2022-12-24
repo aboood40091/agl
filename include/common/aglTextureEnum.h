@@ -135,4 +135,15 @@ enum TextureWrapType
 };
 static_assert(sizeof(TextureWrapType) == 4);
 
+enum MultiSampleType
+{
+    cMultiSampleType_1x = 0,
+    cMultiSampleType_2x,
+    cMultiSampleType_4x,
+    cMultiSampleType_8x,
+    cMultiSampleType_Num
+};
+static_assert(sizeof(MultiSampleType) == 4 &&
+              cMultiSampleType_Num == 4, "agl::MultiSampleType size mismatch");
+
 }
