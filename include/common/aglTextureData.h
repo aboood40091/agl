@@ -73,10 +73,13 @@ public:
         initialize_(cTextureType_2D_MSAA, format, width, height, 1, 1, multi_sample_type);
     }
 
+    void setMipLevelNum(u32 mip_level_num);
+
     void invalidateGPUCache() const;
 
 private:
     void initialize_(TextureType type, TextureFormat format, u32 width, u32 height, u32 depth, u32 mip_level_num, MultiSampleType multi_sample_type);
+    void initializeSize_(u32 width, u32 height, u32 depth);
 
 private:
     TextureFormat mFormat;
