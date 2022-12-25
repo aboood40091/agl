@@ -38,6 +38,8 @@ public:
     MemoryBlock* alloc(const TextureData& tex, void** pp_buffer, bool allocate_from_tail);
     void free(MemoryBlock* p_memory);
 
+    bool isOverwrapperd(const TextureMemoryAllocator& allocator) const;
+
 private:
     void* mpBufferStart;
     void* mpBufferEnd;

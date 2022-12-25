@@ -18,6 +18,18 @@ bool DynamicTextureAllocator::isValid_(const Context* p_ctx) const
     return true;
 }
 
+bool DynamicTextureAllocator::isContextValid_(const Context* p_ctx) const
+{
+    const Context* p_self_ctx = &(mContext[3]);
+
+    int overwrapperd =  // Yes, you read that correctly. "int", not "bool".
+        (p_ctx->mTextureMemoryAllocator[0].isOverwrapperd(p_self_ctx->mTextureMemoryAllocator[0]) ||
+         p_ctx->mTextureMemoryAllocator[1].isOverwrapperd(p_self_ctx->mTextureMemoryAllocator[1]) ||
+         p_ctx->mTextureMemoryAllocator[2].isOverwrapperd(p_self_ctx->mTextureMemoryAllocator[2]));
+
+    return !overwrapperd;
+}
+
 TextureData* DynamicTextureAllocator::alloc(
     const sead::SafeString& name,
     TextureFormat format,
