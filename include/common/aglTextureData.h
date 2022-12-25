@@ -77,11 +77,12 @@ public:
 
     void invalidateGPUCache() const;
 
-    void initializeFromSurface(const GX2Surface& surface);
-
 private:
     void initialize_(TextureType type, TextureFormat format, u32 width, u32 height, u32 depth, u32 mip_level_num, MultiSampleType multi_sample_type);
     void initializeSize_(u32 width, u32 height, u32 depth);
+
+public:
+    void initializeFromSurface(const GX2Surface& surface);
 
 private:
     TextureFormat mFormat;

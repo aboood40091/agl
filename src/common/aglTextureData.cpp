@@ -56,4 +56,18 @@ void TextureData::initialize_(TextureType type, TextureFormat format, u32 width,
     mSurface.mipPtr = nullptr;
 }
 
+void TextureData::initializeFromSurface(const GX2Surface& surface)
+{
+    mSurface = surface;
+    mFormat = detail::TextureDataUtil::convFormatGX2ToAGL(mSurface.format);
+
+    initializeSize_(mSurface.width, mSurface.height, mSurface.depth);
+    setMipLevelNum(surface.numMips);
+
+    mCompR = TextureFormatInfo::getDefaultCompSel(mFormat, 0);
+    mCompG = TextureFormatInfo::getDefaultCompSel(mFormat, 1);
+    mCompB = TextureFormatInfo::getDefaultCompSel(mFormat, 2);
+    mCompA = TextureFormatInfo::getDefaultCompSel(mFormat, 3);
+}
+
 }
