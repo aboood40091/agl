@@ -89,9 +89,9 @@ void TextureData::initializeSize_(u32 width, u32 height, u32 slice_num)
     for (s32 mip_level = 1; ; mip_level++)
     {
         s32 mip_level_prev = mip_level - 1;
-        if (sead::Mathi::max(mSurface.width  >> mip_level, mMinWidth)  == sead::Mathi::max(mSurface.width  >> mip_level_prev, mMinWidth)  &&
-            sead::Mathi::max(mSurface.height >> mip_level, mMinHeight) == sead::Mathi::max(mSurface.height >> mip_level_prev, mMinHeight) &&
-            sead::Mathi::max(mSurface.depth  >> mip_level, mMinSlice)  == sead::Mathi::max(mSurface.depth  >> mip_level_prev, mMinSlice))
+        if (getWidth(mip_level) == getWidth(mip_level_prev) &&
+            getHeight(mip_level) == getHeight(mip_level_prev) &&
+            getSliceNum(mip_level) == getSliceNum(mip_level_prev))
         {
             mMaxMipLevel = mip_level;
             return;
