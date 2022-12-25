@@ -43,7 +43,7 @@ void TextureSampler::applyTextureData_(const TextureData& texture_data)
     mTextureData.mWidth = texture_data.mWidth;
     mTextureData.mHeight = texture_data.mHeight;
     mTextureData.mDepth = texture_data.mDepth;
-    mTextureData.mImageByteSize = texture_data.mImageByteSize;
+    mTextureData.mMipLevelMax = texture_data.mMipLevelMax;
     mTextureData.mCompR = texture_data.mCompR;
     mTextureData.mCompG = texture_data.mCompG;
     mTextureData.mCompB = texture_data.mCompB;

@@ -9,13 +9,19 @@ TextureData::TextureData()
     : mWidth(1)
     , mHeight(1)
     , mDepth(1)
-    , mImageByteSize(1)
+    , mMipLevelMax(1)
     , mCompR(cTextureCompSel_0)
     , mCompG(cTextureCompSel_0)
     , mCompB(cTextureCompSel_0)
     , mCompA(cTextureCompSel_0)
 {
     sead::MemUtil::fillZero(&mSurface, sizeof(GX2Surface));
+}
+
+void TextureData::setMipLevelNum(u32 mip_level_num)
+{
+    mSurface.numMips = sead::Mathi::clamp2(1, mip_level_num, mMipLevelMax);
+    detail::TextureDataUtil::calcSizeAndAlignment(&mSurface);
 }
 
 void TextureData::invalidateGPUCache() const

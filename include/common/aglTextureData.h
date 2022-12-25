@@ -73,6 +73,7 @@ public:
         initialize_(cTextureType_2D_MSAA, format, width, height, 1, 1, multi_sample_type);
     }
 
+    u32 getMipLevelNum() const { return mSurface.numMips; }
     void setMipLevelNum(u32 mip_level_num);
 
     void invalidateGPUCache() const;
@@ -90,7 +91,7 @@ private:
     s32 mWidth;
     s32 mHeight;
     s32 mDepth;
-    u32 mImageByteSize;
+    u32 mMipLevelMax;
     TextureCompSel mCompR;
     TextureCompSel mCompG;
     TextureCompSel mCompB;
