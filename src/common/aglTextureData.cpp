@@ -6,10 +6,10 @@
 namespace agl {
 
 TextureData::TextureData()
-    : mWidth(1)
-    , mHeight(1)
-    , mDepth(1)
-    , mMipLevelMax(1)
+    : mMinWidth(1)
+    , mMinHeight(1)
+    , mMinSlice(1)
+    , mMaxMipLevel(1)
     , mCompR(cTextureCompSel_0)
     , mCompG(cTextureCompSel_0)
     , mCompB(cTextureCompSel_0)
@@ -20,7 +20,7 @@ TextureData::TextureData()
 
 void TextureData::setMipLevelNum(u32 mip_level_num)
 {
-    mSurface.numMips = sead::Mathi::clamp2(1, mip_level_num, mMipLevelMax);
+    mSurface.numMips = sead::Mathi::clamp2(1, mip_level_num, mMaxMipLevel);
     detail::TextureDataUtil::calcSizeAndAlignment(&mSurface);
 }
 
@@ -33,7 +33,7 @@ void TextureData::invalidateGPUCache() const
         GX2Invalidate(GX2_INVALIDATE_TEXTURE, getMipPtr(), getMipSize());
 }
 
-void TextureData::initialize_(TextureType type, TextureFormat format, u32 width, u32 height, u32 depth, u32 mip_level_num, MultiSampleType multi_sample_type)
+void TextureData::initialize_(TextureType type, TextureFormat format, u32 width, u32 height, u32 slice_num, u32 mip_level_num, MultiSampleType multi_sample_type)
 {
     mSurface.dim = GX2SurfaceDim(type);
     mFormat = format;
@@ -48,7 +48,7 @@ void TextureData::initialize_(TextureType type, TextureFormat format, u32 width,
     mSurface.tileMode = GX2_TILE_MODE_DEFAULT;
     mSurface.swizzle = 0;
 
-    initializeSize_(width, height, depth);
+    initializeSize_(width, height, slice_num);
     setMipLevelNum(mip_level_num);
 
     mCompR = TextureFormatInfo::getDefaultCompSel(format, 0);
@@ -60,6 +60,43 @@ void TextureData::initialize_(TextureType type, TextureFormat format, u32 width,
 
     mSurface.imagePtr = nullptr;
     mSurface.mipPtr = nullptr;
+}
+
+void TextureData::initializeSize_(u32 width, u32 height, u32 slice_num)
+{
+    mSurface.width = width;
+    mSurface.height = height;
+    mSurface.depth = slice_num;
+
+    mMinWidth = 1;
+
+    if (mSurface.dim == GX2_SURFACE_DIM_1D_ARRAY)
+        mMinHeight = height;
+    else
+        mMinHeight = 1;
+
+    if (mSurface.dim == GX2_SURFACE_DIM_CUBE || mSurface.dim == GX2_SURFACE_DIM_2D_ARRAY)
+        mMinSlice = slice_num;
+    else
+        mMinSlice = 1;
+
+    if (mSurface.dim == GX2_SURFACE_DIM_2D_MSAA)
+    {
+        mMaxMipLevel = 1;
+        return;
+    }
+
+    for (s32 mip_level = 1; ; mip_level++)
+    {
+        s32 mip_level_prev = mip_level - 1;
+        if (sead::Mathi::max(mSurface.width  >> mip_level, mMinWidth)  == sead::Mathi::max(mSurface.width  >> mip_level_prev, mMinWidth)  &&
+            sead::Mathi::max(mSurface.height >> mip_level, mMinHeight) == sead::Mathi::max(mSurface.height >> mip_level_prev, mMinHeight) &&
+            sead::Mathi::max(mSurface.depth  >> mip_level, mMinSlice)  == sead::Mathi::max(mSurface.depth  >> mip_level_prev, mMinSlice))
+        {
+            mMaxMipLevel = mip_level;
+            return;
+        }
+    }
 }
 
 void TextureData::initializeFromSurface(const GX2Surface& surface)

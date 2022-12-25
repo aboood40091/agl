@@ -18,12 +18,12 @@ public:
     TextureFormat getTextureFormat() const { return mFormat; }
     TextureType getTextureType() const { return TextureType(mSurface.dim); }
 
-    s32 getWidth() const { return sead::Mathi::max(mSurface.width, mWidth); }
-    s32 getHeight() const { return sead::Mathi::max(mSurface.height, mHeight); }
+    u32 getWidth(s32 mip_level = 0) const { return sead::Mathi::max(mSurface.width >> mip_level, mMinWidth); }
+    u32 getHeight(s32 mip_level = 0) const { return sead::Mathi::max(mSurface.height >> mip_level, mMinHeight); }
 
     MultiSampleType getMultiSampleType() const { return MultiSampleType(mSurface.aa); }
 
-    s32 getDepth() const { return sead::Mathi::max(mSurface.depth, mDepth); }
+    u32 getSliceNum(s32 mip_level = 0) const { return sead::Mathi::max(mSurface.depth >> mip_level, mMinSlice); }
 
     void* getImagePtr() const { return mSurface.imagePtr; }
     void setImagePtr(void* ptr) { mSurface.imagePtr = ptr; }
@@ -48,9 +48,9 @@ public:
         initialize_(cTextureType_2D, format, width, height, 1, mip_level_num, cMultiSampleType_1x);
     }
 
-    void initialize3D(TextureFormat format, u32 width, u32 height, u32 depth, u32 mip_level_num)
+    void initialize3D(TextureFormat format, u32 width, u32 height, u32 slice_num, u32 mip_level_num)
     {
-        initialize_(cTextureType_3D, format, width, height, depth, mip_level_num, cMultiSampleType_1x);
+        initialize_(cTextureType_3D, format, width, height, slice_num, mip_level_num, cMultiSampleType_1x);
     }
 
     void initializeCubeMap(TextureFormat format, u32 width, u32 height, u32 mip_level_num)
@@ -79,8 +79,8 @@ public:
     void invalidateGPUCache() const;
 
 private:
-    void initialize_(TextureType type, TextureFormat format, u32 width, u32 height, u32 depth, u32 mip_level_num, MultiSampleType multi_sample_type);
-    void initializeSize_(u32 width, u32 height, u32 depth);
+    void initialize_(TextureType type, TextureFormat format, u32 width, u32 height, u32 slice_num, u32 mip_level_num, MultiSampleType multi_sample_type);
+    void initializeSize_(u32 width, u32 height, u32 slice_num);
 
 public:
     void initializeFromSurface(const GX2Surface& surface);
@@ -88,10 +88,10 @@ public:
 private:
     TextureFormat mFormat;
     GX2Surface mSurface;
-    s32 mWidth;
-    s32 mHeight;
-    s32 mDepth;
-    u32 mMipLevelMax;
+    u32 mMinWidth;
+    u32 mMinHeight;
+    u32 mMinSlice;
+    u32 mMaxMipLevel;
     TextureCompSel mCompR;
     TextureCompSel mCompG;
     TextureCompSel mCompB;

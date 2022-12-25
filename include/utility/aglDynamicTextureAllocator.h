@@ -56,7 +56,7 @@ private:
         TextureFormat format, TextureType type,
         u32 width, u32 height, u32 mip_level_num,
         MultiSampleType multi_sample_type,
-        u32 depth,
+        u32 slice_num,
         void** pp_buffer, bool allocate_from_tail,
         AllocateType allocate_type,
         bool invalidate_gpu_cache

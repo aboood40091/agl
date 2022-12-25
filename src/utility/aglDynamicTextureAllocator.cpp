@@ -34,7 +34,7 @@ TextureData* DynamicTextureAllocator::alloc_(
     TextureFormat format, TextureType type,
     u32 width, u32 height, u32 mip_level_num,
     MultiSampleType multi_sample_type,
-    u32 depth,
+    u32 slice_num,
     void** pp_buffer, bool allocate_from_tail,
     AllocateType allocate_type,
     bool invalidate_gpu_cache
@@ -56,7 +56,7 @@ TextureData* DynamicTextureAllocator::alloc_(
                 tex.getWidth() == width &&
                 tex.getHeight() == height &&
                 tex.getMultiSampleType() == multi_sample_type &&
-                tex.getDepth() == depth &&
+                tex.getSliceNum() == slice_num &&
                 tex.getMipLevelNum() == mip_level_num)
             {
                 match_found = true;
@@ -87,16 +87,16 @@ TextureData* DynamicTextureAllocator::alloc_(
             p_tex->initialize(format, width, height, mip_level_num);
             break;
         case cTextureType_3D:
-            p_tex->initialize3D(format, width, height, depth, mip_level_num);
+            p_tex->initialize3D(format, width, height, slice_num, mip_level_num);
             break;
         case cTextureType_CubeMap:
-            if (depth == 1)
+            if (slice_num == 1)
                 p_tex->initializeCubeMap(format, width, height, mip_level_num);
             else
-                p_tex->initializeCubeMapArray(format, width, height, depth, mip_level_num);
+                p_tex->initializeCubeMapArray(format, width, height, slice_num, mip_level_num);
             break;
         case cTextureType_2D_Array:
-            p_tex->initializeArray(format, width, height, depth, mip_level_num);
+            p_tex->initializeArray(format, width, height, slice_num, mip_level_num);
             break;
         case cTextureType_2D_MSAA:
             p_tex->initializeMultiSample(format, width, height, multi_sample_type);
