@@ -6,6 +6,18 @@ namespace agl { namespace utl {
 
 DynamicTextureAllocator* DynamicTextureAllocator::sInstance = nullptr;
 
+bool DynamicTextureAllocator::isValid_(const Context* p_ctx) const
+{
+    if (p_ctx)
+        return isContextValid_(p_ctx);
+
+    for (sead::UnsafeArray<Context, 4>::constIterator itr_ctx = mContext.constBegin(), itr_ctx_end = --mContext.constEnd(); itr_ctx != itr_ctx_end; ++itr_ctx)
+        if (!isContextValid_(&(*itr_ctx)))
+            return false;
+
+    return true;
+}
+
 TextureData* DynamicTextureAllocator::alloc(
     const sead::SafeString& name,
     TextureFormat format,
