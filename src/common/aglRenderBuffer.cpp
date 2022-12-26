@@ -29,7 +29,10 @@ void RenderBuffer::copyToDisplayBuffer(const sead::DisplayBuffer* display_buffer
     const sead::DisplayBufferCafe* p_display_buffer_cafe = sead::DynamicCast<const sead::DisplayBufferCafe>(display_buffer);
 
     // SEAD_ASSERT(mColorTarget[ 0 ] != nullptr);
+
     mColorTarget[0]->invalidateGPUCache();
+    mColorTarget[0]->getTextureData().invalidateGPUCache();
+
     mColorTarget[0]->copyToDisplayBuffer(p_display_buffer_cafe);
 }
 
@@ -119,9 +122,9 @@ void RenderBuffer::bindImpl_() const
 {
     sBoundRenderBuffer[sead::CoreInfo::getCurrentCoreId()] = this;
 
-    for (sead::SafeArray<RenderTarget<RenderTargetColor>*, 8>::constIterator it = mColorTarget.constBegin(), it_end = mColorTarget.constEnd(); it != it_end; ++it)
+    for (sead::SafeArray<RenderTargetColor*, 8>::constIterator it = mColorTarget.constBegin(), it_end = mColorTarget.constEnd(); it != it_end; ++it)
     {
-        const RenderTarget<RenderTargetColor>* const p_color_target = *it;
+        const RenderTargetColor* const p_color_target = *it;
         if (p_color_target)
         {
             p_color_target->initRegs();

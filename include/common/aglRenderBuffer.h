@@ -11,9 +11,6 @@ namespace agl {
 class RenderTargetColor;
 class RenderTargetDepth;
 
-template <typename T>
-class RenderTarget;
-
 class RenderBuffer : public sead::IDisposer, public sead::FrameBuffer
 {
     SEAD_RTTI_OVERRIDE(RenderBuffer, sead::FrameBuffer)
@@ -32,12 +29,12 @@ public:
     virtual void clear(u32 clr_flag, const sead::Color4f& color, f32 depth, u32 stencil) const;
     virtual void bindImpl_() const;
 
-    RenderTarget<RenderTargetColor>* getRenderTargetColor(u32 target_index = 0) const
+    RenderTargetColor* getRenderTargetColor(u32 target_index = 0) const
     {
         return mColorTarget[target_index];
     }
 
-    RenderTarget<RenderTargetDepth>* getRenderTargetDepth() const
+    RenderTargetDepth* getRenderTargetDepth() const
     {
         return mDepthTarget;
     }
@@ -48,8 +45,8 @@ public:
     void clear(u32 target_index, u32 clr_flag, const sead::Color4f& color, f32 depth, u32 stencil) const;
 
 private:
-    sead::SafeArray<RenderTarget<RenderTargetColor>*, 8> mColorTarget;
-    RenderTarget<RenderTargetDepth>* mDepthTarget;
+    sead::SafeArray<RenderTargetColor*, 8> mColorTarget;
+    RenderTargetDepth* mDepthTarget;
 
     static sead::Buffer<const RenderBuffer*> sBoundRenderBuffer;
 };

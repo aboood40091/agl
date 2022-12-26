@@ -5,14 +5,15 @@
 
 namespace agl {
 
-class RenderTargetBase
+template <typename T>
+class RenderTarget
 {
 public:
-    RenderTargetBase(u32 mip_level = 0, u32 slice = 0)
+    RenderTarget()
         : mTextureData()
         , mUpdateRegs(true)
-        , mMipLevel(mip_level)
-        , mSlice(slice)
+        , mMipLevel(0)
+        , mSlice(0)
     {
     }
 
@@ -22,15 +23,21 @@ public:
     u32 getMipLevel() const { return mMipLevel; }
     u32 getSlice() const { return mSlice; }
 
+    void applyTextureData(const TextureData& texture_data);
+    void applyTextureData(const TextureData& texture_data, u32 mip_level, u32 slice);
+
+protected:
+    void applyTextureData_(const TextureData& texture_data, u32 mip_level, u32 slice);
+
 protected:
     TextureData mTextureData;
     mutable bool mUpdateRegs;
     u32 mMipLevel;
     u32 mSlice;
 };
-static_assert(sizeof(RenderTargetBase) == 0xA8);
+static_assert(sizeof(RenderTarget<void>) == 0xA8);
 
-class RenderTargetColor : public RenderTargetBase
+class RenderTargetColor : public RenderTarget<RenderTargetColor>
 {
 public:
     RenderTargetColor();
@@ -60,7 +67,7 @@ protected:
 };
 static_assert(sizeof(RenderTargetColor) == 0x154, "agl::RenderTargetColor size mismatch");
 
-class RenderTargetDepth : public RenderTargetBase
+class RenderTargetDepth : public RenderTarget<RenderTargetDepth>
 {
 public:
     RenderTargetDepth();
@@ -86,33 +93,6 @@ protected:
     mutable GX2DepthBuffer mInnerBuffer;
 };
 static_assert(sizeof(RenderTargetDepth) == 0x160, "agl::RenderTargetDepth size mismatch");
-
-template <typename T>
-class RenderTarget : public T
-{
-public:
-    RenderTarget()
-        : T()
-    {
-    }
-
-    RenderTarget(const TextureData& texture_data, u32 mip_level, u32 slice)
-        : T(texture_data, mip_level, slice)
-    {
-    }
-
-    void invalidateGPUCache() const
-    {
-        T::invalidateGPUCache();
-        mTextureData.invalidateGPUCache();
-    }
-
-    void applyTextureData(const TextureData& texture_data);
-    void applyTextureData(const TextureData& texture_data, u32 mip_level, u32 slice);
-
-private:
-    void applyTextureData_(const TextureData& texture_data, u32 mip_level, u32 slice);
-};
 
 }
 

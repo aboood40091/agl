@@ -4,7 +4,7 @@
 namespace agl {
 
 RenderTargetColor::RenderTargetColor()
-    : RenderTargetBase()
+    : RenderTarget<RenderTargetColor>()
     , mIsMSAA2D(false)
     , mAuxBufferSize(0)
     , mAuxBufferAlign(0x800)
@@ -33,7 +33,7 @@ void RenderTargetColor::initRegs_() const
 }
 
 RenderTargetDepth::RenderTargetDepth()
-    : RenderTargetBase()
+    : RenderTarget<RenderTargetDepth>()
     , mHiZBufferSize(0)
     , mHiZBufferAlign(0x800)
     , mpHiZBuffer(nullptr)

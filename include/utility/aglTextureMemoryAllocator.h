@@ -64,8 +64,8 @@ private:
     sead::OffsetList<MemoryBlock> mMemoryBlockUsed;
     sead::OffsetList<MemoryBlock> mMemoryBlockFree;
     sead::OffsetList<MemoryBlock> mMemoryBlockEmpty;
-    RenderTarget<RenderTargetColor> mColorTarget;
-    RenderTarget<RenderTargetDepth> mDepthTarget;
+    RenderTargetColor mColorTarget;
+    RenderTargetDepth mDepthTarget;
     sead::Heap* mpDebugHeap;
 };
 static_assert(sizeof(TextureMemoryAllocator) == 0x300, "agl::utl::TextureMemoryAllocator size mismatch");

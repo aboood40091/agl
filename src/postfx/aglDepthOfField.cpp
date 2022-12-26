@@ -291,7 +291,7 @@ ShaderMode DepthOfField::draw(s32 ctx_index, const RenderBuffer& render_buffer, 
 
 void DepthOfField::allocBuffer(s32 ctx_index, const RenderBuffer& render_buffer) const
 {
-    const RenderTarget<RenderTargetColor>* color = render_buffer.getRenderTargetColor();
+    const RenderTargetColor* color = render_buffer.getRenderTargetColor();
     // SEAD_ASSERT(color != nullptr);
 
     allocBuffer(ctx_index, color->getTextureData().getTextureFormat(), color->getTextureData().getWidth(), color->getTextureData().getHeight());
