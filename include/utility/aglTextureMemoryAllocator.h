@@ -9,6 +9,18 @@ namespace agl { namespace utl {
 
 class TextureMemoryAllocator
 {
+    struct AllocArg
+    {
+        u32 mSize;
+        u32 mImageSize;
+        u32 mMipSize;
+        u32 mAlignment;
+        void** mppTargetBuffer;
+        u32 mTargetBufferSize;
+        u32 mTargetBufferAlignment;
+    };
+    static_assert(sizeof(AllocArg) == 0x1C, "agl::utl::TextureMemoryAllocator::AllocArg size mismatch");
+
 public:
     class MemoryBlock
     {
@@ -28,6 +40,7 @@ public:
 
         friend class TextureMemoryAllocator;
     };
+    static_assert(sizeof(MemoryBlock) == 0x1C, "agl::utl::TextureMemoryAllocator::MemoryBlock size mismatch");
 
 public:
     TextureMemoryAllocator();
@@ -39,6 +52,9 @@ public:
     void free(MemoryBlock* p_memory);
 
     bool isOverwrapperd(const TextureMemoryAllocator& allocator) const;
+
+private:
+    bool alloc_(MemoryBlock* p_memory, const AllocArg& arg, bool allocate_from_head);
 
 private:
     void* mpBufferStart;

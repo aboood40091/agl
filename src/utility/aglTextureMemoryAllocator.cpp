@@ -2,6 +2,75 @@
 
 namespace agl { namespace utl {
 
+TextureMemoryAllocator::MemoryBlock* TextureMemoryAllocator::alloc(const TextureData& tex, void** pp_buffer, bool allocate_from_head)
+{
+    if (!mpBufferStart)
+        return nullptr;
+
+    AllocArg arg;
+    arg.mImageSize = tex.getImageSize();
+    arg.mMipSize = tex.getMipLevelNum() > 1 ? tex.getMipSize() : 0;
+    arg.mAlignment = tex.getAlignment();
+    arg.mppTargetBuffer = nullptr;
+    arg.mTargetBufferSize = 0;
+    arg.mTargetBufferAlignment = sizeof(void*);
+
+    if (tex.getTextureFormat() >= cTextureFormat_Depth_16 && tex.getTextureFormat() <= cTextureFormat_Depth_24_uNorm_Stencil_8)
+    {
+        if (pp_buffer != nullptr)
+        {
+            mDepthTarget.applyTextureData(tex);
+
+            arg.mppTargetBuffer = pp_buffer;
+            arg.mTargetBufferAlignment = mDepthTarget.getHiZBufferAlign();
+            arg.mTargetBufferSize = mDepthTarget.getHiZBufferSize();
+        }
+    }
+    else
+    {
+        if (tex.getMultiSampleType() != cMultiSampleType_1x)
+        {
+            mColorTarget.applyTextureData(tex);
+
+            arg.mppTargetBuffer = pp_buffer;
+            arg.mTargetBufferAlignment = mColorTarget.getAuxBufferAlign();
+            arg.mTargetBufferSize = mColorTarget.getAuxBufferSize();
+        }
+    }
+
+    const u32 alignment = sead::Mathu::max(arg.mAlignment, arg.mTargetBufferAlignment);
+
+    arg.mSize  = sead::Mathu::roundUpPow2(arg.mImageSize, arg.mAlignment);
+    arg.mSize += sead::Mathu::roundUpPow2(arg.mMipSize, arg.mTargetBufferAlignment);
+    arg.mSize += arg.mTargetBufferSize;
+    arg.mSize += alignment;
+
+    if (allocate_from_head)
+    {
+        MemoryBlock* p_memory = mMemoryBlockFree.front();
+        while (p_memory != nullptr)
+        {
+            if (alloc_(p_memory, arg, true))
+                return p_memory;
+
+            p_memory = mMemoryBlockFree.next(p_memory);
+        }
+    }
+    else
+    {
+        MemoryBlock* p_memory = mMemoryBlockFree.back();
+        while (p_memory != nullptr)
+        {
+            if (alloc_(p_memory, arg, false))
+                return p_memory;
+
+            p_memory = mMemoryBlockFree.prev(p_memory);
+        }
+    }
+
+    return nullptr;
+}
+
 void TextureMemoryAllocator::free(MemoryBlock* p_memory)
 {
     // SEAD_ASSERT(p_memory != nullptr);

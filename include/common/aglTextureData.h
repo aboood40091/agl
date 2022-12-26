@@ -35,6 +35,8 @@ public:
 
     u32 getMipSize() const { return mSurface.mipSize; }
 
+    u32 getAlignment() const { return mSurface.alignment; }
+
     u32 getSurfaceSwizzle() { return GX2GetSurfaceSwizzle(&mSurface); }
     void setSurfaceSwizzle(u32 swizzle) { GX2SetSurfaceSwizzle(&mSurface, swizzle); }
 
