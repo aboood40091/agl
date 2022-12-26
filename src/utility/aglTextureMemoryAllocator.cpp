@@ -70,4 +70,24 @@ void TextureMemoryAllocator::free(MemoryBlock* p_memory)
     }
 }
 
+bool TextureMemoryAllocator::isOverwrapperd(const TextureMemoryAllocator& allocator) const
+{
+    // SEAD_ASSERT(&allocator != this);
+
+    const void* buffer1 = nullptr;
+    const void* buffer2 = nullptr;
+
+    // Mismatches if ternary operator not used
+
+    buffer2 = mMemoryBlockFree.back()
+        ? mMemoryBlockFree.back()->mpBuffer
+        : nullptr;
+
+    buffer1 = allocator.mMemoryBlockFree.front()
+        ? allocator.mMemoryBlockFree.front()->mpBuffer + allocator.mMemoryBlockFree.back()->mBufferSize
+        : nullptr;
+
+    return buffer1 < buffer2;
+}
+
 } }
