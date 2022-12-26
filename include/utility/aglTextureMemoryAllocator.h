@@ -35,7 +35,7 @@ public:
 
     u32 getUsedSize() const { return mUsedSize; }
 
-    MemoryBlock* alloc(const TextureData& tex, void** pp_buffer, bool allocate_from_tail);
+    MemoryBlock* alloc(const TextureData& tex, void** pp_buffer = nullptr, bool allocate_from_head = true);
     void free(MemoryBlock* p_memory);
 
     bool isOverwrapperd(const TextureMemoryAllocator& allocator) const;

@@ -59,7 +59,7 @@ TextureData* DynamicTextureAllocator::alloc_(
     u32 width, u32 height, u32 mip_level_num,
     MultiSampleType multi_sample_type,
     u32 slice_num,
-    void** pp_buffer, bool allocate_from_tail,
+    void** pp_buffer, bool allocate_from_head,
     AllocateType allocate_type,
     bool invalidate_gpu_cache
 )
@@ -153,12 +153,12 @@ TextureData* DynamicTextureAllocator::alloc_(
         for (; allocator_idx < allocator_num; allocator_idx++)
         {
             p_tex->mpMemoryAllocator = &(p_ctx->mTextureMemoryAllocator[allocator_idx]);
-            p_tex->mpMemoryBlock = p_tex->mpMemoryAllocator->alloc(*p_tex, pp_buffer, allocate_from_tail);
+            p_tex->mpMemoryBlock = p_tex->mpMemoryAllocator->alloc(*p_tex, pp_buffer, allocate_from_head);
 
             if (p_tex->mpMemoryBlock == nullptr)
                 continue;
 
-            if (isValid_(allocate_from_tail ? p_ctx : nullptr))
+            if (isValid_(allocate_from_head ? p_ctx : nullptr))
                 break;
 
             if (p_tex->mpMemoryBlock != nullptr) // Always true

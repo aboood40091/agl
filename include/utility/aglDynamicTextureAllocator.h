@@ -57,7 +57,7 @@ private:
         u32 width, u32 height, u32 mip_level_num,
         MultiSampleType multi_sample_type,
         u32 slice_num,
-        void** pp_buffer, bool allocate_from_tail,
+        void** pp_buffer, bool allocate_from_head,
         AllocateType allocate_type,
         bool invalidate_gpu_cache
     );
