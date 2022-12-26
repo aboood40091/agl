@@ -20,7 +20,7 @@ public:
 
     private:
         u8* mpBuffer;
-        u32 mBufferSize;
+        u32 mSize;
         u8* mpBufferFromDebugHeap;
         void* mpImagePtr;
         void* mpMipPtr;

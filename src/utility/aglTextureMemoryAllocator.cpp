@@ -6,7 +6,7 @@ void TextureMemoryAllocator::free(MemoryBlock* p_memory)
 {
     // SEAD_ASSERT(p_memory != nullptr);
 
-    mUsedSize -= p_memory->mBufferSize;
+    mUsedSize -= p_memory->mSize;
 
     if (p_memory->mpBufferFromDebugHeap)
     {
@@ -26,22 +26,22 @@ void TextureMemoryAllocator::free(MemoryBlock* p_memory)
     {
         MemoryBlock* p_temp_memory = &(*itr);
 
-        if (p_memory->mpBuffer + p_memory->mBufferSize <= p_temp_memory->mpBuffer)
+        if (p_memory->mpBuffer + p_memory->mSize <= p_temp_memory->mpBuffer)
         {
             mMemoryBlockFree.insertBefore(p_temp_memory, p_memory);
 
-            if (p_memory->mpBuffer + p_memory->mBufferSize == p_temp_memory->mpBuffer)
+            if (p_memory->mpBuffer + p_memory->mSize == p_temp_memory->mpBuffer)
             {
-                p_memory->mBufferSize += p_temp_memory->mBufferSize;
+                p_memory->mSize += p_temp_memory->mSize;
                 mMemoryBlockFree.erase(p_temp_memory);
                 mMemoryBlockEmpty.pushBack(p_temp_memory);
             }
 
             MemoryBlock* p_prev = mMemoryBlockFree.prev(p_memory);
-            if (p_prev && p_prev->mpBuffer + p_prev->mBufferSize == p_memory->mpBuffer)
+            if (p_prev && p_prev->mpBuffer + p_prev->mSize == p_memory->mpBuffer)
             {
                 p_memory->mpBuffer = p_prev->mpBuffer;
-                p_memory->mBufferSize += p_prev->mBufferSize;
+                p_memory->mSize += p_prev->mSize;
                 mMemoryBlockFree.erase(p_prev);
                 mMemoryBlockEmpty.pushBack(p_prev);
             }
@@ -55,10 +55,10 @@ void TextureMemoryAllocator::free(MemoryBlock* p_memory)
         mMemoryBlockFree.pushBack(p_memory);
 
         MemoryBlock* p_prev = mMemoryBlockFree.prev(p_memory);
-        if (p_prev && p_prev->mpBuffer + p_prev->mBufferSize == p_memory->mpBuffer)
+        if (p_prev && p_prev->mpBuffer + p_prev->mSize == p_memory->mpBuffer)
         {
             p_memory->mpBuffer = p_prev->mpBuffer;
-            p_memory->mBufferSize += p_prev->mBufferSize;
+            p_memory->mSize += p_prev->mSize;
             mMemoryBlockFree.erase(p_prev);
             mMemoryBlockEmpty.pushBack(p_prev);
         }
@@ -84,7 +84,7 @@ bool TextureMemoryAllocator::isOverwrapperd(const TextureMemoryAllocator& alloca
         : nullptr;
 
     buffer1 = allocator.mMemoryBlockFree.front()
-        ? allocator.mMemoryBlockFree.front()->mpBuffer + allocator.mMemoryBlockFree.back()->mBufferSize
+        ? allocator.mMemoryBlockFree.front()->mpBuffer + allocator.mMemoryBlockFree.back()->mSize
         : nullptr;
 
     return buffer1 < buffer2;
