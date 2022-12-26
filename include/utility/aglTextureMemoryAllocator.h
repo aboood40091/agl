@@ -34,8 +34,8 @@ public:
         u8* mpBuffer;
         u32 mSize;
         u8* mpBufferFromDebugHeap;
-        void* mpImagePtr;
-        void* mpMipPtr;
+        u8* mpImagePtr;
+        u8* mpMipPtr;
         sead::ListNode mListNode;
 
         friend class TextureMemoryAllocator;

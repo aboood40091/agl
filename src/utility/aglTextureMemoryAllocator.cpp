@@ -71,6 +71,73 @@ TextureMemoryAllocator::MemoryBlock* TextureMemoryAllocator::alloc(const Texture
     return nullptr;
 }
 
+bool TextureMemoryAllocator::alloc_(MemoryBlock* p_memory, const AllocArg& arg, bool allocate_from_head)
+{
+    // SEAD_ASSERT(p_memory != nullptr);
+
+    if (arg.mSize >= p_memory->mSize)
+    {
+        if (arg.mSize > p_memory->mSize)
+            return false;
+    }
+    else
+    {
+        MemoryBlock* p_new_free = mMemoryBlockEmpty.popBack();
+        // SEAD_ASSERT(p_new_free != nullptr);
+        p_new_free->mSize = p_memory->mSize - arg.mSize;
+
+        if (allocate_from_head)
+        {
+            p_new_free->mpBuffer = p_memory->mpBuffer + arg.mSize;
+
+            mMemoryBlockFree.insertAfter(p_memory, p_new_free);
+        }
+        else
+        {
+            p_new_free->mpBuffer = p_memory->mpBuffer;
+            p_memory->mpBuffer = p_memory->mpBuffer + p_new_free->mSize;
+
+            mMemoryBlockFree.insertBefore(p_memory, p_new_free);
+        }
+    }
+
+    p_memory->mSize = arg.mSize;
+
+    if (mpDebugHeap == nullptr)
+    {
+        p_memory->mpBufferFromDebugHeap = nullptr;
+        p_memory->mpImagePtr = (u8*)sead::Mathu::roundUpPow2((uintptr_t)p_memory->mpBuffer, arg.mAlignment);
+    }
+    else
+    {
+        u8* p_buffer_from_debug_heap = new (mpDebugHeap, arg.mAlignment) u8[p_memory->mSize];
+        p_memory->mpBufferFromDebugHeap = p_buffer_from_debug_heap;
+        DCFlushRange(p_buffer_from_debug_heap, p_memory->mSize);
+        p_memory->mpImagePtr = (u8*)sead::Mathu::roundUpPow2((uintptr_t)p_buffer_from_debug_heap, arg.mAlignment);
+    }
+
+    u8* p_buffer = p_memory->mpImagePtr + arg.mImageSize;
+
+    if (arg.mMipSize > 0)
+    {
+        p_memory->mpMipPtr = (u8*)sead::Mathu::roundUpPow2((uintptr_t)p_buffer, arg.mAlignment);
+        p_buffer = p_memory->mpMipPtr + arg.mMipSize;
+    }
+    else
+    {
+        p_memory->mpMipPtr = nullptr;
+    }
+
+    if (arg.mppTargetBuffer != nullptr)
+        *arg.mppTargetBuffer = (u8*)sead::Mathu::roundUpPow2((uintptr_t)p_buffer, arg.mTargetBufferAlignment);
+
+    mMemoryBlockFree.erase(p_memory);
+    mMemoryBlockUsed.pushBack(p_memory);
+    mUsedSize += p_memory->mSize;
+
+    return true;
+}
+
 void TextureMemoryAllocator::free(MemoryBlock* p_memory)
 {
     // SEAD_ASSERT(p_memory != nullptr);
