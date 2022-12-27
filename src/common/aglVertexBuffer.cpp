@@ -3,8 +3,7 @@
 namespace agl {
 
 VertexBuffer::VertexBuffer()
-    : mStream()
-    , mpBuffer(nullptr)
+    : mpBuffer(nullptr)
     , mStride(0)
     , mVertexNum(0)
     , mBufferByteSize(0)

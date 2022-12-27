@@ -364,8 +364,6 @@ bool ShaderProgramArchive::setUp_(bool unk)
 ShaderProgramArchive::ShaderProgramEx::ShaderProgramEx()
     : mIndex(0)
     , mpArchive(nullptr)
-    , mCompileInfoEx()
-    , _110()
     , mVariationIndex(0)
     , mFlag(0)
 {

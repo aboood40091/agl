@@ -6,8 +6,6 @@
 namespace agl { namespace g3d {
 
 ModelShaderAttribute::ModelShaderAttribute()
-    : mVertexBuffer()
-    , mFetchShader()
 {
     clear();
 }
@@ -147,10 +145,6 @@ void ModelShaderAttribute::setVertexBuffer(const nw::g3d::fnd::GfxBuffer* p_buff
 
 ModelShaderAssign::ModelShaderAssign()
     : mpProgram(nullptr)
-    , mUniformBlockLocation()
-    , mSamplerLocation()
-    , mResSampler()
-    , mAttribute()
 {
     clear_();
 }
