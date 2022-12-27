@@ -4,6 +4,62 @@
 
 namespace agl {
 
+template <typename T>
+void RenderTarget<T>::applyTextureData(const TextureData& texture_data)
+{
+    applyTextureData(texture_data, mMipLevel, mSlice);
+}
+
+template <typename T>
+void RenderTarget<T>::applyTextureData(const TextureData& texture_data, u32 mip_level, u32 slice)
+{
+    if (mTextureData.getSurface().dim      != texture_data.getSurface().dim      ||
+        mTextureData.getSurface().width    != texture_data.getSurface().width    ||
+        mTextureData.getSurface().height   != texture_data.getSurface().height   ||
+        mTextureData.getSurface().depth    != texture_data.getSurface().depth    ||
+        mTextureData.getSurface().numMips  != texture_data.getSurface().numMips  ||
+        mTextureData.getSurface().format   != texture_data.getSurface().format   ||
+        mTextureData.getSurface().swizzle  != texture_data.getSurface().swizzle  ||
+        mTextureData.getSurface().tileMode != texture_data.getSurface().tileMode ||
+        mTextureData.getSurface().aa       != texture_data.getSurface().aa)
+    {
+        applyTextureData_(texture_data, mip_level, slice);
+    }
+    else
+    {
+        void* image_ptr = texture_data.getImagePtr();
+        void* mip_ptr = texture_data.getMipPtr();
+
+        mTextureData.setImagePtr(image_ptr);
+        mTextureData.setMipPtr(mip_ptr);
+
+        static_cast<T*>(this)->mInnerBuffer.surface.imagePtr = image_ptr;
+        static_cast<T*>(this)->mInnerBuffer.surface.mipPtr   = mip_ptr;
+
+        if (mSlice != slice)
+        {
+            mSlice = slice;
+            mUpdateRegs = true;
+        }
+
+        if (mMipLevel != mip_level)
+        {
+            mMipLevel = mip_level;
+            mUpdateRegs = true;
+        }
+    }
+}
+
+template <typename T>
+void RenderTarget<T>::applyTextureData_(const TextureData& texture_data, u32 mip_level, u32 slice)
+{
+    mTextureData = texture_data;
+    mMipLevel = mip_level;
+    mSlice = slice;
+    static_cast<T*>(this)->onApplyTextureData_();
+    mUpdateRegs = true;
+}
+
 inline void
 RenderTargetColor::copyToDisplayBuffer(const sead::DisplayBufferCafe* display_buffer) const
 {
