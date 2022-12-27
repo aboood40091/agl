@@ -70,6 +70,29 @@ void VertexAttribute::setVertexStream(s16 location, const VertexBuffer* buffer, 
         mAttribute[location].mBufferIndex = enableVertexBuffer_(&(mAttribute[location]), buffer, stream_index);
 }
 
+s32 VertexAttribute::enableVertexBuffer_(Attribute_* attr, const VertexBuffer* buffer, u32 stream_index)
+{
+    // SEAD_ASSERT(attr->mpVertexBuffer == nullptr);
+
+    attr->mpVertexBuffer = buffer;
+    attr->mStreamIndex = stream_index;
+
+    s32 null_buffer_index = -1;
+
+    for (s32 i = mVertexBuffer.size() - 1; i >= 0; i--)
+    {
+        if (mVertexBuffer[i] == attr->mpVertexBuffer)
+            return i;
+
+        if (mVertexBuffer[i] == nullptr)
+            null_buffer_index = i;
+    }
+
+    // SEAD_ASSERT(null_buffer_index != -1);
+    mVertexBuffer[null_buffer_index] = buffer;
+    return null_buffer_index;
+}
+
 s32 VertexAttribute::disableVertexBuffer_(Attribute_* attr)
 {
     const VertexBuffer* buffer = attr->mpVertexBuffer;

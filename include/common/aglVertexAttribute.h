@@ -20,7 +20,7 @@ class VertexAttribute
         {
         }
 
-        VertexBuffer* mpVertexBuffer;
+        const VertexBuffer* mpVertexBuffer;
         s32 mStreamIndex;
         s32 mBufferIndex;
     };
