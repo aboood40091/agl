@@ -3,6 +3,17 @@
 
 namespace agl {
 
+void RenderTargetColor::onApplyTextureData_()
+{
+    mIsMSAA2D = mTextureData.getTextureType() == cTextureType_2D_MSAA;
+
+    mInnerBuffer.surface = mTextureData.getSurface();
+    mInnerBuffer.surface.use = GX2_SURFACE_USE_COLOR_BUFFER;
+
+    if (mIsMSAA2D)
+        GX2CalcColorBufferAuxInfo(&mInnerBuffer, &mAuxBufferSize, &mAuxBufferAlign);
+}
+
 RenderTargetColor::RenderTargetColor()
     : RenderTarget<RenderTargetColor>()
     , mIsMSAA2D(false)
@@ -30,6 +41,14 @@ void RenderTargetColor::initRegs_() const
     mInnerBuffer.viewNumSlices = 1;
     GX2InitColorBufferRegs(&mInnerBuffer);
     mUpdateRegs = false;
+}
+
+void RenderTargetDepth::onApplyTextureData_()
+{
+    mInnerBuffer.surface = mTextureData.getSurface();
+    mInnerBuffer.surface.use = GX2_SURFACE_USE_DEPTH_BUFFER;
+
+    GX2CalcDepthBufferHiZInfo(&mInnerBuffer, &mHiZBufferSize, &mHiZBufferAlign);
 }
 
 RenderTargetDepth::RenderTargetDepth()

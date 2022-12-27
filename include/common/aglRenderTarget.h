@@ -39,6 +39,7 @@ static_assert(sizeof(RenderTarget<void>) == 0xA8);
 
 class RenderTargetColor : public RenderTarget<RenderTargetColor>
 {
+    void onApplyTextureData_();
     friend class RenderTarget<RenderTargetColor>;
 
 public:
@@ -58,7 +59,6 @@ public:
     void invalidateGPUCache() const;
 
 private:
-    void onApplyTextureData_();
     void initRegs_() const;
 
 protected:
@@ -72,6 +72,7 @@ static_assert(sizeof(RenderTargetColor) == 0x154, "agl::RenderTargetColor size m
 
 class RenderTargetDepth : public RenderTarget<RenderTargetDepth>
 {
+    void onApplyTextureData_();
     friend class RenderTarget<RenderTargetDepth>;
 
 public:
@@ -89,7 +90,6 @@ public:
     void invalidateGPUCache() const;
 
 private:
-    void onApplyTextureData_();
     void initRegs_() const;
 
 protected:
