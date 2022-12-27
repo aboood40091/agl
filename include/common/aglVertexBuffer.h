@@ -37,7 +37,15 @@ public:
     VertexBuffer();
     virtual ~VertexBuffer();
 
+    VertexStreamFormat getStreamFormat(s32 index) const { return mStream[index].mFormat; }
+    u32 getStreamOffset(s32 index) const { return mStream[index].mOffset; }
+
     bool isEnable(s32 index) const { return mStream[index].mEnable; }
+
+    GX2CompSel getStreamCompSel(s32 index) const { return mStream[index].mCompSel; }
+    u32 getStreamDivisor(s32 index) const { return mStream[index].mDivisor; }
+    GX2EndianSwapMode getStreamEndianSwap(s32 index) const { return mStream[index].mEndianSwap; }
+    GX2AttribIndexType getStreamIndexType(s32 index) const { return mStream[index].mIndexType; }
 
     void setUpBuffer(const void* buffer, u32 stride, u32 buffer_byte_size);
     void setUpStream(s32 index, VertexStreamFormat format, u32 offset);

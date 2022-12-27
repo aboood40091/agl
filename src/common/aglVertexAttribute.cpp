@@ -108,4 +108,37 @@ s32 VertexAttribute::disableVertexBuffer_(Attribute_* attr)
     return -1;
 }
 
+void VertexAttribute::setUp()
+{
+    // SEAD_ASSERT(mCreateFinish);
+
+    sead::UnsafeArray<GX2AttribStream, cVertexAttributeMax> stream_array;
+    u32 stream_num = 0;
+
+    for (s32 i = 0; i < cVertexAttributeMax; i++)
+    {
+        const Attribute_* attr = &(mAttribute[i]);
+        GX2AttribStream* stream = &(stream_array[i]);
+
+        if (attr->mpVertexBuffer != nullptr)
+        {
+            stream->buffer = attr->mBufferIndex;
+            stream->offset = attr->mpVertexBuffer->getStreamOffset(attr->mStreamIndex);
+            stream->location = i;
+            stream->format = GX2AttribFormat(attr->mpVertexBuffer->getStreamFormat(attr->mStreamIndex));
+            stream->destSel = attr->mpVertexBuffer->getStreamCompSel(attr->mStreamIndex);
+            stream->indexType = attr->mpVertexBuffer->getStreamIndexType(attr->mStreamIndex);
+            stream->aluDivisor = attr->mpVertexBuffer->getStreamDivisor(attr->mStreamIndex);
+            stream->endianSwap = attr->mpVertexBuffer->getStreamEndianSwap(attr->mStreamIndex);
+
+            stream_num++;
+        }
+    }
+
+    GX2InitFetchShader(&mFetchShader, mpFetchShaderBuf, stream_num, stream_array.getBufferPtr());
+    DCFlushRangeNoSync(mpFetchShaderBuf, GX2CalcFetchShaderSize(stream_num));
+
+    mSetupFinish = true;
+}
+
 }
