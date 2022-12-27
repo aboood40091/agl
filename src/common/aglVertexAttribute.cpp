@@ -1,4 +1,5 @@
 #include <common/aglVertexAttribute.h>
+#include <common/aglVertexBuffer.h>
 
 namespace agl {
 
@@ -56,6 +57,9 @@ void VertexAttribute::destroy()
 
 void VertexAttribute::setVertexStream(s16 location, const VertexBuffer* buffer, u32 stream_index)
 {
+    // SEAD_ASSERT(mCreateFinish);
+    // SEAD_ASSERT(buffer->isEnable( stream_index ));
+
     if (location == -1)
         return;
 

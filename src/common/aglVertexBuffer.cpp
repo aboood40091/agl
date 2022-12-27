@@ -18,7 +18,7 @@ VertexBuffer::~VertexBuffer()
 void VertexBuffer::cleanUp_()
 {
     for (u32 i = 0; i < cVertexStreamMax; i++)
-        mStream[i].mInitialized = false;
+        mStream[i].mEnable = false;
 
     mpBuffer = nullptr;
     mBufferByteSize = 0;
@@ -56,7 +56,7 @@ void VertexBuffer::setUpStream(s32 index, VertexStreamFormat format, u32 offset)
 {
     mStream[index].mFormat = format;
     mStream[index].mOffset = offset;
-    mStream[index].mInitialized = true;
+    mStream[index].mEnable = true;
 
     const GX2CompSel comp_sel[] = {
         GX2_COMP_SEL_X001, GX2_COMP_SEL_XY01,

@@ -14,14 +14,14 @@ class VertexBuffer
         Stream_()
             : mFormat(cVertexStreamFormat_8_uNorm)
             , mOffset(0)
-            , mInitialized(false)
+            , mEnable(false)
         {
         }
 
         VertexStreamFormat mFormat;
         u32 mOffset;
 
-        bool mInitialized;
+        bool mEnable;
 
         GX2CompSel mCompSel;
         u32 mDivisor;
@@ -36,6 +36,8 @@ public:
 public:
     VertexBuffer();
     virtual ~VertexBuffer();
+
+    bool isEnable(s32 index) const { return mStream[index].mEnable; }
 
     void setUpBuffer(const void* buffer, u32 stride, u32 buffer_byte_size);
     void setUpStream(s32 index, VertexStreamFormat format, u32 offset);
