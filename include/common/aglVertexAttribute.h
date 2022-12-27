@@ -33,7 +33,11 @@ public:
     VertexAttribute();
     virtual ~VertexAttribute();
 
+    void create(u32 buffer_max, sead::Heap* heap = nullptr);
     void destroy();
+
+    void setVertexStream(s16 location, const VertexBuffer* buffer, u32 stream_index);
+    void setUp();
 
 private:
     sead::SafeArray<Attribute_, cVertexAttributeMax> mAttribute;

@@ -16,9 +16,18 @@ public:
     virtual ~IndexStream();
 
     PrimitiveType getPrimitiveType() const { return mPrimitiveType; }
-    void setPrimitiveType(PrimitiveType type) { mPrimitiveType = type; }
+    void setPrimitiveType(PrimitiveType primitive_type) { mPrimitiveType = primitive_type; }
+
+    void setUpStream(const void* addr, IndexStreamFormat format, u32 count, PrimitiveType primitive_type)
+    {
+        setUpStream_(addr, format, count);
+        setPrimitiveType(primitive_type);
+    }
+
+    u32 getCount() const { return mCount; }
 
 private:
+    void setUpStream_(const void* addr, IndexStreamFormat format, u32 count);
     void cleanUp_();
 
 private:

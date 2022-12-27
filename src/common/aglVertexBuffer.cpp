@@ -7,7 +7,7 @@ VertexBuffer::VertexBuffer()
     , mpBuffer(nullptr)
     , mStride(0)
     , mVertexNum(0)
-    , mBufferSize(0)
+    , mBufferByteSize(0)
 {
 }
 
@@ -22,7 +22,7 @@ void VertexBuffer::cleanUp_()
         mVertexStream[i].reset();
 
     mpBuffer = nullptr;
-    mBufferSize = 0;
+    mBufferByteSize = 0;
     mStride = 0;
     mVertexNum = 0;
 }

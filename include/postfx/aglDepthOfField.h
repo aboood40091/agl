@@ -67,17 +67,18 @@ class DepthOfField : public utl::IParameterIO, public sead::hostio::Node
 
     struct Vertex
     {
-        sead::Vector4f data;
+        sead::Vector2f position;
+        sead::Vector2f texcoord;
     };
     static_assert(sizeof(Vertex) == 0x10);
 
     struct VignettingShape
     {
-        sead::Buffer<Vertex> mVertexBuffer;
-        sead::Buffer<u16> mIndexBuffer;
-        VertexBuffer mVertex;
-        VertexAttribute mAttrib;
-        IndexStream mIndex;
+        sead::Buffer<Vertex> mVertex;
+        sead::Buffer<u16> mIndex;
+        VertexBuffer mVertexBuffer;
+        VertexAttribute mVertexAttribute;
+        IndexStream mIndexStream;
     };
     static_assert(sizeof(VignettingShape) == 0x2F0, "agl::pfx::DepthOfField::VignettingShape size mismatch");
 

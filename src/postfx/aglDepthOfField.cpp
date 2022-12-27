@@ -1,3 +1,4 @@
+#include <container/seadSafeArray.h>
 #include <detail/aglRootNode.h>
 #include <detail/aglShaderHolder.h>
 #include <postfx/aglDepthOfField.h>
@@ -236,6 +237,156 @@ void DepthOfField::assignShaderProgram_()
                                        program_vignetting.getVariationMacroValueVariationNum(MACRO_DOF_VIGNETTING_VIGNETTING_BLEND) * vignetting_blend_idx;
 
         mpCurrentProgramVignetting = program_vignetting.getVariation(vignetting_variation_idx);
+    }
+}
+
+void DepthOfField::initVertex_(sead::Heap* heap)
+{
+    static const sead::UnsafeArray<s32, 2> sShapeNum = { 32, 4 };
+
+    const sead::UnsafeArray<f32, 4> cTexcoordX = { 1.0f, 1.0f, 0.0f, 0.0f };
+
+    for (u32 i_shape = 0; i_shape < 2; i_shape++)
+    {
+        VignettingShape* p_shape = &(mVignettingShape[i_shape]);
+
+        s32 num = sShapeNum[i_shape];
+
+        p_shape->mVertex.allocBuffer(4 * num, heap); // They forgot to align the data lol
+
+        u32 vtx_index = 0;
+
+        for (u32 j = 0; j < 4; j++)
+        {
+            switch(i_shape)
+            {
+            case 0: // Circle
+                for (s32 k = 0; k < num; k++)
+                {
+                    f32 rad = k * sead::Mathf::pi2() / num;
+
+                    p_shape->mVertex[vtx_index].position.set(
+                        sead::Mathf::cos(rad),
+                        sead::Mathf::sin(rad)
+                    );
+
+                    p_shape->mVertex[vtx_index].texcoord.set(
+                        cTexcoordX[j],
+                        s32(j)
+                    );
+
+                    vtx_index++;
+                }
+                break;
+            case 1: // Quad
+                {
+                    p_shape->mVertex[vtx_index].position.set(
+                        -1.0f,
+                         1.0f
+                    );
+
+                    p_shape->mVertex[vtx_index].texcoord.set(
+                        cTexcoordX[j],
+                        s32(j)
+                    );
+
+                    vtx_index++;
+
+                    p_shape->mVertex[vtx_index].position.set(
+                        -1.0f,
+                        -1.0f
+                    );
+
+                    p_shape->mVertex[vtx_index].texcoord.set(
+                        cTexcoordX[j],
+                        s32(j)
+                    );
+
+                    vtx_index++;
+
+                    p_shape->mVertex[vtx_index].position.set(
+                         1.0f,
+                        -1.0f
+                    );
+
+                    p_shape->mVertex[vtx_index].texcoord.set(
+                        cTexcoordX[j],
+                        s32(j)
+                    );
+
+                    vtx_index++;
+
+                    p_shape->mVertex[vtx_index].position.set(
+                         1.0f,
+                         1.0f
+                    );
+
+                    p_shape->mVertex[vtx_index].texcoord.set(
+                        cTexcoordX[j],
+                        s32(j)
+                    );
+
+                    vtx_index++;
+                }
+                break;
+            }
+        }
+
+        // SEAD_ASSERT(vtx_index == p_shape->mVertex.size());
+
+        p_shape->mVertexBuffer.setUpBuffer(
+            p_shape->mVertex.getBufferPtr(),
+            sizeof(Vertex),
+            p_shape->mVertex.size() * sizeof(Vertex)
+        );
+
+        p_shape->mVertexBuffer.setUpStream(0, cVertexStreamFormat_32_32_float, offsetof(Vertex, position));
+        p_shape->mVertexBuffer.setUpStream(1, cVertexStreamFormat_32_32_float, offsetof(Vertex, texcoord));
+
+        p_shape->mVertexAttribute.create(1);
+
+        p_shape->mVertexAttribute.setVertexStream(0, &p_shape->mVertexBuffer, 0);
+        p_shape->mVertexAttribute.setVertexStream(1, &p_shape->mVertexBuffer, 1);
+
+        p_shape->mVertexAttribute.setUp();
+    }
+}
+
+void DepthOfField::initIndex_(sead::Heap* heap)
+{
+    static const sead::UnsafeArray<s32, 2> sShapeNum = { 32, 4 };
+
+    for (u32 i_shape = 0; i_shape < 2; i_shape++)
+    {
+        VignettingShape* p_shape = &(mVignettingShape[i_shape]);
+
+        s32 num = sShapeNum[i_shape];
+
+        p_shape->mIndex.allocBuffer(3 * num * 6, heap); // They forgot to align the data lol
+
+        u32 idx_index = 0;
+
+        for (u32 j = 0; j < 3; j++)
+        {
+            for (s32 k = 0; k < num; k++)
+            {
+                p_shape->mIndex[idx_index++] = j * num + k;
+                p_shape->mIndex[idx_index++] = j * num + num + ((k + 1) % num);
+                p_shape->mIndex[idx_index++] = j * num + ((k + 1) % num);
+                p_shape->mIndex[idx_index++] = j * num + k;
+                p_shape->mIndex[idx_index++] = j * num + num + k;
+                p_shape->mIndex[idx_index++] = j * num + num + ((k + 1) % num);
+            }
+        }
+
+        // SEAD_ASSERT(idx_index == p_shape->mIndex.size());
+
+        p_shape->mIndexStream.setUpStream(
+            p_shape->mIndex.getBufferPtr(),
+            cIndexStreamFormat_u16,
+            p_shape->mIndex.size(),
+            GX2_PRIMITIVE_TRIANGLES
+        );
     }
 }
 
