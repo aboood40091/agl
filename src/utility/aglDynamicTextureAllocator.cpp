@@ -182,7 +182,8 @@ TextureData* DynamicTextureAllocator::alloc_(
     if (invalidate_gpu_cache)
         p_tex->invalidateGPUCache();
 
-    p_tex->setSurfaceSwizzle(p_tex->mSurfaceSwizzle);
+    GX2SetSurfaceSwizzle(&p_tex->getSurface(), p_tex->mSurfaceSwizzle);
+
     p_tex->mpContext = p_ctx;
 
     return p_tex;

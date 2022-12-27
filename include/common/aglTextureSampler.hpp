@@ -5,26 +5,26 @@ namespace agl {
 inline void
 TextureSampler::applyTextureData(const TextureData& texture_data)
 {
-    if (!mIsTextureSet                                                   ||
-        mTextureData.mSurface.dim      != texture_data.mSurface.dim      ||
-        mTextureData.mSurface.width    != texture_data.mSurface.width    ||
-        mTextureData.mSurface.height   != texture_data.mSurface.height   ||
-        mTextureData.mSurface.depth    != texture_data.mSurface.depth    ||
-        mTextureData.mSurface.numMips  != texture_data.mSurface.numMips  ||
-        mTextureData.mSurface.format   != texture_data.mSurface.format   ||
-        mTextureData.mSurface.swizzle  != texture_data.mSurface.swizzle  ||
-        mTextureData.mSurface.tileMode != texture_data.mSurface.tileMode ||
-        mTextureData.mSurface.aa       != texture_data.mSurface.aa)
+    if (!mIsTextureSet                                                           ||
+        mTextureData.getSurface().dim      != texture_data.getSurface().dim      ||
+        mTextureData.getSurface().width    != texture_data.getSurface().width    ||
+        mTextureData.getSurface().height   != texture_data.getSurface().height   ||
+        mTextureData.getSurface().depth    != texture_data.getSurface().depth    ||
+        mTextureData.getSurface().numMips  != texture_data.getSurface().numMips  ||
+        mTextureData.getSurface().format   != texture_data.getSurface().format   ||
+        mTextureData.getSurface().swizzle  != texture_data.getSurface().swizzle  ||
+        mTextureData.getSurface().tileMode != texture_data.getSurface().tileMode ||
+        mTextureData.getSurface().aa       != texture_data.getSurface().aa)
     {
         applyTextureData_(texture_data);
     }
     else
     {
-        void* image_ptr = texture_data.mSurface.imagePtr;
-        void* mip_ptr = texture_data.mSurface.mipPtr;
+        void* image_ptr = texture_data.getImagePtr();
+        void* mip_ptr = texture_data.getMipPtr();
 
-        mTextureData.mSurface.imagePtr = image_ptr;
-        mTextureData.mSurface.mipPtr   = mip_ptr;
+        mTextureData.setImagePtr(image_ptr);
+        mTextureData.setMipPtr(mip_ptr);
 
         mGX2Texture.surface.imagePtr = image_ptr;
         mGX2Texture.surface.mipPtr   = mip_ptr;

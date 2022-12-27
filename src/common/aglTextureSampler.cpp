@@ -38,20 +38,9 @@ TextureSampler::~TextureSampler()
 
 void TextureSampler::applyTextureData_(const TextureData& texture_data)
 {
-    mTextureData.mFormat = texture_data.mFormat;
-    mTextureData.mSurface = texture_data.mSurface;
-    mTextureData.mMinWidth = texture_data.mMinWidth;
-    mTextureData.mMinHeight = texture_data.mMinHeight;
-    mTextureData.mMinSlice = texture_data.mMinSlice;
-    mTextureData.mMaxMipLevel = texture_data.mMaxMipLevel;
-    mTextureData.mCompR = texture_data.mCompR;
-    mTextureData.mCompG = texture_data.mCompG;
-    mTextureData.mCompB = texture_data.mCompB;
-    mTextureData.mCompA = texture_data.mCompA;
-
+    mTextureData = texture_data;
     mIsTextureSet = true;
-
-    sead::MemUtil::copy(&mGX2Texture.surface, &mTextureData.mSurface, sizeof(GX2Surface));
+    sead::MemUtil::copy(&mGX2Texture.surface, &mTextureData.getSurface(), sizeof(GX2Surface));
     mGX2Texture.viewFirstMip = 0;
     mGX2Texture.viewNumMips = mGX2Texture.surface.numMips;
     mGX2Texture.viewFirstSlice = 0;

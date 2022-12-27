@@ -7,8 +7,6 @@
 
 namespace agl {
 
-class TextureSampler;
-
 class TextureData
 {
 public:
@@ -37,8 +35,8 @@ public:
 
     u32 getAlignment() const { return mSurface.alignment; }
 
-    u32 getSurfaceSwizzle() { return GX2GetSurfaceSwizzle(&mSurface); }
-    void setSurfaceSwizzle(u32 swizzle) { GX2SetSurfaceSwizzle(&mSurface, swizzle); }
+    GX2Surface& getSurface() { return mSurface; }
+    const GX2Surface& getSurface() const { return mSurface; }
 
     TextureCompSel getComponentR() const { return mCompR; }
     TextureCompSel getComponentG() const { return mCompG; }
@@ -98,8 +96,6 @@ private:
     TextureCompSel mCompG;
     TextureCompSel mCompB;
     TextureCompSel mCompA;
-
-    friend class TextureSampler;
 };
 static_assert(sizeof(TextureData) == 0x9C, "agl::TextureData size mismatch");
 
