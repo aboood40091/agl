@@ -54,4 +54,16 @@ void VertexAttribute::destroy()
     mSetupFinish = false;
 }
 
+void VertexAttribute::setVertexStream(s16 location, const VertexBuffer* buffer, u32 stream_index)
+{
+    if (location == -1)
+        return;
+
+    if (mAttribute[location].mpVertexBuffer != nullptr)
+        mAttribute[location].mBufferIndex = disableVertexBuffer_(&(mAttribute[location]));
+
+    if (buffer != nullptr)
+        mAttribute[location].mBufferIndex = enableVertexBuffer_(&(mAttribute[location]), buffer, stream_index);
+}
+
 }

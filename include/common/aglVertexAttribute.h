@@ -41,6 +41,10 @@ public:
     void setUp();
 
 private:
+    s32 enableVertexBuffer_(Attribute_* attr, const VertexBuffer* buffer, u32 stream_index);
+    s32 disableVertexBuffer_(Attribute_* attr);
+
+private:
     sead::SafeArray<Attribute_, cVertexAttributeMax> mAttribute;
     sead::Buffer<const VertexBuffer*> mVertexBuffer;
     bool mSetupFinish;
