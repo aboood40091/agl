@@ -26,6 +26,17 @@ void VertexAttribute::create(u32 buffer_max, sead::Heap* heap)
     cleanUp();
 }
 
+void VertexAttribute::cleanUp()
+{
+    for (s32 i = 0; i < cVertexAttributeMax; i++)
+        mAttribute[i].mpVertexBuffer = nullptr;
+
+    for (s32 i = 0; i < mVertexBuffer.size(); i++)
+        mVertexBuffer[i] = nullptr;
+
+    mSetupFinish = false;
+}
+
 void VertexAttribute::destroy()
 {
     if (!mCreateFinish)
