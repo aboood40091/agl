@@ -34,6 +34,7 @@ public:
     virtual ~VertexAttribute();
 
     void create(u32 buffer_max, sead::Heap* heap = nullptr);
+    void cleanUp();
     void destroy();
 
     void setVertexStream(s16 location, const VertexBuffer* buffer, u32 stream_index);
@@ -41,7 +42,7 @@ public:
 
 private:
     sead::SafeArray<Attribute_, cVertexAttributeMax> mAttribute;
-    sead::Buffer<VertexBuffer*> mVertexBuffer;
+    sead::Buffer<const VertexBuffer*> mVertexBuffer;
     bool mSetupFinish;
     bool mCreateFinish;
     GX2FetchShader mFetchShader;
