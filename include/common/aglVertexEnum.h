@@ -80,26 +80,6 @@ enum VertexStreamFormat
 };
 static_assert(sizeof(VertexStreamFormat) == 4, "agl::VertexStreamFormat size mismatch");
 
-enum VertexStreamEndianSwap
-{
-    cVertexStreamEndianSwap_None,
-    cVertexStreamEndianSwap_8_in_16,
-    cVertexStreamEndianSwap_8_in_32,
-    cVertexStreamEndianSwap_Default,
-    cVertexStreamEndianSwap_Num
-};
-static_assert(sizeof(VertexStreamEndianSwap) == 4 &&
-              cVertexStreamEndianSwap_Num == 4);
-
-enum VertexStreamIndexType
-{
-    cVertexStreamIndexType_PerVertex,
-    cVertexStreamIndexType_PerInstance,
-    cVertexStreamIndexType_Num
-};
-static_assert(sizeof(VertexStreamIndexType) == 4 &&
-              cVertexStreamIndexType_Num == 2);
-
 enum IndexStreamFormat
 {
     cIndexStreamFormat_u16 = 4,

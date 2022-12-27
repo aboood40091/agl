@@ -1,11 +1,9 @@
 #include <common/aglVertexBuffer.h>
 
-#include <cafe/os.h>
-
 namespace agl {
 
 VertexBuffer::VertexBuffer()
-    : mVertexStream()
+    : mStream()
     , mpBuffer(nullptr)
     , mStride(0)
     , mVertexNum(0)
@@ -21,7 +19,7 @@ VertexBuffer::~VertexBuffer()
 void VertexBuffer::cleanUp_()
 {
     for (u32 i = 0; i < cVertexStreamMax; i++)
-        mVertexStream[i].reset();
+        mStream[i].mInitialized = false;
 
     mpBuffer = nullptr;
     mBufferByteSize = 0;
