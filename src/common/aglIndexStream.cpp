@@ -23,4 +23,19 @@ void IndexStream::cleanUp_()
     mStride = 0;
 }
 
+void IndexStream::setUpStream_(const void* addr, IndexStreamFormat format, u32 count)
+{
+    // SEAD_ASSERT(count != 0);
+    // SEAD_ASSERT(addr != nullptr);
+
+    cleanUp_();
+
+    mpBuffer = addr;
+    mCount = count;
+    mFormat = format;
+    mStride = mFormat == cIndexStreamFormat_u16 ? sizeof(u16) : sizeof(u32);
+
+    DCFlushRangeNoSync(mpBuffer, mStride * mCount);
+}
+
 }

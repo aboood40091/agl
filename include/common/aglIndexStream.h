@@ -33,7 +33,7 @@ private:
 private:
     IndexStreamFormat mFormat;
     PrimitiveType mPrimitiveType;
-    void* mpBuffer;
+    const void* mpBuffer;
     u32 mCount;
     u32 mStride;
 };
