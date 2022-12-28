@@ -1,6 +1,8 @@
 #include <container/seadSafeArray.h>
 #include <detail/aglRootNode.h>
 #include <detail/aglShaderHolder.h>
+#include <gfx/seadGraphicsContext.h>
+#include <gfx/seadViewport.h>
 #include <postfx/aglDepthOfField.h>
 #include <utility/aglDynamicTextureAllocator.h>
 
@@ -410,19 +412,19 @@ ShaderMode DepthOfField::draw(s32 ctx_index, const RenderBuffer& render_buffer, 
                 {
                     // Pass 0
                     {
-                        arg.mPass = 0;
+                        arg.pass = 0;
                         mode = drawColorMipMap_(arg, mode);
                     }
 
                     if (enableDepthBlur_()) // Pass 1
                     {
-                        arg.mPass = 1;
+                        arg.pass = 1;
                         mode = drawDepthMipMap_(arg, mode);
                     }
 
                     // Pass 2
                     {
-                        arg.mPass = 2;
+                        arg.pass = 2;
                         mode = drawCompose_(arg, mode);
                     }
                 }
@@ -431,7 +433,7 @@ ShaderMode DepthOfField::draw(s32 ctx_index, const RenderBuffer& render_buffer, 
 
             if (enableSeparateVignettingPass_()) // Pass 3
             {
-                arg.mPass = 3;
+                arg.pass = 3;
                 mode = drawVignetting_(arg, mode);
             }
         }
@@ -544,17 +546,67 @@ bool DepthOfField::enableSeparateVignettingPass_() const
     return false;
 }
 
-DepthOfField::DrawArg::DrawArg(Context& ctx, const RenderBuffer& render_buffer, const TextureData& depth, bool view_depth, f32 near, f32 far)
-    : mCtx(ctx)
-    , mRenderBuffer(render_buffer)
-    , mNear(near)
-    , mFar(far)
-    , mWidth(mRenderBuffer.getRenderTargetColor()->getTextureData().getWidth())
-    , mHeight(mRenderBuffer.getRenderTargetColor()->getTextureData().getHeight())
-    , mViewDepth(view_depth)
+static bool always_true = true; // shrug
+
+ShaderMode DepthOfField::drawCompose_(const DrawArg& arg, ShaderMode mode) const
 {
-    mCtx.mColorTargetTextureSampler.applyTextureData(mRenderBuffer.getRenderTargetColor()->getTextureData());
-    mCtx.mDepthTargetTextureSampler.applyTextureData(depth);
+    bool depth_far  =  *mFarEnable && !*mNearEnable                 && always_true && !*mEnableVignettingBlur;
+    bool depth_near = !*mFarEnable &&  *mNearEnable && !*mDepthBlur && always_true && !*mEnableVignettingBlur;
+
+    sead::GraphicsContext context;
+    {
+        context.setDepthWriteEnable(false);
+        if (depth_far)
+        {
+            context.setDepthTestEnable(true);
+            context.setDepthFunc(sead::Graphics::cDepthFunc_Less);
+        }
+        else if (depth_near)
+        {
+            context.setDepthTestEnable(true);
+            context.setDepthFunc(sead::Graphics::cDepthFunc_Greater);
+        }
+        else
+        {
+            context.setDepthTestEnable(false);
+        }
+        context.setColorMask(true, true, true, false);
+    }
+    context.apply();
+
+    sead::Viewport viewport(*arg.p_render_buffer);
+    viewport.apply(*arg.p_render_buffer);
+
+    arg.p_render_buffer->bind();
+
+    const agl::ShaderProgram* program =
+        _1e8 == 1
+            ? mpCurrentProgramDepthMask[arg.view_depth]
+            : mpCurrentProgramFinal[arg.view_depth];
+
+    mode = program->activate(mode);
+
+    uniformComposeParam_(arg, program);
+
+    if (*mEnableVignettingBlur)
+        uniformVignettingParam_(arg, program);
+
+    drawKick_(arg);
+
+    return mode;
+}
+
+DepthOfField::DrawArg::DrawArg(Context& ctx, const RenderBuffer& render_buffer, const TextureData& depth, bool view_depth_, f32 near_, f32 far_)
+    : p_ctx(&ctx)
+    , p_render_buffer(&render_buffer)
+    , near(near_)
+    , far(far_)
+    , width(p_render_buffer->getRenderTargetColor()->getTextureData().getWidth())
+    , height(p_render_buffer->getRenderTargetColor()->getTextureData().getHeight())
+    , view_depth(view_depth_)
+{
+    p_ctx->mColorTargetTextureSampler.applyTextureData(p_render_buffer->getRenderTargetColor()->getTextureData());
+    p_ctx->mDepthTargetTextureSampler.applyTextureData(depth);
 }
 
 DepthOfField::TempVignetting::TempVignetting(DepthOfField* p_dof, const sead::SafeString& param_name)

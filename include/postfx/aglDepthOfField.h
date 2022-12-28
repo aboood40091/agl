@@ -41,16 +41,16 @@ class DepthOfField : public utl::IParameterIO, public sead::hostio::Node
 
     struct DrawArg
     {
-        DrawArg(Context& ctx, const RenderBuffer& render_buffer, const TextureData& depth, bool view_depth, f32 near, f32 far);
+        DrawArg(Context& ctx, const RenderBuffer& render_buffer, const TextureData& depth, bool view_depth_, f32 near_, f32 far_);
 
-        s32 mPass;
-        Context& mCtx;
-        const RenderBuffer& mRenderBuffer;
-        f32 mNear;
-        f32 mFar;
-        u32 mWidth;
-        u32 mHeight;
-        bool mViewDepth;
+        s32 pass;
+        Context* p_ctx;
+        const RenderBuffer* p_render_buffer;
+        f32 near;
+        f32 far;
+        u32 width;
+        u32 height;
+        bool view_depth;
     };
     static_assert(sizeof(DrawArg) == 0x20, "agl::pfx::DepthOfField::DrawArg size mismatch");
 
@@ -126,10 +126,15 @@ private:
     bool enableDifferntShape_() const;
     bool enableSeparateVignettingPass_() const;
 
+    void drawKick_(const DrawArg& arg) const;
+
     ShaderMode drawColorMipMap_(const DrawArg& arg, ShaderMode mode) const;
     ShaderMode drawDepthMipMap_(const DrawArg& arg, ShaderMode mode) const;
     ShaderMode drawCompose_(const DrawArg& arg, ShaderMode mode) const;
     ShaderMode drawVignetting_(const DrawArg& arg, ShaderMode mode) const;
+
+    void uniformComposeParam_(const DrawArg& arg, const ShaderProgram* program) const;
+    void uniformVignettingParam_(const DrawArg& arg, const ShaderProgram* program) const;
 
     static s32 roundUp_(f32 value)
     {
@@ -159,7 +164,7 @@ public:
 
 private:
     mutable sead::Buffer<Context> mContext;
-    u32 _1e8;
+    s32 _1e8;
     f32 _1ec;
     bool mEnableColorBlur;
     f32 _1f4;
