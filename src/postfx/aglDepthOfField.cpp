@@ -230,9 +230,9 @@ void DepthOfField::assignShaderProgram_()
         s32 vignetting_blend_idx;
         switch (VignettingBlendType(*mVignettingBlend))
         {
-        default:                        vignetting_blend_idx = 0; break;
-        case cVignettingBlend_White:    vignetting_blend_idx = 1; break;
-        case cVignettingBlend_Black:    vignetting_blend_idx = 2; break;
+        default:                            vignetting_blend_idx = 0; break;
+        case cVignettingBlendType_Mult:     vignetting_blend_idx = 1; break;
+        case cVignettingBlendType_Screen:   vignetting_blend_idx = 2; break;
         }
 
         s32 vignetting_variation_idx = program_vignetting.getVariationMacroValueVariationNum(MACRO_DOF_VIGNETTING_VIGNETTING)       * s32(!vignetting_color_is_black) +

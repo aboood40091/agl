@@ -84,9 +84,10 @@ class DepthOfField : public utl::IParameterIO, public sead::hostio::Node
 
     enum VignettingBlendType
     {
-        // 0 & 1: None
-        cVignettingBlend_White = 2,
-        cVignettingBlend_Black
+        cVignettingBlendType_Normal = 0,    // op = Add,    src = SrcAlpha,     dst = InvSrcAlpha
+        cVignettingBlendType_Add,           // op = Add,    src = SrcAlpha,     dst = One
+        cVignettingBlendType_Mult,          // op = Add,    src = Zero,         dst = SrcColor
+        cVignettingBlendType_Screen         // op = Add,    src = InvDstColor,  dst = One
     };
 
 public:
