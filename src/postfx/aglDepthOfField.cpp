@@ -385,7 +385,6 @@ void DepthOfField::initIndex_(sead::Heap* heap)
 
         p_shape->mIndexStream.setUpStream(
             p_shape->mIndex.getBufferPtr(),
-            cIndexStreamFormat_u16,
             p_shape->mIndex.size(),
             GX2_PRIMITIVE_TRIANGLES
         );

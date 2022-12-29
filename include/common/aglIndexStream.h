@@ -18,9 +18,25 @@ public:
     PrimitiveType getPrimitiveType() const { return mPrimitiveType; }
     void setPrimitiveType(PrimitiveType primitive_type) { mPrimitiveType = primitive_type; }
 
-    void setUpStream(const void* addr, IndexStreamFormat format, u32 count, PrimitiveType primitive_type)
+    void setUpStream(const u16* addr, u32 count)
     {
-        setUpStream_(addr, format, count);
+        setUpStream_(addr, cIndexStreamFormat_u16, count);
+    }
+
+    void setUpStream(const u16* addr, u32 count, PrimitiveType primitive_type)
+    {
+        setUpStream_(addr, cIndexStreamFormat_u16, count);
+        setPrimitiveType(primitive_type);
+    }
+
+    void setUpStream(const u32* addr, u32 count)
+    {
+        setUpStream_(addr, cIndexStreamFormat_u32, count);
+    }
+
+    void setUpStream(const u32* addr, u32 count, PrimitiveType primitive_type)
+    {
+        setUpStream_(addr, cIndexStreamFormat_u32, count);
         setPrimitiveType(primitive_type);
     }
 
