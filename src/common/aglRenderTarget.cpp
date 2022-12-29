@@ -28,10 +28,10 @@ RenderTargetColor::RenderTargetColor()
 void RenderTargetColor::invalidateGPUCache() const
 {
     if (mTextureData.getImagePtr())
-        GX2Invalidate(GX2_INVALIDATE_COLOR_BUFFER, mTextureData.getImagePtr(), mTextureData.getImageSize());
+        GX2Invalidate(GX2_INVALIDATE_COLOR_BUFFER, mTextureData.getImagePtr(), mTextureData.getImageByteSize());
 
     if (mTextureData.getMipPtr())
-        GX2Invalidate(GX2_INVALIDATE_COLOR_BUFFER, mTextureData.getMipPtr(), mTextureData.getMipSize());
+        GX2Invalidate(GX2_INVALIDATE_COLOR_BUFFER, mTextureData.getMipPtr(), mTextureData.getMipByteSize());
 }
 
 void RenderTargetColor::initRegs_() const

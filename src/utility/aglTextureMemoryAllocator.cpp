@@ -8,8 +8,8 @@ TextureMemoryAllocator::MemoryBlock* TextureMemoryAllocator::alloc(const Texture
         return nullptr;
 
     AllocArg arg;
-    arg.mImageSize = tex.getImageSize();
-    arg.mMipSize = tex.getMipLevelNum() > 1 ? tex.getMipSize() : 0;
+    arg.mImageSize = tex.getImageByteSize();
+    arg.mMipSize = tex.getMipLevelNum() > 1 ? tex.getMipByteSize() : 0;
     arg.mAlignment = tex.getAlignment();
     arg.mppTargetBuffer = nullptr;
     arg.mTargetBufferSize = 0;

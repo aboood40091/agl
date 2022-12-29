@@ -27,10 +27,10 @@ void TextureData::setMipLevelNum(u32 mip_level_num)
 void TextureData::invalidateGPUCache() const
 {
     if (getImagePtr())
-        GX2Invalidate(GX2_INVALIDATE_TEXTURE, getImagePtr(), getImageSize());
+        GX2Invalidate(GX2_INVALIDATE_TEXTURE, getImagePtr(), getImageByteSize());
 
     if (getMipPtr())
-        GX2Invalidate(GX2_INVALIDATE_TEXTURE, getMipPtr(), getMipSize());
+        GX2Invalidate(GX2_INVALIDATE_TEXTURE, getMipPtr(), getMipByteSize());
 }
 
 void TextureData::initialize_(TextureType type, TextureFormat format, u32 width, u32 height, u32 slice_num, u32 mip_level_num, MultiSampleType multi_sample_type)

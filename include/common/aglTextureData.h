@@ -26,12 +26,12 @@ public:
     void* getImagePtr() const { return mSurface.imagePtr; }
     void setImagePtr(void* ptr) { mSurface.imagePtr = ptr; }
 
-    u32 getImageSize() const { return mSurface.imageSize; }
+    u32 getImageByteSize() const { return mSurface.imageSize; }
 
     void* getMipPtr() const { return mSurface.mipPtr; }
     void setMipPtr(void* ptr) { mSurface.mipPtr = ptr; }
 
-    u32 getMipSize() const { return mSurface.mipSize; }
+    u32 getMipByteSize() const { return mSurface.mipSize; }
 
     u32 getAlignment() const { return mSurface.alignment; }
 
