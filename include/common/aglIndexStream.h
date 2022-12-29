@@ -40,9 +40,21 @@ public:
         setPrimitiveType(primitive_type);
     }
 
+    const void* getBufferPtr() const { return mpBuffer; }
+
+    const void* getBufferPtr(u32 start) const
+    {
+        u32 offset = mFormat == cIndexStreamFormat_u16
+            ? sizeof(u16) * start
+            : sizeof(u32) * start;
+
+        return static_cast<const u8*>(mpBuffer) + offset;
+    }
+
     u32 getCount() const { return mCount; }
 
-    void draw(u32 count = 1, u32 start = 0) const;
+    void draw(u32 instance_num = 1, u32 base_vertex = 0) const;
+    void draw(u32 start, u32 count, u32 instance_num = 1, u32 base_vertex = 0) const;
 
 private:
     void setUpStream_(const void* addr, IndexStreamFormat format, u32 count);
