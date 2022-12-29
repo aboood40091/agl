@@ -596,6 +596,49 @@ ShaderMode DepthOfField::drawCompose_(const DrawArg& arg, ShaderMode mode) const
     return mode;
 }
 
+ShaderMode DepthOfField::drawVignetting_(const DrawArg& arg, ShaderMode mode) const
+{
+    sead::GraphicsContext context;
+    {
+        context.setDepthEnable(false, false);
+        context.setColorMask(true, true, true, false);
+
+        switch (getVignettingBlendType())
+        {
+        case cVignettingBlendType_Normal:
+            context.setBlendFactor(sead::Graphics::cBlendFactor_SrcAlpha, sead::Graphics::cBlendFactor_InvSrcAlpha);
+            context.setBlendEquation(sead::Graphics::cBlendEquation_Add);
+            break;
+        case cVignettingBlendType_Add:
+            context.setBlendFactor(sead::Graphics::cBlendFactor_SrcAlpha, sead::Graphics::cBlendFactor_One);
+            context.setBlendEquation(sead::Graphics::cBlendEquation_Add);
+            break;
+        case cVignettingBlendType_Mult:
+            context.setBlendFactor(sead::Graphics::cBlendFactor_Zero, sead::Graphics::cBlendFactor_SrcColor);
+            context.setBlendEquation(sead::Graphics::cBlendEquation_Add);
+            break;
+        case cVignettingBlendType_Screen:
+            context.setBlendFactor(sead::Graphics::cBlendFactor_InvDstColor, sead::Graphics::cBlendFactor_One);
+            context.setBlendEquation(sead::Graphics::cBlendEquation_Add);
+            break;
+        }
+    }
+    context.apply();
+
+    sead::Viewport viewport(*arg.p_render_buffer);
+    viewport.apply(*arg.p_render_buffer);
+
+    arg.p_render_buffer->bind();
+
+    mode = mpCurrentProgramVignetting->activate(mode);
+
+    uniformVignettingParam_(arg, mpCurrentProgramVignetting);
+
+    drawKick_(arg);
+
+    return mode;
+}
+
 DepthOfField::DrawArg::DrawArg(Context& ctx, const RenderBuffer& render_buffer, const TextureData& depth, bool view_depth_, f32 near_, f32 far_)
     : p_ctx(&ctx)
     , p_render_buffer(&render_buffer)
