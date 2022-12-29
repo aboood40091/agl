@@ -228,7 +228,7 @@ void DepthOfField::assignShaderProgram_()
                                          mVignettingColor->b == 0.0f;
 
         s32 vignetting_blend_idx;
-        switch (VignettingBlendType(*mVignettingBlend))
+        switch (getVignettingBlendType())
         {
         default:                            vignetting_blend_idx = 0; break;
         case cVignettingBlendType_Mult:     vignetting_blend_idx = 1; break;
@@ -540,7 +540,7 @@ bool DepthOfField::enableSeparateVignettingPass_() const
     // Implementing this in a single line mismatches :^)
 
     if (*mEnableVignettingColor)
-        if (enableDifferntShape_() || *mVignettingBlend != 0 || !*mEnableVignettingBlur)
+        if (enableDifferntShape_() || getVignettingBlendType() != cVignettingBlendType_Normal || !*mEnableVignettingBlur)
             return true;
 
     return false;

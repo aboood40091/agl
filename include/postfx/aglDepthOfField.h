@@ -82,6 +82,7 @@ class DepthOfField : public utl::IParameterIO, public sead::hostio::Node
     };
     static_assert(sizeof(VignettingShape) == 0x2F0, "agl::pfx::DepthOfField::VignettingShape size mismatch");
 
+public:
     enum VignettingBlendType
     {
         cVignettingBlendType_Normal = 0,    // op = Add,    src = SrcAlpha,     dst = InvSrcAlpha
@@ -112,6 +113,8 @@ public:
     {
         *mEnable = enable;
     }
+
+    VignettingBlendType getVignettingBlendType() const { return VignettingBlendType(*mVignettingBlend); }
 
     ShaderMode draw(s32 ctx_index, const RenderBuffer& render_buffer, f32 near, f32 far, ShaderMode mode = cShaderMode_Invalid) const;
     ShaderMode draw(s32 ctx_index, const RenderBuffer& render_buffer, const TextureData& depth, bool view_depth, f32 near, f32 far, ShaderMode mode = cShaderMode_Invalid) const;
