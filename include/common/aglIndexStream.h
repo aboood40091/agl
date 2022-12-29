@@ -42,6 +42,8 @@ public:
 
     u32 getCount() const { return mCount; }
 
+    void draw(u32 count = 1, u32 start = 0) const;
+
 private:
     void setUpStream_(const void* addr, IndexStreamFormat format, u32 count);
     void cleanUp_();
@@ -56,3 +58,9 @@ private:
 static_assert(sizeof(IndexStream) == 0x18, "agl::IndexStream size mismatch");
 
 }
+
+#ifdef __cplusplus
+
+#include <common/aglIndexStream.hpp>
+
+#endif // __cplusplus

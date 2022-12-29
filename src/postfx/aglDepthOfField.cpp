@@ -5,6 +5,8 @@
 #include <gfx/seadViewport.h>
 #include <postfx/aglDepthOfField.h>
 #include <utility/aglDynamicTextureAllocator.h>
+#include <utility/aglPrimitiveShape.h>
+#include <utility/aglVertexAttributeHolder.h>
 
 namespace agl { namespace pfx {
 
@@ -543,6 +545,41 @@ bool DepthOfField::enableSeparateVignettingPass_() const
             return true;
 
     return false;
+}
+
+void DepthOfField::drawKick_(const DrawArg& arg) const
+{
+    switch (arg.pass)
+    {
+    case 3: // Vignetting
+        {
+            s32 type = enableDifferntShape_()
+                ? *mTempVignetting1.mType
+                : *mTempVignetting0.mType;
+
+            mVignettingShape[type].mVertexAttribute.activate();
+            mVignettingShape[type].mIndexStream.draw();
+        }
+        break;
+    case 2: // Compose
+        if (*mEnableVignettingBlur)
+        {
+            mVignettingShape[*mTempVignetting0.mType].mVertexAttribute.activate();
+            mVignettingShape[*mTempVignetting0.mType].mIndexStream.draw();
+        }
+        else
+        {
+            utl::VertexAttributeHolder::instance()->getVertexAttribute(utl::VertexAttributeHolder::cAttribute_QuadTriangle).activate();
+            utl::PrimitiveShape::instance()->getIdxStreamQuadTriangle().draw();
+        }
+        break;
+    default:
+        {
+            utl::VertexAttributeHolder::instance()->getVertexAttribute(utl::VertexAttributeHolder::cAttribute_QuadTriangle).activate();
+            utl::PrimitiveShape::instance()->getIdxStreamQuadTriangle().draw();
+        }
+        break;
+    }
 }
 
 static bool always_true = true; // shrug
