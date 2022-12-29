@@ -141,4 +141,18 @@ void VertexAttribute::setUp()
     mSetupFinish = true;
 }
 
+void VertexAttribute::activate() const
+{
+    // SEAD_ASSERT(mSetupFinish);
+
+    GX2SetFetchShader(&mFetchShader);
+
+    for (s32 i = 0; i < mVertexBuffer.size(); i++)
+    {
+        const VertexBuffer* buffer = mVertexBuffer[i];
+        if (buffer != nullptr)
+            GX2SetAttribBuffer(i, buffer->getBufferByteSize(), buffer->getStride(), buffer->getBufferPtr());
+    }
+}
+
 }

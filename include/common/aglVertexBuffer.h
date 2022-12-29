@@ -47,6 +47,11 @@ public:
     GX2EndianSwapMode getStreamEndianSwap(s32 index) const { return mStream[index].mEndianSwap; }
     GX2AttribIndexType getStreamIndexType(s32 index) const { return mStream[index].mIndexType; }
 
+    const void* getBufferPtr() const { return mpBuffer; }
+    u32 getStride() const { return mStride; }
+    u32 getVertexNum() const { return mVertexNum; }
+    u32 getBufferByteSize() const { return mBufferByteSize; }
+
     void setUpBuffer(const void* buffer, u32 stride, u32 buffer_byte_size);
     void setUpStream(s32 index, VertexStreamFormat format, u32 offset);
 

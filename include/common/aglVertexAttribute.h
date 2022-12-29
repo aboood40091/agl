@@ -40,6 +40,8 @@ public:
     void setVertexStream(s16 location, const VertexBuffer* buffer, u32 stream_index);
     void setUp();
 
+    void activate() const;
+
 private:
     s32 enableVertexBuffer_(Attribute_* attr, const VertexBuffer* buffer, u32 stream_index);
     s32 disableVertexBuffer_(Attribute_* attr);
