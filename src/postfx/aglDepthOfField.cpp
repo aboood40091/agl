@@ -3,6 +3,7 @@
 #include <detail/aglShaderHolder.h>
 #include <gfx/seadGraphicsContext.h>
 #include <gfx/seadViewport.h>
+#include <math/seadMatrix.h>
 #include <postfx/aglDepthOfField.h>
 #include <utility/aglDynamicTextureAllocator.h>
 #include <utility/aglImageFilter2D.h>
@@ -895,6 +896,23 @@ void DepthOfField::applyIndirectTextureData_()
     _ae0.x = mpIndirectTextureData->getWidth();
     _ae0.y = mpIndirectTextureData->getHeight();
     _ae0.w = *mIndirectScale;
+}
+
+void DepthOfField::updateIndirectMatrix_()
+{
+    sead::Matrix34f mtx;
+
+    mtx.makeR(sead::Vector3f(0.0f, 0.0f, *mIndirectTexRotate));
+    mtx.multScaleLocal(sead::Vector3f(mIndirectTexScale->x, mIndirectTexScale->y, 0.0f));
+    mtx.multTranslationLocal(sead::Vector3f(mIndirectTexTrans->x, mIndirectTexTrans->y, 0.0f));
+
+    mIndirectMatrixRow0.x = mtx(0, 0);
+    mIndirectMatrixRow0.y = mtx(0, 1);
+    mIndirectMatrixRow0.z = mtx(0, 3);
+
+    mIndirectMatrixRow1.x = mtx(1, 0);
+    mIndirectMatrixRow1.y = mtx(1, 1);
+    mIndirectMatrixRow1.z = mtx(1, 3);
 }
 
 void DepthOfField::postRead_()
