@@ -885,6 +885,18 @@ ShaderMode DepthOfField::drawVignetting_(const DrawArg& arg, ShaderMode mode) co
     return mode;
 }
 
+void DepthOfField::applyIndirectTextureData_()
+{
+    if (mpIndirectTextureData == nullptr)
+        return;
+
+    mIndirectTextureSampler.applyTextureData(*mpIndirectTextureData);
+
+    _ae0.x = mpIndirectTextureData->getWidth();
+    _ae0.y = mpIndirectTextureData->getHeight();
+    _ae0.w = *mIndirectScale;
+}
+
 void DepthOfField::postRead_()
 {
     assignShaderProgram_();
