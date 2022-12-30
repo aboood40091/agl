@@ -82,6 +82,7 @@ class DepthOfField : public utl::IParameterIO, public sead::hostio::Node
     };
     static_assert(sizeof(VignettingShape) == 0x2F0, "agl::pfx::DepthOfField::VignettingShape size mismatch");
 
+public:
     enum Uniform
     {
         cUniform_Param0 = 0,
@@ -92,14 +93,15 @@ class DepthOfField : public utl::IParameterIO, public sead::hostio::Node
         cUniform_AddParam,
         cUniform_NearFarParam,
         cUniform_TexParam,
+        cUniform_VignettingRadius,
         cUniform_VignettingParam,
         cUniform_VignettingTrans,
-        cUniform_VignettingRadius,
         cUniform_VignettingColor,
-        cUniform_FarMulColor
+        cUniform_FarMulColor,
+        cUniform_Num
     };
+    static_assert(cUniform_Num == 13);
 
-public:
     enum VignettingBlendType
     {
         cVignettingBlendType_Normal = 0,    // op = Add,    src = SrcAlpha,     dst = InvSrcAlpha

@@ -142,6 +142,11 @@ public:
         mFlag.change(1, enable);
     }
 
+    void update() const // Shrug
+    {
+        validate_();
+    }
+
     void updateVariation(s32 index) // I don't know the actual name
     {
         ShaderProgram* program = getVariation(index);
