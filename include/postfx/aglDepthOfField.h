@@ -147,7 +147,7 @@ private:
     bool enableDifferntShape_() const;
     bool enableSeparateVignettingPass_() const;
 
-    void bindRenderBuffer_(RenderBuffer& render_buffer, s32 mip_level, s32) const;
+    void bindRenderBuffer_(RenderBuffer& render_buffer, s32 mip_level_color, s32 mip_level_depth) const;
 
     void drawKick_(const DrawArg& arg) const;
 

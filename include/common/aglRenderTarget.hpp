@@ -36,17 +36,8 @@ void RenderTarget<T>::applyTextureData(const TextureData& texture_data, u32 mip_
         static_cast<T*>(this)->mInnerBuffer.surface.imagePtr = image_ptr;
         static_cast<T*>(this)->mInnerBuffer.surface.mipPtr   = mip_ptr;
 
-        if (mSlice != slice)
-        {
-            mSlice = slice;
-            mUpdateRegs = true;
-        }
-
-        if (mMipLevel != mip_level)
-        {
-            mMipLevel = mip_level;
-            mUpdateRegs = true;
-        }
+        setSlice(slice);
+        setMipLevel(mip_level);
     }
 }
 

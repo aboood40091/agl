@@ -9,6 +9,9 @@ template <typename T>
 class RenderTarget
 {
 public:
+    static const u32 cMipLevelMax = 14;
+
+public:
     RenderTarget()
         : mTextureData()
         , mUpdateRegs(true)
@@ -22,6 +25,25 @@ public:
 
     u32 getMipLevel() const { return mMipLevel; }
     u32 getSlice() const { return mSlice; }
+
+    void setSlice(u32 slice)
+    {
+        if (mSlice != slice)
+        {
+            mSlice = slice;
+            mUpdateRegs = true;
+        }
+    }
+
+    void setMipLevel(u32 mip_level)
+    {
+        // SEAD_ASSERT(mip_level < cMipLevelMax);
+        if (mMipLevel != mip_level)
+        {
+            mMipLevel = mip_level;
+            mUpdateRegs = true;
+        }
+    }
 
     void applyTextureData(const TextureData& texture_data);
     void applyTextureData(const TextureData& texture_data, u32 mip_level, u32 slice);

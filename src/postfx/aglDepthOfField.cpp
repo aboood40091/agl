@@ -548,6 +548,46 @@ bool DepthOfField::enableSeparateVignettingPass_() const
     return false;
 }
 
+void DepthOfField::bindRenderBuffer_(RenderBuffer& render_buffer, s32 mip_level_color, s32 mip_level_depth) const
+{
+    s32 w = -1;
+    s32 h = -1;
+
+    if (render_buffer.getRenderTargetColor() != nullptr)
+    {
+        u32 mip_level = mip_level_color;
+        render_buffer.getRenderTargetColor()->setMipLevel(mip_level);
+
+        w = render_buffer.getRenderTargetColor()->getTextureData().getWidth(mip_level);
+        h = render_buffer.getRenderTargetColor()->getTextureData().getHeight(mip_level);
+    }
+
+    if (render_buffer.getRenderTargetDepth() != nullptr)
+    {
+        u32 mip_level = mip_level_color + mip_level_depth;
+        render_buffer.getRenderTargetDepth()->setMipLevel(mip_level);
+
+        s32 w_ = render_buffer.getRenderTargetDepth()->getTextureData().getWidth(mip_level);
+        s32 h_ = render_buffer.getRenderTargetDepth()->getTextureData().getHeight(mip_level);
+
+        // SEAD_ASSERT(w == -1 || w == w_);
+        // SEAD_ASSERT(h == -1 || h == h_);
+
+        w = w_;
+        h = h_;
+    }
+
+    sead::Vector2f size(w, h);
+
+    render_buffer.setPhysicalArea(0.0f, 0.0f, size.x, size.y);
+    render_buffer.setVirtualSize(size);
+
+    sead::Viewport viewport(render_buffer);
+    viewport.apply(render_buffer);
+
+    render_buffer.bind();
+}
+
 void DepthOfField::drawKick_(const DrawArg& arg) const
 {
     switch (arg.pass)
