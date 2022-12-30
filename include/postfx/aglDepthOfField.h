@@ -198,6 +198,12 @@ public:
     void setIndirectTextureTrans(const sead::Vector2f& trans);
 
 private:
+    void applyIndirectTextureData_();
+    void updateIndirectMatrix_();
+
+    virtual void postRead_();
+
+private:
     mutable sead::Buffer<Context> mContext;
     s32 _1e8;
     f32 _1ec;

@@ -885,6 +885,13 @@ ShaderMode DepthOfField::drawVignetting_(const DrawArg& arg, ShaderMode mode) co
     return mode;
 }
 
+void DepthOfField::postRead_()
+{
+    assignShaderProgram_();
+    applyIndirectTextureData_();
+    updateIndirectMatrix_();
+}
+
 DepthOfField::DrawArg::DrawArg(Context& ctx, const RenderBuffer& render_buffer, const TextureData& depth, bool view_depth_, f32 near_, f32 far_)
     : p_ctx(&ctx)
     , p_render_buffer(&render_buffer)
