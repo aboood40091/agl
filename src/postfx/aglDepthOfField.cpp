@@ -51,9 +51,9 @@ DepthOfField::DepthOfField()
     , mDebugTexturePage()
     , mpIndirectTextureData(nullptr)
     , mIndirectTextureSampler()
-    , _ae0(sead::Vector4f::zero)
-    , mIndirectMatrixRow0(1.0f, 0.0f, 0.0f)
-    , mIndirectMatrixRow1(0.0f, 1.0f, 0.0f)
+    , mIndirectTexParam(sead::Vector4f::zero)
+    , mIndirectTexMtx0(1.0f, 0.0f, 0.0f)
+    , mIndirectTexMtx1(0.0f, 1.0f, 0.0f)
     , _10e8(1)
 {
     addObj(&mParameterObj, "dof");
@@ -673,7 +673,7 @@ ShaderMode DepthOfField::drawColorMipMap_(const DrawArg& arg, ShaderMode mode) c
             p_sampler = &arg.p_ctx->mColorTargetTextureSampler;
         }
 
-        p_sampler->activate(p_program_mipmap->getSamplerLocation(0));
+        p_sampler->activate(p_program_mipmap->getSamplerLocation(cSampler_TexColor));
 
         sead::Vector4f param = getTexParam_(
             color_sampler.getTextureData(),
@@ -748,7 +748,7 @@ ShaderMode DepthOfField::drawDepthMipMap_(const DrawArg& arg, ShaderMode mode) c
 
         p_program_near_mask->getUniformLocation(cUniform_NearFarParam).setUniform(sizeof(sead::Vector4f), &param);
 
-        arg.p_ctx->mDepthTargetTextureSampler.activate(p_program_near_mask->getSamplerLocation(1));
+        arg.p_ctx->mDepthTargetTextureSampler.activate(p_program_near_mask->getSamplerLocation(cSampler_TexDepth));
 
         param = getTexParam_(depth_sampler.getTextureData());
         sead::Vector4f tex_param = param * _1ec;
@@ -771,7 +771,7 @@ ShaderMode DepthOfField::drawDepthMipMap_(const DrawArg& arg, ShaderMode mode) c
         {
             depth_sampler.setMipParam(mip_level - 1, mip_level - 1, 0.0f);
 
-            depth_sampler.activate(p_program_mipmap->getSamplerLocation(1));
+            depth_sampler.activate(p_program_mipmap->getSamplerLocation(cSampler_TexDepth));
 
             sead::Vector4f param = getTexParam_(
                 depth_sampler.getTextureData(),
@@ -893,9 +893,9 @@ void DepthOfField::applyIndirectTextureData_()
 
     mIndirectTextureSampler.applyTextureData(*mpIndirectTextureData);
 
-    _ae0.x = mpIndirectTextureData->getWidth();
-    _ae0.y = mpIndirectTextureData->getHeight();
-    _ae0.w = *mIndirectScale;
+    mIndirectTexParam.x = mpIndirectTextureData->getWidth();
+    mIndirectTexParam.y = mpIndirectTextureData->getHeight();
+    mIndirectTexParam.w = *mIndirectScale;
 }
 
 void DepthOfField::updateIndirectMatrix_()
@@ -906,13 +906,13 @@ void DepthOfField::updateIndirectMatrix_()
     mtx.multScaleLocal(sead::Vector3f(mIndirectTexScale->x, mIndirectTexScale->y, 0.0f));
     mtx.multTranslationLocal(sead::Vector3f(mIndirectTexTrans->x, mIndirectTexTrans->y, 0.0f));
 
-    mIndirectMatrixRow0.x = mtx(0, 0);
-    mIndirectMatrixRow0.y = mtx(0, 1);
-    mIndirectMatrixRow0.z = mtx(0, 3);
+    mIndirectTexMtx0.x = mtx(0, 0);
+    mIndirectTexMtx0.y = mtx(0, 1);
+    mIndirectTexMtx0.z = mtx(0, 3);
 
-    mIndirectMatrixRow1.x = mtx(1, 0);
-    mIndirectMatrixRow1.y = mtx(1, 1);
-    mIndirectMatrixRow1.z = mtx(1, 3);
+    mIndirectTexMtx1.x = mtx(1, 0);
+    mIndirectTexMtx1.y = mtx(1, 1);
+    mIndirectTexMtx1.z = mtx(1, 3);
 }
 
 void DepthOfField::postRead_()

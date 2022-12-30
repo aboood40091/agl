@@ -48,8 +48,8 @@ class DepthOfField : public utl::IParameterIO, public sead::hostio::Node
         const RenderBuffer* p_render_buffer;
         f32 near;
         f32 far;
-        u32 width;
-        u32 height;
+        s32 width;
+        s32 height;
         bool view_depth;
     };
     static_assert(sizeof(DrawArg) == 0x20, "agl::pfx::DepthOfField::DrawArg size mismatch");
@@ -101,6 +101,17 @@ public:
         cUniform_Num
     };
     static_assert(cUniform_Num == 13);
+
+    enum Sampler
+    {
+        cSampler_TexColor = 0,
+        cSampler_TexDepth,
+        cSampler_TexMipMap,
+        cSampler_TexMipMapDepth,
+        cSampler_TexIndirect,
+        cSampler_Num
+    };
+    static_assert(cSampler_Num == 5);
 
     enum VignettingBlendType
     {
@@ -246,9 +257,9 @@ private:
     ShaderProgram* mpCurrentProgramVignetting;
     TextureData* mpIndirectTextureData;
     TextureSampler mIndirectTextureSampler;
-    sead::Vector4f _ae0;
-    sead::Vector3f mIndirectMatrixRow0;
-    sead::Vector3f mIndirectMatrixRow1;
+    sead::Vector4f mIndirectTexParam;
+    sead::Vector3f mIndirectTexMtx0;
+    sead::Vector3f mIndirectTexMtx1;
     sead::SafeArray<VignettingShape, 2> mVignettingShape;
     u8 _10e8;
 };
