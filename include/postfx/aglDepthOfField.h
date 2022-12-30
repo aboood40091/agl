@@ -82,6 +82,23 @@ class DepthOfField : public utl::IParameterIO, public sead::hostio::Node
     };
     static_assert(sizeof(VignettingShape) == 0x2F0, "agl::pfx::DepthOfField::VignettingShape size mismatch");
 
+    enum Uniform
+    {
+        cUniform_Param0 = 0,
+        cUniform_IndirectTexParam,
+        cUniform_IndirectTexMtx0,
+        cUniform_IndirectTexMtx1,
+        cUniform_MulParam,
+        cUniform_AddParam,
+        cUniform_NearFarParam,
+        cUniform_TexParam,
+        cUniform_VignettingParam,
+        cUniform_VignettingTrans,
+        cUniform_VignettingRadius,
+        cUniform_VignettingColor,
+        cUniform_FarMulColor
+    };
+
 public:
     enum VignettingBlendType
     {
@@ -130,6 +147,8 @@ private:
     bool enableDifferntShape_() const;
     bool enableSeparateVignettingPass_() const;
 
+    void bindRenderBuffer_(RenderBuffer& render_buffer, s32 mip_level, s32) const;
+
     void drawKick_(const DrawArg& arg) const;
 
     ShaderMode drawColorMipMap_(const DrawArg& arg, ShaderMode mode) const;
@@ -158,6 +177,19 @@ private:
                 ivalue--;
 
         return ivalue;
+    }
+
+    sead::Vector4f getTexParam_(const TextureData& data, u32 mip_level, u32 slice) const
+    {
+        f32 width  = 0.5f / data.getWidth(mip_level);
+        f32 height = 0.5f / data.getHeight(mip_level);
+
+        sead::Vector4f param;
+        param.x = width  * _1ec;
+        param.y = height * _1ec;
+        param.z = slice  * _1ec;    // Unused
+        param.w = param.z;          // ^^
+        return param;
     }
 
 public:

@@ -149,6 +149,11 @@ public:
         program->validate_();
     }
 
+    const AttributeLocation& getAttributeLocation(s32 index) const { return mAttributeLocation[index]; }
+    const UniformLocation& getUniformLocation(s32 index) const { return mUniformLocation[index]; }
+    const UniformBlockLocation& getUniformBlockLocation(s32 index) const { return mUniformBlockLocation[index]; }
+    const SamplerLocation& getSamplerLocation(s32 index) const { return mSamplerLocation[index]; }
+
     void updateAttributeLocation() const;
     void updateUniformLocation() const;
     void updateUniformBlockLocation() const;

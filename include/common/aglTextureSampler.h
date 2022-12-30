@@ -15,6 +15,7 @@ public:
     TextureSampler(const TextureData& texture_data);
     virtual ~TextureSampler();
 
+    const TextureData& getTextureData() const { return mTextureData; }
     void applyTextureData(const TextureData& texture_data);
 
     void setTextureCompSel(

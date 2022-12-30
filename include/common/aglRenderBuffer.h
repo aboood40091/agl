@@ -39,8 +39,18 @@ public:
         return mDepthTarget;
     }
 
+    void setRenderTargetColor(RenderTargetColor* target, u32 target_index = 0)
+    {
+        mColorTarget[target_index] = target;
+    }
+
+    void setRenderTargetDepth(RenderTargetDepth* target)
+    {
+        mDepthTarget = target;
+    }
+
     void setRenderTargetColorNullAll();
-    void setRenderTargetDepthNull() { mDepthTarget = nullptr; }
+    void setRenderTargetDepthNull() { setRenderTargetDepth(nullptr); }
 
     void clear(u32 target_index, u32 clr_flag, const sead::Color4f& color, f32 depth, u32 stencil) const;
 

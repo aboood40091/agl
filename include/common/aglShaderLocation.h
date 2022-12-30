@@ -61,6 +61,8 @@ public:
     }
 
     void search(const ShaderProgram& program);
+
+    void setUniform(u32 size, const void* buffer) const;
 };
 static_assert(sizeof(UniformLocation) == 0x10, "agl::UniformLocation size mismatch");
 
@@ -158,3 +160,9 @@ private:
 static_assert(sizeof(AttributeLocation) == 0xC, "agl::AttributeLocation size mismatch");
 
 }
+
+#ifdef __cplusplus
+
+#include <common/aglShaderLocation.hpp>
+
+#endif // __cplusplus

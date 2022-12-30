@@ -5,6 +5,7 @@
 #include <gfx/seadViewport.h>
 #include <postfx/aglDepthOfField.h>
 #include <utility/aglDynamicTextureAllocator.h>
+#include <utility/aglImageFilter2D.h>
 #include <utility/aglPrimitiveShape.h>
 #include <utility/aglVertexAttributeHolder.h>
 
@@ -460,7 +461,7 @@ void DepthOfField::allocBuffer(s32 ctx_index, TextureFormat format, s32 width, s
     s32 color_blur_width;
     s32 color_blur_height;
 
-    if (*mIndirectEnable && roundDown_(*mLevel) == 0)
+    if (*mIndirectEnable && roundDown_(*mLevel) == 0)   // enableMipFromZeroLevel_()
     {
         color_blur_mipmap_num = roundUp_(*mLevel) + 1;
 
@@ -580,6 +581,76 @@ void DepthOfField::drawKick_(const DrawArg& arg) const
         }
         break;
     }
+}
+
+ShaderMode DepthOfField::drawColorMipMap_(const DrawArg& arg, ShaderMode mode) const
+{
+    bool enable_mip_from_zero_level = *mIndirectEnable && roundDown_(*mLevel) == 0; // enableMipFromZeroLevel_()
+
+    TextureSampler& color_sampler = arg.p_ctx->mColorTextureSampler;
+    RenderBuffer& render_buffer = arg.p_ctx->mRenderBuffer;
+    RenderTargetColor& color_target = arg.p_ctx->mColorTarget;
+
+    sead::GraphicsContext context;
+    {
+        context.setDepthEnable(false, false);
+        context.setBlendEnable(false);
+        context.setColorMask(true, true, true, false);
+    }
+    context.apply();
+
+    render_buffer.setRenderTargetColorNullAll();
+    render_buffer.setRenderTargetDepthNull();
+
+    render_buffer.setRenderTargetColor(&color_target);
+    color_target.applyTextureData(color_sampler.getTextureData(), 0, 0);
+
+    const ShaderProgram* p_program_mipmap = mpCurrentProgramMipMap[0];
+    mode = p_program_mipmap->activate(mode);
+
+    color_sampler.setFilter(cTextureFilterType_Linear, cTextureFilterType_Linear, cTextureMipFilterType_Point);
+
+    u32 mip_level_num = color_sampler.getTextureData().getMipLevelNum();
+
+    for (u32 mip_level = 0; mip_level < mip_level_num; mip_level++)
+    {
+        const TextureSampler* p_sampler;
+        if (mip_level != 0)
+        {
+            color_sampler.setMipParam(mip_level - 1, mip_level - 1, 0.0f);
+            p_sampler = &color_sampler;
+        }
+        else
+        {
+            if (enable_mip_from_zero_level)
+            {
+                bindRenderBuffer_(render_buffer, 0, 0);
+                mode = utl::ImageFilter2D::drawTextureQuadTriangle(arg.p_ctx->mColorTargetTextureSampler, mode);
+                arg.p_ctx->mRenderBuffer.getRenderTargetColor()->invalidateGPUCache();
+                continue;
+            }
+            p_sampler = &arg.p_ctx->mColorTargetTextureSampler;
+        }
+
+        p_sampler->activate(p_program_mipmap->getSamplerLocation(0));
+
+        sead::Vector4f tex_param = getTexParam_(
+            color_sampler.getTextureData(),
+            mip_level,
+            0
+        );
+
+        p_program_mipmap->getUniformLocation(cUniform_TexParam).setUniform(sizeof(sead::Vector4f), &tex_param);
+
+        bindRenderBuffer_(render_buffer, mip_level, 0);
+        drawKick_(arg);
+        arg.p_ctx->mRenderBuffer.getRenderTargetColor()->invalidateGPUCache();
+    }
+
+    color_sampler.setFilter(cTextureFilterType_Linear, cTextureFilterType_Linear, cTextureMipFilterType_Linear);
+    color_sampler.setMipParam(0.0f, color_sampler.getTextureData().getMipLevelNum() - 1.0f, 0.0f);
+
+    return mode;
 }
 
 static bool always_true = true; // shrug
