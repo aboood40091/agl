@@ -634,8 +634,8 @@ ShaderMode DepthOfField::drawColorMipMap_(const DrawArg& arg, ShaderMode mode) c
     sead::GraphicsContext context;
     {
         context.setDepthEnable(false, false);
-        context.setBlendEnable(false);
         context.setColorMask(true, true, true, false);
+        context.setBlendEnable(false);
     }
     context.apply();
 
@@ -674,11 +674,11 @@ ShaderMode DepthOfField::drawColorMipMap_(const DrawArg& arg, ShaderMode mode) c
 
         p_sampler->activate(p_program_mipmap->getSamplerLocation(0));
 
-        sead::Vector4f tex_param = getTexParam_(
+        sead::Vector4f param = getTexParam_(
             color_sampler.getTextureData(),
-            mip_level,
-            0
+            mip_level
         );
+        sead::Vector4f tex_param = param * _1ec;
 
         p_program_mipmap->getUniformLocation(cUniform_TexParam).setUniform(sizeof(sead::Vector4f), &tex_param);
 
@@ -689,6 +689,105 @@ ShaderMode DepthOfField::drawColorMipMap_(const DrawArg& arg, ShaderMode mode) c
 
     color_sampler.setFilter(cTextureFilterType_Linear, cTextureFilterType_Linear, cTextureMipFilterType_Linear);
     color_sampler.setMipParam(0.0f, color_sampler.getTextureData().getMipLevelNum() - 1.0f, 0.0f);
+
+    return mode;
+}
+
+ShaderMode DepthOfField::drawDepthMipMap_(const DrawArg& arg, ShaderMode mode) const
+{
+    TextureSampler& depth_sampler = arg.p_ctx->mDepthTextureSampler;
+    RenderBuffer& render_buffer = arg.p_ctx->mRenderBuffer;
+    RenderTargetColor& color_target = arg.p_ctx->mColorTarget;
+
+    sead::GraphicsContext context;
+    {
+        context.setDepthEnable(false, false);
+        context.setColorMask(true, false, false, false);
+        context.setBlendEnable(false);
+    }
+    context.apply();
+
+    render_buffer.setRenderTargetColorNullAll();
+    render_buffer.setRenderTargetDepthNull();
+
+    render_buffer.setRenderTargetColor(&color_target);
+    color_target.applyTextureData(depth_sampler.getTextureData(), 0, 0);
+
+    depth_sampler.setFilter(cTextureFilterType_Linear, cTextureFilterType_Linear, cTextureMipFilterType_Point);
+
+    // NearMask
+    {
+        const ShaderProgram* p_program_near_mask =
+            detail::ShaderHolder::instance()->getShader(detail::ShaderHolder::cShader_DOFNearMask)
+                .getVariation(arg.view_depth); // VIEW_DEPTH = 1
+
+        mode = p_program_near_mask->activate(mode);
+
+        // TODO: Not 100% certain about this
+
+        f32 far_end   = sead::Mathf::min(*mFarEnd, *mFarStart);
+        f32 far_start = sead::Mathf::max(*mFarStart, *mFarEnd);
+
+        if (far_start == far_end)
+            far_end += sead::Mathf::epsilon();
+
+        f32 far_range = far_end - far_start;
+        if (arg.view_depth)
+        {
+            f32 z = arg.far - arg.near;
+            far_range = far_range               / z;
+            far_start = (far_start - arg.near)  / z;
+        }
+
+        sead::Vector4f param;
+        param.x = 1.0f / arg.near;
+        param.y = (1.0f - arg.near / arg.far) / arg.near;
+        param.z = 1.0f / far_range;
+        param.w = -far_start * param.z;
+
+        p_program_near_mask->getUniformLocation(cUniform_NearFarParam).setUniform(sizeof(sead::Vector4f), &param);
+
+        arg.p_ctx->mDepthTargetTextureSampler.activate(p_program_near_mask->getSamplerLocation(1));
+
+        param = getTexParam_(depth_sampler.getTextureData());
+        sead::Vector4f tex_param = param * _1ec;
+
+        p_program_near_mask->getUniformLocation(cUniform_TexParam).setUniform(sizeof(sead::Vector4f), &tex_param);
+
+        bindRenderBuffer_(render_buffer, 0, 0);
+        drawKick_(arg);
+        arg.p_ctx->mRenderBuffer.getRenderTargetColor()->invalidateGPUCache();
+    }
+
+    //MipMap
+    {
+        const ShaderProgram* p_program_mipmap = mpCurrentProgramMipMap[1];
+        mode = p_program_mipmap->activate(mode);
+
+        u32 mip_level_num = depth_sampler.getTextureData().getMipLevelNum();
+
+        for (u32 mip_level = 1; mip_level < mip_level_num; mip_level++)
+        {
+            depth_sampler.setMipParam(mip_level - 1, mip_level - 1, 0.0f);
+
+            depth_sampler.activate(p_program_mipmap->getSamplerLocation(1));
+
+            sead::Vector4f param = getTexParam_(
+                depth_sampler.getTextureData(),
+                mip_level
+            );
+            sead::Vector4f tex_param = param * _1ec;
+
+            p_program_mipmap->getUniformLocation(cUniform_TexParam).setUniform(sizeof(sead::Vector4f), &tex_param);
+
+            bindRenderBuffer_(render_buffer, mip_level, 0);
+            drawKick_(arg);
+            arg.p_ctx->mRenderBuffer.getRenderTargetColor()->invalidateGPUCache();
+        }
+    }
+
+    depth_sampler.setFilter(cTextureFilterType_Linear, cTextureFilterType_Linear, cTextureMipFilterType_Point);
+    depth_sampler.setMipParam(*mDepthBlurAdd, *mDepthBlurAdd, 0.0f);
 
     return mode;
 }

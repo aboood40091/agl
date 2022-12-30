@@ -181,16 +181,13 @@ private:
         return ivalue;
     }
 
-    sead::Vector4f getTexParam_(const TextureData& data, u32 mip_level, u32 slice) const
+    sead::Vector4f getTexParam_(const TextureData& data, u32 mip_level = 0) const
     {
-        f32 width  = 0.5f / data.getWidth(mip_level);
-        f32 height = 0.5f / data.getHeight(mip_level);
-
         sead::Vector4f param;
-        param.x = width  * _1ec;
-        param.y = height * _1ec;
-        param.z = slice  * _1ec;    // Unused
-        param.w = param.z;          // ^^
+        param.x = 0.5f / data.getWidth(mip_level);
+        param.y = 0.5f / data.getHeight(mip_level);
+        param.z = 0.0f; // Unused
+        param.w = 0.0f; // ^^
         return param;
     }
 
