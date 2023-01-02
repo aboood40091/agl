@@ -11,14 +11,32 @@ class PrimitiveTexture
     SEAD_SINGLETON_DISPOSER(PrimitiveTexture)
 
 public:
+    enum TextureSamplerType
+    {
+        cSampler_White2D = 0,
+        cSampler_Gray2D,
+        cSampler_Black2D,
+        cSampler_Black2DArray,
+        cSampler_BlackCube,
+        cSampler_BlackCubeArray,
+        cSampler_Depth32_0,
+        cSampler_Depth32_1,
+        cSampler_MipLevel,
+        cSampler_DepthShadow,
+        cSampler_DepthShadowArray,
+        cSampler_Num
+    };
+    static_assert(cSampler_Num == 11);
+
+public:
     PrimitiveTexture();
     virtual ~PrimitiveTexture();
 
-    TextureSampler& getTextureSampler(s32 index) { return mTextureSampler[index]; }
-    const TextureSampler& getTextureSampler(s32 index) const { return mTextureSampler[index]; }
+    TextureSampler& getTextureSampler(TextureSamplerType sampler) { return mTextureSampler[sampler]; }
+    const TextureSampler& getTextureSampler(TextureSamplerType sampler) const { return mTextureSampler[sampler]; }
 
 private:
-    sead::UnsafeArray<TextureSampler, 11> mTextureSampler;
+    sead::SafeArray<TextureSampler, cSampler_Num> mTextureSampler;
 };
 static_assert(sizeof(PrimitiveTexture) == 0x11F4, "agl::utl::PrimitiveTexture size mismatch");
 
