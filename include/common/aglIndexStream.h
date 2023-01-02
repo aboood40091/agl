@@ -53,8 +53,11 @@ public:
 
     u32 getCount() const { return mCount; }
 
-    void draw(u32 instance_num = 1, u32 base_vertex = 0) const;
-    void draw(u32 start, u32 count, u32 instance_num = 1, u32 base_vertex = 0) const;
+    void draw() const;
+    void draw(u32 start, u32 count) const;
+
+    void drawInstanced(u32 instance_num, u32 base_vertex) const;
+    void drawInstanced(u32 start, u32 count, u32 instance_num, u32 base_vertex) const;
 
 private:
     void setUpStream_(const void* addr, IndexStreamFormat format, u32 count);

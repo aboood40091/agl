@@ -3,13 +3,25 @@
 namespace agl {
 
 inline void
-IndexStream::draw(u32 instance_num, u32 base_vertex) const
+IndexStream::draw() const
 {
-    draw(0, getCount(), instance_num, base_vertex);
+    drawInstanced(1, 0);
 }
 
 inline void
-IndexStream::draw(u32 start, u32 count, u32 instance_num, u32 base_vertex) const
+IndexStream::draw(u32 start, u32 count) const
+{
+    drawInstanced(start, count, 1, 0);
+}
+
+inline void
+IndexStream::drawInstanced(u32 instance_num, u32 base_vertex) const
+{
+    drawInstanced(0, getCount(), instance_num, base_vertex);
+}
+
+inline void
+IndexStream::drawInstanced(u32 start, u32 count, u32 instance_num, u32 base_vertex) const
 {
     if (count > 0)
     {
