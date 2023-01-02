@@ -43,6 +43,14 @@ public:
     TextureCompSel getComponentB() const { return mCompB; }
     TextureCompSel getComponentA() const { return mCompA; }
 
+    void setTextureCompSel(TextureCompSel r, TextureCompSel g, TextureCompSel b, TextureCompSel a)
+    {
+        mCompR = r;
+        mCompG = g;
+        mCompB = b;
+        mCompA = a;
+    }
+
     void initialize(TextureFormat format, u32 width, u32 height, u32 mip_level_num)
     {
         initialize_(cTextureType_2D, format, width, height, 1, mip_level_num, cMultiSampleType_1x);
