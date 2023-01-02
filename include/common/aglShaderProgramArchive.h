@@ -7,12 +7,13 @@
 #include <container/seadBuffer.h>
 #include <container/seadSafeArray.h>
 #include <heap/seadDisposer.h>
+#include <hostio/seadHostIODummy.h>
 #include <prim/seadBitFlag.h>
 #include <prim/seadSafeString.h>
 
 namespace agl {
 
-class ShaderProgramArchive : public sead::IDisposer
+class ShaderProgramArchive : public sead::IDisposer, public sead::hostio::Node
 {
     class ShaderProgramEx;
     class ShaderSource;
@@ -33,7 +34,7 @@ class ShaderProgramArchive : public sead::IDisposer
     };
     static_assert(sizeof(ShaderCompileInfoEx) == 0x58, "agl::ShaderProgramArchive::ShaderCompileInfoEx size mismatch");
 
-    class ShaderProgramEx
+    class ShaderProgramEx : public sead::hostio::Node
     {
     public:
         ShaderProgramEx();
@@ -55,7 +56,7 @@ class ShaderProgramArchive : public sead::IDisposer
     };
     static_assert(sizeof(ShaderProgramEx) == 0x124, "agl::ShaderProgramArchive::ShaderProgramEx size mismatch");
 
-    class ShaderSource : public sead::IDisposer
+    class ShaderSource : public sead::IDisposer, public sead::hostio::Node
     {
     public:
         ShaderSource();

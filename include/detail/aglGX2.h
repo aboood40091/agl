@@ -3,11 +3,12 @@
 #include <common/aglShaderEnum.h>
 #include <common/aglShaderOptimizeInfo.h>
 #include <heap/seadDisposer.h>
+#include <hostio/seadHostIODummy.h>
 #include <thread/seadCriticalSection.h>
 
 namespace agl { namespace driver {
 
-class GX2Resource
+class GX2Resource : public sead::hostio::Node
 {
     SEAD_SINGLETON_DISPOSER(GX2Resource)
 

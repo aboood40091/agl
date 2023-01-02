@@ -1,5 +1,6 @@
 #include <common/aglShaderProgramArchive.h>
 #include <detail/aglPrivateResource.h>
+#include <detail/aglRootNode.h>
 #include <detail/aglShaderTextUtil.h>
 #include <time/seadTickTime.h>
 
@@ -78,7 +79,7 @@ ShaderProgramArchive::ShaderProgramArchive()
     , mSourceText()
     , mSourceName()
 {
-    // detail::RootNode::setNodeMeta(this, "Icon = LAYOUT, Security = agl_shader");
+    detail::RootNode::setNodeMeta(this, "Icon = LAYOUT, Security = agl_shader");
 }
 
 ShaderProgramArchive::~ShaderProgramArchive()
@@ -415,7 +416,7 @@ void ShaderProgramArchive::ShaderProgramEx::initialize(ShaderProgramArchive* arc
             *it = 0;
     }
 
-    // detail::RootNode::setNodeMeta(this, "Icon = CIRCLE_ORENGE");
+    detail::RootNode::setNodeMeta(this, "Icon = CIRCLE_ORENGE");
 }
 
 void ShaderProgramArchive::ShaderProgramEx::updateRawText()
@@ -472,7 +473,7 @@ void ShaderProgramArchive::ShaderSource::initialize(ShaderProgramArchive* archiv
     for (sead::Buffer<bool>::iterator it = mUsedInSource.begin(), it_end = mUsedInSource.end(); it != it_end; ++it)
         *it = false;
 
-    // detail::RootNode::setNodeMeta(this, "Icon = NOTE");
+    detail::RootNode::setNodeMeta(this, "Icon = NOTE");
 }
 
 void ShaderProgramArchive::ShaderSource::expand()

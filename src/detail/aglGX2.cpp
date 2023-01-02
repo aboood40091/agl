@@ -1,4 +1,5 @@
 #include <detail/aglGX2.h>
+#include <detail/aglRootNode.h>
 
 #ifdef cafe
 #include <cafe/gx2.h>
@@ -21,7 +22,7 @@ GX2Resource::GX2Resource()
     , mStateShadowEnable(true)
     , mUseStateDisplayList(false)
 {
-  //detail::RootNode::setNodeMeta("Icon = CIRCLE_BLUE");
+    detail::RootNode::setNodeMeta(this, "Icon = CIRCLE_BLUE");
 }
 
 GX2Resource::~GX2Resource()
