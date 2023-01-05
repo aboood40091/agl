@@ -35,9 +35,11 @@ public:
     virtual bool isRenderStepGPUCalc(s32 idx) { return false; }
     virtual bool isRenderStepNoDependency(s32 idx) { return false; }
 
-    DrawMethod* pushBackDrawMethod(u32 render_step, DrawMethod* p_draw_method);
-    DrawMethod* pushBackDrawMethod(DrawMethod* p_draw_method);
+    DrawMethod* pushBackDrawMethod(u32 render_step, DrawMethod* p_method);
+    DrawMethod* pushBackDrawMethod(DrawMethod* p_method);
+
     s32 removeDrawMethod(const DrawMethod* p_draw_method);
+
     // ...
 
 protected:

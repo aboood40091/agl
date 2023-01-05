@@ -13,6 +13,7 @@ public:
     RenderStep();
     virtual ~RenderStep() {}
 
+    bool pushBack(DrawMethod* p_method);
     s32 remove(const DrawMethod* p_method);
 
 private:
