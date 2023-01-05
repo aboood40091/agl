@@ -902,6 +902,12 @@ void DepthOfField::setIndirectEnable(bool enable)
     }
 }
 
+void DepthOfField::setIndirectTextureTrans(const sead::Vector2f& trans)
+{
+    *mIndirectTexTrans = trans;
+    updateIndirectMatrix_();
+}
+
 void DepthOfField::applyIndirectTextureData_()
 {
     if (mpIndirectTextureData == nullptr)
