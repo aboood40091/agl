@@ -20,6 +20,12 @@ public:
 protected:
     virtual void callbackInvalidVersion_(ResParameterArchive arc) { }
 
+public:
+    void setDelegate(void* delegate)
+    {
+        mpDelegate = delegate;
+    }
+
 protected:
     sead::FixedSafeString<64> _80;
     u32 _cc;
