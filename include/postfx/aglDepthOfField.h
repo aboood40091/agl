@@ -255,7 +255,7 @@ private:
     sead::SafeArray<const ShaderProgram*, 2> mpCurrentProgramDepthMask;
     sead::SafeArray<ShaderProgram*, 2> mpCurrentProgramFinal;
     ShaderProgram* mpCurrentProgramVignetting;
-    TextureData* mpIndirectTextureData;
+    const TextureData* mpIndirectTextureData;
     TextureSampler mIndirectTextureSampler;
     sead::Vector4f mIndirectTexParam;
     sead::Vector3f mIndirectTexMtx0;
