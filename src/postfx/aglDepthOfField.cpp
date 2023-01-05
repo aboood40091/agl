@@ -893,6 +893,15 @@ void DepthOfField::setIndirectTextureData(const TextureData* p_texture_data)
     assignShaderProgram_();
 }
 
+void DepthOfField::setIndirectEnable(bool enable)
+{
+    if (*mIndirectEnable != enable)
+    {
+        *mIndirectEnable = enable;
+        assignShaderProgram_();
+    }
+}
+
 void DepthOfField::applyIndirectTextureData_()
 {
     if (mpIndirectTextureData == nullptr)
