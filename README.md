@@ -1,4 +1,6 @@
 # agl
+**This project has been moved to a [different repository](https://github.com/aboood40091/EAD-Lib).**  
+---------------------------------------------------------------------------------  
 Decompilation of Nintendo EAD's main graphics library (NSMBU version).  
 As with [sead](https://github.com/aboood40091/sead), while a 1:1 decompilation is impossible, the current goal is to create code with 1:1 functionality and no less efficiency than the original code (if not already matching).  
 
